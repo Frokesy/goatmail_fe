@@ -11,6 +11,13 @@ export default function AuthLayout() {
           headerBackTitle: "Back",
         }}
       />
+      <Stack.Screen
+        name="confirmEmailAddress"
+        options={{
+          headerTitle: "",
+          headerBackTitle: "Back",
+        }}
+      />
     </Stack>
   );
 }

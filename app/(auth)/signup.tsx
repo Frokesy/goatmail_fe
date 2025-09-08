@@ -28,9 +28,12 @@ const Signup = () => {
       </View>
       <View className="w-[100%] mt-10">
         <TouchableOpacity className="bg-[#3D4294] p-5 rounded-full items-center">
-          <Text className="text-white font-medium text-[16px]">
+          <Link
+            href="/confirmEmailAddress"
+            className="text-white font-medium text-[16px]"
+          >
             Proceed to setup Server
-          </Text>
+          </Link>
         </TouchableOpacity>
       </View>
       <View className="mt-6 flex flex-row items-center justify-center border border-[#D6D6D6] p-5 w-[100%] rounded-full">
