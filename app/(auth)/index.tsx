@@ -9,6 +9,7 @@ import {
 import EyeIcon from "../components/icons/EyesIcon";
 import { useState } from "react";
 import EyeOffIcon from "../components/icons/EyeOff";
+import { Link } from "expo-router";
 
 export default function Login() {
   const [showPassword, toggleShowPassword] = useState<boolean>(false);
@@ -49,17 +50,17 @@ export default function Login() {
       </View>
       <View className="w-[100%] mt-10">
         <TouchableOpacity className="bg-[#3D4294] p-5 rounded-full items-center">
-          <Text className="text-white font-medium text-[16px]">
-            Proceed to setup Server
-          </Text>
+          <Text className="text-white font-medium text-[16px]">Login</Text>
         </TouchableOpacity>
       </View>
       <View className="mt-6 flex flex-row items-center justify-center border border-[#D6D6D6] p-5 w-[100%] rounded-full">
         <Text className="text-[#1A2E6C] text-[14px]">
-          Already have an account?
+          Don&apos;t have an account?
         </Text>
         <TouchableOpacity>
-          <Text className="text-[#1A2E6C] text-[14px] ml-1">Sign In</Text>
+          <Link href="/signup" className="text-[#1A2E6C] text-[14px] ml-1">
+            Sign Up
+          </Link>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
