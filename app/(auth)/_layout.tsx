@@ -18,6 +18,13 @@ export default function AuthLayout() {
           headerBackTitle: "Back",
         }}
       />
+      <Stack.Screen
+        name="createPassword"
+        options={{
+          headerTitle: "",
+          headerBackTitle: "Back",
+        }}
+      />
     </Stack>
   );
 }

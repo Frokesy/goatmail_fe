@@ -70,7 +70,7 @@ const ConfirmEmailAddress = () => {
         <View className="w-[100%] mt-10">
           <TouchableOpacity className="bg-[#3D4294] p-5 rounded-full items-center">
             <Link
-              href="/confirmEmailAddress"
+              href="/createPassword"
               className="text-white font-medium text-[16px]"
             >
               Proceed to setup Server
