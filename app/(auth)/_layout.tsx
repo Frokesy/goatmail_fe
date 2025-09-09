@@ -25,6 +25,13 @@ export default function AuthLayout() {
           headerBackTitle: "Back",
         }}
       />
+      <Stack.Screen
+        name="incomingEmailServerType"
+        options={{
+          headerTitle: "",
+          headerBackTitle: "Back",
+        }}
+      />
     </Stack>
   );
 }

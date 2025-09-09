@@ -1,0 +1,126 @@
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TextInput,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
+import { useState } from "react";
+import CustomSelect from "../components/CustomSelect";
+import EyeOffIcon from "../components/icons/EyeOff";
+import EyeIcon from "../components/icons/EyesIcon";
+import SuccessModal from "../components/modals/SuccessModal";
+
+const serverOptions = [
+  { label: "IMAP (Sync across devices)", value: "IMAP" },
+  { label: "POP3 (Download locally)", value: "POP3" },
+];
+
+const securityTypeOptions = [
+  { label: "SSL/TLS", value: "SSL/TLS" },
+  { label: "STARTTLS", value: "STARTTLS" },
+  { label: "None", value: "None" },
+];
+
+const IncomingEmailServerType = () => {
+  const [server, setServer] = useState<string | number | null>(null);
+  const [showPassword, toggleShowPassword] = useState<boolean>(false);
+  const [securityType, setSecurityType] = useState<string | number | null>(
+    null
+  );
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  return (
+    <SafeAreaView className="mt-[5vh] mx-6 flex flex-col items-center justify-center">
+      <Text className="text-[24px] font-bold">
+        Select incoming email server type
+      </Text>
+      <Text className="text-[#A3A3A3] text-[14px] mt-2 mx-4 text-center">
+        Enter your email credentials to connect your account.
+      </Text>
+
+      <View className="flex flex-col w-[100%] mt-3">
+        <Text className="text-[14px] text-[#344054] font-medium mt-6">
+          Select server
+        </Text>
+        <CustomSelect
+          options={serverOptions}
+          value={server}
+          onChange={(v) => setServer(v)}
+          placeholder="Select server"
+          searchable
+        />
+      </View>
+      <View className="flex flex-col w-[100%] mt-3">
+        <Text className="text-[14px] text-[#344054] font-medium mt-6">
+          Server name
+        </Text>
+        <TextInput
+          className="border border-[#D6D6D6] mt-3 p-3 rounded-lg"
+          inputMode="text"
+          placeholder="Enter server name e.g imap.mail.com"
+          placeholderTextColor="#9ca3af"
+        />
+      </View>
+      <View className="flex flex-col w-[100%] mt-3">
+        <Text className="text-[14px] text-[#344054] font-medium mt-6">
+          Password
+        </Text>
+        <View className="border border-[#D6D6D6] mt-3 rounded-lg p-3 flex flex-row justify-between items-center">
+          <TextInput
+            secureTextEntry={!showPassword}
+            textContentType="password"
+            placeholder="Enter password"
+            className="w-[90%]"
+            placeholderTextColor="#9ca3af"
+          />
+          <TouchableOpacity onPress={() => toggleShowPassword(!showPassword)}>
+            {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View className="flex flex-col w-[100%] mt-3">
+        <Text className="text-[14px] text-[#344054] font-medium mt-6">
+          Port
+        </Text>
+        <TextInput
+          className="border border-[#D6D6D6] mt-3 p-3 rounded-lg"
+          inputMode="numeric"
+          placeholder="Enter port number e.g 993"
+          placeholderTextColor="#9ca3af"
+        />
+      </View>
+      <View className="flex flex-col w-[100%] mt-3">
+        <Text className="text-[14px] text-[#344054] font-medium mt-6">
+          Security
+        </Text>
+        <CustomSelect
+          options={securityTypeOptions}
+          value={securityType}
+          onChange={(v) => setSecurityType(v)}
+          placeholder="Select security type"
+          searchable
+        />
+      </View>
+      <View className="w-[100%] mt-10">
+        <Pressable
+          onPress={() => setModalVisible(true)}
+          className="bg-[#3D4294] p-5 rounded-full items-center"
+        >
+          <Text className="text-white font-medium text-[16px]">
+            Proceed to setup Server
+          </Text>
+        </Pressable>
+      </View>
+
+      <SuccessModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
+    </SafeAreaView>
+  );
+};
+
+export default IncomingEmailServerType;
