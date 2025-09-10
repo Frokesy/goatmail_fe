@@ -1,14 +1,7 @@
-import {
-  View,
-  Text,
-  Modal,
-  Alert,
-  Pressable,
-  StyleSheet,
-  Image,
-} from "react-native";
+import { View, Text, Modal, Alert, StyleSheet, Image } from "react-native";
 import React from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { Link } from "expo-router";
 
 type SuccessModalProps = {
   modalVisible: boolean;
@@ -38,19 +31,13 @@ const SuccessModal = ({ modalVisible, setModalVisible }: SuccessModalProps) => {
               <Text className="text-[#6B7280] text-[14px] mt-2 text-center">
                 Your server details has been verified and saved successfully.
               </Text>
-              <Pressable
+              <Link
+                href="/twoFA"
                 onPress={() => setModalVisible(!modalVisible)}
                 className="bg-[#3D4294] mt-10 p-5 rounded-full items-center"
               >
-                <Text style={styles.textStyle}>Proceed to setup Server</Text>
-              </Pressable>
-            </View>
-            <View className="w-[100%] mt-10">
-              <Pressable onPress={() => setModalVisible(false)}>
-                <Text className="text-white font-medium text-[16px]">
-                  Setup outgoing server
-                </Text>
-              </Pressable>
+                <Text style={styles.textStyle}>Setup outgoing server</Text>
+              </Link>
             </View>
           </View>
         </Modal>

@@ -32,6 +32,12 @@ export default function AuthLayout() {
           headerBackTitle: "Back",
         }}
       />
+      <Stack.Screen
+        name="twoFA"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }
