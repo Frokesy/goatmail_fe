@@ -1,4 +1,13 @@
-import { View, Text, Modal, Alert, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  Modal,
+  Alert,
+  StyleSheet,
+  Image,
+  ImageSourcePropType,
+  Pressable,
+} from "react-native";
 import React from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
@@ -6,9 +15,22 @@ import { Link } from "expo-router";
 type SuccessModalProps = {
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
+  image?: ImageSourcePropType;
+  title?: string;
+  message?: string;
+  buttonText?: string;
+  buttonLink?: string;
 };
 
-const SuccessModal = ({ modalVisible, setModalVisible }: SuccessModalProps) => {
+const SuccessModal = ({
+  modalVisible,
+  setModalVisible,
+  image,
+  title,
+  message,
+  buttonText,
+  buttonLink,
+}: SuccessModalProps) => {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.centeredView}>
@@ -18,28 +40,47 @@ const SuccessModal = ({ modalVisible, setModalVisible }: SuccessModalProps) => {
           visible={modalVisible}
           onRequestClose={() => {
             Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
+            setModalVisible(false);
           }}
         >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Image
-                source={require("../../../assets/images/success.png")}
-                className="w-[113px] h-[100px]"
-              />
-              <Text className="text-[20px] font-bold mt-4">Success!</Text>
-              <Text className="text-[#6B7280] text-[14px] mt-2 text-center">
-                Your server details has been verified and saved successfully.
-              </Text>
-              <Link
-                href="/twoFA"
-                onPress={() => setModalVisible(!modalVisible)}
-                className="bg-[#3D4294] mt-10 p-5 rounded-full items-center"
-              >
-                <Text style={styles.textStyle}>Setup outgoing server</Text>
-              </Link>
-            </View>
-          </View>
+          <Pressable
+            style={styles.centeredView}
+            onPress={() => setModalVisible(false)}
+          >
+            <Pressable style={styles.modalView} onPress={() => {}}>
+              <View style={{ alignItems: "center" }}>
+                {image && (
+                  <Image source={image} style={{ width: 113, height: 100 }} />
+                )}
+
+                {title && (
+                  <Text className="text-[20px] font-bold mt-4">{title}</Text>
+                )}
+
+                {message && (
+                  <Text className="text-[#6B7280] text-[14px] mt-2 text-center">
+                    {message}
+                  </Text>
+                )}
+              </View>
+
+              <View style={{ width: "100%", marginTop: 30 }}>
+                {buttonLink ? (
+                  <Link
+                    href={buttonLink as any}
+                    onPress={() => setModalVisible(false)}
+                    style={styles.buttonFullWidth}
+                  >
+                    <Text style={styles.textStyle}>{buttonText}</Text>
+                  </Link>
+                ) : (
+                  <View style={styles.buttonFullWidth}>
+                    <Text style={styles.textStyle}>{buttonText}</Text>
+                  </View>
+                )}
+              </View>
+            </Pressable>
+          </Pressable>
         </Modal>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -53,40 +94,31 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.3)",
   },
   modalView: {
-    margin: 20,
+    width: "85%",
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
+    padding: 25,
+    justifyContent: "space-between",
     alignItems: "center",
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
   },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
+  buttonFullWidth: {
+    backgroundColor: "#3D4294",
+    padding: 18,
+    borderRadius: 9999,
+    alignItems: "center",
+    width: "100%",
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
     textAlign: "center",
   },
 });

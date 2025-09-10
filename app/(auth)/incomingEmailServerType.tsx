@@ -11,6 +11,7 @@ import CustomSelect from "../components/CustomSelect";
 import EyeOffIcon from "../components/icons/EyeOff";
 import EyeIcon from "../components/icons/EyesIcon";
 import SuccessModal from "../components/modals/SuccessModal";
+import SuccessImage from "../../assets/images/success.png";
 
 const serverOptions = [
   { label: "IMAP (Sync across devices)", value: "IMAP" },
@@ -118,6 +119,11 @@ const IncomingEmailServerType = () => {
       <SuccessModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        title="Success!"
+        message="Your server details has been verified and saved successfully."
+        buttonText="Setup outgoing server"
+        buttonLink="/twoFA"
+        image={SuccessImage}
       />
     </SafeAreaView>
   );
