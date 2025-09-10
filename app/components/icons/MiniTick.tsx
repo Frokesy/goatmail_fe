@@ -1,0 +1,36 @@
+import React from "react";
+import { Svg, Rect, Path, Defs, ClipPath, G } from "react-native-svg";
+
+const MiniTick = () => {
+  return (
+    <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <Defs>
+        <ClipPath id="clip0_857_22780">
+          <Rect width="24" height="24" rx="12" fill="white" />
+        </ClipPath>
+      </Defs>
+
+      <G clipPath="url(#clip0_857_22780)">
+        <Rect width="24" height="24" rx="12" fill="#E8EAF0" />
+        <Rect
+          x="0.75"
+          y="0.75"
+          width="22.5"
+          height="22.5"
+          rx="11.25"
+          stroke="#182A62"
+          strokeWidth="1.5"
+          fill="none"
+        />
+        <Path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M17.096 7.39004L9.93602 14.3L8.03602 12.27C7.68602 11.94 7.13602 11.92 6.73602 12.2C6.34602 12.49 6.23602 13 6.47602 13.41L8.72602 17.07C8.94602 17.41 9.32601 17.62 9.75601 17.62C10.166 17.62 10.556 17.41 10.776 17.07C11.136 16.6 18.006 8.41004 18.006 8.41004C18.906 7.49004 17.816 6.68004 17.096 7.38004V7.39004Z"
+          fill="#182A62"
+        />
+      </G>
+    </Svg>
+  );
+};
+
+export default MiniTick;

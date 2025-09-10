@@ -67,7 +67,7 @@ const TwoFA = () => {
           Add this secret key to your authenticator app:
         </Text>
 
-        <View className="w-[80%] mt-10 flex flex-row justify-between items-center">
+        <View className="w-[100%] mt-10 flex flex-row justify-between items-center">
           <Text className="text-[#333333] font-semibold text-[16px]">
             RRGH TTER 8T7SD OYW9
           </Text>

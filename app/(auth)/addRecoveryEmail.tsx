@@ -1,22 +1,19 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
-import React from "react";
+import { View, Text, SafeAreaView, TextInput, Pressable } from "react-native";
+import React, { useState } from "react";
 import { Link } from "expo-router";
 import CaretRight from "../components/icons/CaretRight";
 import CaretLeft from "../components/icons/CaretLeft";
+import EmailAccountCreationStatusModal from "../components/modals/EmailAccountCreationStatusModal";
 
 const AddRecoveryEmail = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <SafeAreaView className="mt-[10vh] mx-6">
       <View className="flex flex-row justify-between items-center">
-        <View>
+        <Link href="/twoFA">
           <CaretLeft />
-        </View>
+        </Link>
         <Link href="/addRecoveryEmail">
           <View className="flex flex-row justify-end items-center">
             <Text className="mr-3">Skip</Text>
@@ -39,17 +36,20 @@ const AddRecoveryEmail = () => {
             inputMode="email"
           />
         </View>
-        <View className="w-[100%] mt-10">
-          <TouchableOpacity className="bg-[#3D4294] p-5 rounded-full items-center">
-            <Link
-              href="/confirmEmailAddress"
-              className="text-white font-medium text-[16px]"
-            >
-              Proceed to setup Server
-            </Link>
-          </TouchableOpacity>
-        </View>
+        <Pressable
+          onPress={() => setModalVisible(true)}
+          className="text-white text-center font-medium text-[16px] bg-[#3D4294] p-5 w-[100%] mt-20 rounded-full items-center"
+        >
+          <Text className="text-white font-medium text-[16px]">
+            Proceed to server Setup
+          </Text>
+        </Pressable>
       </View>
+
+      <EmailAccountCreationStatusModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
     </SafeAreaView>
   );
 };

@@ -51,6 +51,13 @@ export default function AuthLayout() {
           headerBackTitle: "Back",
         }}
       />
+      <Stack.Screen
+        name="pricing"
+        options={{
+          headerTitle: "",
+          headerBackTitle: "Back",
+        }}
+      />
     </Stack>
   );
 }

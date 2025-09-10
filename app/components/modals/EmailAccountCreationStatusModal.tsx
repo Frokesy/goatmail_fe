@@ -1,0 +1,136 @@
+import React, { useEffect, useRef, useState } from "react";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  Image,
+  Modal,
+  Animated,
+  TouchableWithoutFeedback,
+} from "react-native";
+import { useRouter } from "expo-router";
+import Svg, { Circle } from "react-native-svg";
+import MiniTick from "../icons/MiniTick";
+import GreyDot from "../icons/GreyDot";
+
+const CIRCLE_SIZE = 36;
+const STROKE_WIDTH = 3;
+const RADIUS = (CIRCLE_SIZE - STROKE_WIDTH) / 2;
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+
+const EmailAccountCreationStatusModal = ({
+  modalVisible,
+  setModalVisible,
+}: {
+  modalVisible: boolean;
+  setModalVisible: (visible: boolean) => void;
+}) => {
+  const [countdown, setCountdown] = useState(5);
+  const slideAnim = useRef(new Animated.Value(1000)).current;
+  const progressAnim = useRef(new Animated.Value(0)).current;
+  const router = useRouter();
+
+  useEffect(() => {
+    if (modalVisible) {
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+
+      setCountdown(5);
+      progressAnim.setValue(0);
+
+      Animated.timing(progressAnim, {
+        toValue: 1,
+        duration: 5000,
+        useNativeDriver: false,
+      }).start();
+    }
+  }, [modalVisible]);
+
+  useEffect(() => {
+    if (modalVisible && countdown > 0) {
+      const timer = setTimeout(() => setCountdown((prev) => prev - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+    if (countdown === 0) {
+      setModalVisible(false);
+      router.push("/pricing");
+    }
+  }, [countdown, modalVisible]);
+
+  return (
+    <Modal
+      animationType="none"
+      transparent
+      visible={modalVisible}
+      onRequestClose={() => setModalVisible(false)}
+    >
+      <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+        <View className="flex-1 bg-black/40" />
+      </TouchableWithoutFeedback>
+
+      <Animated.View
+        style={{ transform: [{ translateY: slideAnim }] }}
+        className="absolute bottom-0 h-[90%] w-full bg-white rounded-t-3xl p-5"
+      >
+        <SafeAreaView className="flex-1 items-center">
+          <View className="absolute top-5 right-5">
+            <Svg width={CIRCLE_SIZE} height={CIRCLE_SIZE}>
+              <Circle
+                stroke="#E5E5E5"
+                fill="none"
+                cx={CIRCLE_SIZE / 2}
+                cy={CIRCLE_SIZE / 2}
+                r={RADIUS}
+                strokeWidth={STROKE_WIDTH}
+              />
+              <Circle
+                stroke="#3D4294"
+                fill="none"
+                cx={CIRCLE_SIZE / 2}
+                cy={CIRCLE_SIZE / 2}
+                r={RADIUS}
+                strokeWidth={STROKE_WIDTH}
+                strokeDasharray={CIRCUMFERENCE}
+                strokeLinecap="round"
+              />
+            </Svg>
+            <View className="absolute inset-0 items-center justify-center">
+              <Text className="text-[#3D4294] font-bold">{countdown}</Text>
+            </View>
+          </View>
+
+          <Text className="text-[24px] font-bold mt-20 text-center">
+            Email account creation in Progress
+          </Text>
+          <Text className="text-[#A3A3A3] text-[14px] mt-2 text-center">
+            Give it a minute...
+          </Text>
+
+          <Image
+            source={require("../../../assets/images/double-envelope.gif")}
+            className="w-[180px] h-[180px]"
+          />
+
+          <View className="flex flex-col mt-10 w-[100%]">
+            <View className="flex flex-row items-center">
+              <MiniTick />
+              <Text className="ml-2 text-[14px]">Setting up profile</Text>
+            </View>
+            <View className="border-l-4 ml-3 border-[#d6d6d6] h-4"></View>
+            <View className="flex flex-row items-center">
+              <GreyDot />
+              <Text className="ml-2 text-[14px] text-[#A3A3A3]">
+                Choosing pricing plans
+              </Text>
+            </View>
+          </View>
+        </SafeAreaView>
+      </Animated.View>
+    </Modal>
+  );
+};
+
+export default EmailAccountCreationStatusModal;
