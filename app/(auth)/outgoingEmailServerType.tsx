@@ -13,19 +13,13 @@ import EyeIcon from "../components/icons/EyesIcon";
 import SuccessModal from "../components/modals/SuccessModal";
 import SuccessImage from "../../assets/images/success.png";
 
-const serverOptions = [
-  { label: "IMAP (Sync across devices)", value: "IMAP" },
-  { label: "POP3 (Download locally)", value: "POP3" },
-];
-
 const securityTypeOptions = [
   { label: "SSL/TLS", value: "SSL/TLS" },
   { label: "STARTTLS", value: "STARTTLS" },
   { label: "None", value: "None" },
 ];
 
-const IncomingEmailServerType = () => {
-  const [server, setServer] = useState<string | number | null>(null);
+const OutgoingEmailServerType = () => {
   const [showPassword, toggleShowPassword] = useState<boolean>(false);
   const [securityType, setSecurityType] = useState<string | number | null>(
     null
@@ -36,27 +30,14 @@ const IncomingEmailServerType = () => {
   return (
     <SafeAreaView className="mt-[5vh] mx-6 flex flex-col items-center justify-center">
       <Text className="text-[24px] font-bold">
-        Select incoming email server type
+        Select outgoing email server type
       </Text>
       <Text className="text-[#A3A3A3] text-[14px] mt-2 mx-4 text-center">
         Enter your email credentials to connect your account.
       </Text>
-
       <View className="flex flex-col w-[100%] mt-3">
         <Text className="text-[14px] text-[#344054] font-medium mt-6">
-          Select server
-        </Text>
-        <CustomSelect
-          options={serverOptions}
-          value={server}
-          onChange={(v) => setServer(v)}
-          placeholder="Select server"
-          searchable
-        />
-      </View>
-      <View className="flex flex-col w-[100%] mt-3">
-        <Text className="text-[14px] text-[#344054] font-medium mt-6">
-          Server name
+          SMTP Server
         </Text>
         <TextInput
           className="border border-[#D6D6D6] mt-3 p-3 rounded-lg"
@@ -121,12 +102,12 @@ const IncomingEmailServerType = () => {
         setModalVisible={setModalVisible}
         title="Success!"
         message="Your server details has been verified and saved successfully."
-        buttonText="Setup outgoing server"
-        buttonLink="/outgoingEmailServerType"
+        buttonText="Enable Two-Factor Authentication"
+        buttonLink="/twoFA"
         image={SuccessImage}
       />
     </SafeAreaView>
   );
 };
 
-export default IncomingEmailServerType;
+export default OutgoingEmailServerType;
