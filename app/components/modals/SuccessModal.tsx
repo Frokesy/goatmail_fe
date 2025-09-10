@@ -1,4 +1,12 @@
-import { View, Text, Modal, Alert, Pressable, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Modal,
+  Alert,
+  Pressable,
+  StyleSheet,
+  Image,
+} from "react-native";
 import React from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
@@ -22,12 +30,26 @@ const SuccessModal = ({ modalVisible, setModalVisible }: SuccessModalProps) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalText}>Hello World!</Text>
+              <Image
+                source={require("../../../assets/images/success.png")}
+                className="w-[113px] h-[100px]"
+              />
+              <Text className="text-[20px] font-bold mt-4">Success!</Text>
+              <Text className="text-[#6B7280] text-[14px] mt-2 text-center">
+                Your server details has been verified and saved successfully.
+              </Text>
               <Pressable
-                style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}
+                className="bg-[#3D4294] mt-10 p-5 rounded-full items-center"
               >
-                <Text style={styles.textStyle}>Hide Modal</Text>
+                <Text style={styles.textStyle}>Proceed to setup Server</Text>
+              </Pressable>
+            </View>
+            <View className="w-[100%] mt-10">
+              <Pressable onPress={() => setModalVisible(false)}>
+                <Text className="text-white font-medium text-[16px]">
+                  Setup outgoing server
+                </Text>
               </Pressable>
             </View>
           </View>
