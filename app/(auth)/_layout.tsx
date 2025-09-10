@@ -38,6 +38,12 @@ export default function AuthLayout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="addRecoveryEmail"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }
