@@ -12,6 +12,7 @@ import EyeOffIcon from "../components/icons/EyeOff";
 import EyeIcon from "../components/icons/EyesIcon";
 import SuccessModal from "../components/modals/SuccessModal";
 import SuccessImage from "../../assets/images/success.png";
+import { useSearchParams } from "expo-router/build/hooks";
 
 const serverOptions = [
   { label: "IMAP (Sync across devices)", value: "IMAP" },
@@ -24,14 +25,53 @@ const securityTypeOptions = [
   { label: "None", value: "None" },
 ];
 
+const API_URL = "http://192.168.1.117:3000/api/auth";
+
 const IncomingEmailServerType = () => {
   const [server, setServer] = useState<string | number | null>(null);
-  const [showPassword, toggleShowPassword] = useState<boolean>(false);
+  const [serverName, setServerName] = useState("");
+  const [password, setPassword] = useState("");
+  const [port, setPort] = useState("");
   const [securityType, setSecurityType] = useState<string | number | null>(
     null
   );
-
+  const [showPassword, toggleShowPassword] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email") || "";
+
+  const handleProceed = async () => {
+    if (!server || !serverName || !password || !port || !securityType) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_URL}/set-incoming-server`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          serverType: server,
+          serverName,
+          password,
+          port,
+          security: securityType,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to save server details");
+      } else {
+        setModalVisible(true);
+      }
+    } catch (err) {
+      alert("Network error");
+      console.log(err);
+    }
+  };
 
   return (
     <SafeAreaView className="mt-[5vh] mx-6 flex flex-col items-center justify-center">
@@ -54,6 +94,7 @@ const IncomingEmailServerType = () => {
           searchable
         />
       </View>
+
       <View className="flex flex-col w-[100%] mt-3">
         <Text className="text-[14px] text-[#344054] font-medium mt-6">
           Server name
@@ -63,8 +104,11 @@ const IncomingEmailServerType = () => {
           inputMode="text"
           placeholder="Enter server name e.g imap.mail.com"
           placeholderTextColor="#9ca3af"
+          value={serverName}
+          onChangeText={setServerName}
         />
       </View>
+
       <View className="flex flex-col w-[100%] mt-3">
         <Text className="text-[14px] text-[#344054] font-medium mt-6">
           Password
@@ -76,12 +120,15 @@ const IncomingEmailServerType = () => {
             placeholder="Enter password"
             className="w-[90%]"
             placeholderTextColor="#9ca3af"
+            value={password}
+            onChangeText={setPassword}
           />
           <TouchableOpacity onPress={() => toggleShowPassword(!showPassword)}>
             {showPassword ? <EyeOffIcon /> : <EyeIcon />}
           </TouchableOpacity>
         </View>
       </View>
+
       <View className="flex flex-col w-[100%] mt-3">
         <Text className="text-[14px] text-[#344054] font-medium mt-6">
           Port
@@ -91,8 +138,11 @@ const IncomingEmailServerType = () => {
           inputMode="numeric"
           placeholder="Enter port number e.g 993"
           placeholderTextColor="#9ca3af"
+          value={port}
+          onChangeText={setPort}
         />
       </View>
+
       <View className="flex flex-col w-[100%] mt-3">
         <Text className="text-[14px] text-[#344054] font-medium mt-6">
           Security
@@ -105,9 +155,10 @@ const IncomingEmailServerType = () => {
           searchable
         />
       </View>
+
       <View className="w-[100%] mt-10">
         <Pressable
-          onPress={() => setModalVisible(true)}
+          onPress={handleProceed}
           className="bg-[#3D4294] p-5 rounded-full items-center"
         >
           <Text className="text-white font-medium text-[16px]">
@@ -120,9 +171,11 @@ const IncomingEmailServerType = () => {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         title="Success!"
-        message="Your server details has been verified and saved successfully."
+        message="Your server details have been verified and saved successfully."
         buttonText="Setup outgoing server"
-        buttonLink="/outgoingEmailServerType"
+        buttonLink={`/outgoingEmailServerType?email=${encodeURIComponent(
+          email
+        )}`}
         image={SuccessImage}
       />
     </SafeAreaView>
