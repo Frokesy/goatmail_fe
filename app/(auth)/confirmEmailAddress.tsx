@@ -67,7 +67,10 @@ const ConfirmEmailAddress = () => {
       if (!res.ok) setError(data.error || "OTP verification failed");
       else {
         Alert.alert("Success", "Email verified successfully!");
-        router.push("/createPassword");
+        router.push({
+          pathname: "/createPassword",
+          params: { email },
+        });
       }
     } catch (err) {
       setError(`Network error. Please try again. ${err}`);
