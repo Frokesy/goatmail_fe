@@ -4,12 +4,23 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Alert,
 } from "react-native";
 import React, { useRef, useState } from "react";
-import { Link } from "expo-router";
+import { useRouter } from "expo-router";
+import { useSearchParams } from "expo-router/build/hooks";
+
+const API_URL = "http://192.168.1.117:3000/api/auth";
 
 const ConfirmEmailAddress = () => {
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email") || "";
+  const router = useRouter();
+
   const [code, setCode] = useState(["", "", "", "", "", ""]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const inputs = useRef<(TextInput | null)[]>([]);
 
   const handleChange = (text: string, index: number) => {
@@ -31,6 +42,37 @@ const ConfirmEmailAddress = () => {
         newCode[index - 1] = "";
         setCode(newCode);
       }
+    }
+  };
+
+  const handleVerify = async () => {
+    const otp = code.join("");
+    if (otp.length < 6) {
+      setError("Please enter all 6 digits");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch(`${API_URL}/verify-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) setError(data.error || "OTP verification failed");
+      else {
+        Alert.alert("Success", "Email verified successfully!");
+        router.push("/createPassword");
+      }
+    } catch (err) {
+      setError(`Network error. Please try again. ${err}`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,22 +101,32 @@ const ConfirmEmailAddress = () => {
               value={digit}
               onChangeText={(text) => handleChange(text, index)}
               onKeyPress={(e) => handleKeyPress(e, index)}
+              editable={!loading}
             />
           ))}
         </View>
+
+        {error ? (
+          <Text className="text-red-500 text-[14px] mt-2">{error}</Text>
+        ) : null}
+
         <TouchableOpacity className="mt-2">
           <Text className="text-[#6941C6] text-[14px]">
             Didn&apos;t receive code? Try again in 00:59
           </Text>
         </TouchableOpacity>
+
         <View className="w-[100%] mt-10">
-          <TouchableOpacity className="bg-[#3D4294] p-5 rounded-full items-center">
-            <Link
-              href="/createPassword"
-              className="text-white font-medium text-[16px]"
-            >
-              Proceed to setup Server
-            </Link>
+          <TouchableOpacity
+            className={`p-5 rounded-full items-center ${
+              loading ? "bg-gray-400" : "bg-[#3D4294]"
+            }`}
+            onPress={handleVerify}
+            disabled={loading}
+          >
+            <Text className="text-white font-medium text-[16px]">
+              {loading ? "Verifying..." : "Proceed to setup Password"}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
