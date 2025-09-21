@@ -1,7 +1,13 @@
-import { View, Text, Pressable, ScrollView, Alert } from "react-native";
-import React, { useState } from "react";
+import {
+  View,
+  Text,
+  Pressable,
+  ScrollView,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
+import React, { useState, useEffect } from "react";
 import PricingCard from "../components/cards/PricingCard";
-import { useRouter } from "expo-router";
 import { useSearchParams } from "expo-router/build/hooks";
 import EmailAccountCreationStatusModal from "../components/modals/EmailAccountCreationStatusModal";
 
@@ -13,87 +19,28 @@ const Pricing = () => {
   );
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [plans, setPlans] = useState<any | null>(null);
+  const [fetching, setFetching] = useState(true);
 
   const searchParams = useSearchParams();
-  const router = useRouter();
   const email = searchParams.get("email") || "";
 
-  const pricingPlans = {
-    monthly: [
-      {
-        cost: "$0",
-        title: "Free Plan",
-        subtext:
-          "Send and receive emails with basic tracking and scheduling, perfect for personal use.",
-        buttonText: "Use free plan",
-        features: ["Basic email tracking", "Scheduling support", "5GB storage"],
-      },
-      {
-        cost: "$20",
-        title: "Premium Plan",
-        subtext: "Make use of Goatmail features with unlimited access.",
-        buttonText: "Start free trial now",
-        bgColor: "#3359D2",
-        textColor: "#FFFFFF",
-        features: [
-          "Unlimited storage",
-          "Advanced analytics",
-          "Team collaboration",
-        ],
-      },
-      {
-        cost: "$50",
-        title: "Unlimited Plan",
-        subtext: "Make use of Goatmail features with unlimited access.",
-        buttonText: "Subscribe",
-        bgColor: "#EEF0F4",
-        textColor: "#000000",
-        features: [
-          "Unlimited storage",
-          "Advanced analytics",
-          "Team collaboration",
-        ],
-      },
-    ],
-    yearly: [
-      {
-        cost: "$0",
-        title: "Free Plan",
-        subtext:
-          "Send and receive emails with basic tracking and scheduling, perfect for personal use.",
-        buttonText: "Use free plan",
-        features: ["Basic email tracking", "Scheduling support", "5GB storage"],
-      },
-      {
-        cost: "$200",
-        title: "Premium Plan (Save 20%)",
-        subtext:
-          "Make use of Goatmail features with unlimited access for a year.",
-        buttonText: "Start free trial now",
-        bgColor: "#3359D2",
-        textColor: "#FFFFFF",
-        features: [
-          "Unlimited storage",
-          "Advanced analytics",
-          "Team collaboration",
-        ],
-      },
-      {
-        cost: "$500",
-        title: "Unlimited Plan (Save 20%)",
-        subtext:
-          "Make use of Goatmail features with unlimited access for a year.",
-        buttonText: "Subscribe",
-        bgColor: "#EEF0F4",
-        textColor: "#000000",
-        features: [
-          "Unlimited storage",
-          "Advanced analytics",
-          "Team collaboration",
-        ],
-      },
-    ],
-  };
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const response = await fetch(`${API_URL}/plans`);
+        const data = await response.json();
+        setPlans(data);
+      } catch (err) {
+        console.error("Error fetching plans:", err);
+        Alert.alert("Error", "Could not load pricing plans");
+      } finally {
+        setFetching(false);
+      }
+    };
+
+    fetchPlans();
+  }, []);
 
   const handleSubscribe = async (plan: any) => {
     if (!email) {
@@ -187,15 +134,21 @@ const Pricing = () => {
       </View>
 
       <View className="mt-2 mx-6">
-        {pricingPlans[billingCycle].map((plan, idx) => (
-          <PricingCard
-            key={idx}
-            {...plan}
-            onPress={() => handleSubscribe(plan)}
-            loading={loading}
-          />
-        ))}
+        {fetching ? (
+          <ActivityIndicator size="large" color="#3D4294" />
+        ) : (
+          plans &&
+          plans[billingCycle]?.map((plan: any, idx: number) => (
+            <PricingCard
+              key={idx}
+              {...plan}
+              onPress={() => handleSubscribe(plan)}
+              loading={loading}
+            />
+          ))
+        )}
       </View>
+
       <EmailAccountCreationStatusModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}

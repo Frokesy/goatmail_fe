@@ -44,7 +44,7 @@ const EmailAccountCreationStatusModal = ({
         useNativeDriver: true,
       }).start();
 
-      setCountdown(screen === "pricing" ? 3 : 5);
+      setCountdown(5);
       setCompleted(false);
       progressAnim.setValue(0);
 
@@ -127,11 +127,13 @@ const EmailAccountCreationStatusModal = ({
               : "Give it a minute..."}
           </Text>
 
-          {!completed && (
+          {!completed ? (
             <Image
               source={require("../../../assets/images/double-envelope.gif")}
               className="w-[180px] h-[180px]"
             />
+          ) : (
+            <View className="w-[180px] h-[180px] items-center justify-center"></View>
           )}
 
           <View className="flex flex-col mt-10 w-[100%]">

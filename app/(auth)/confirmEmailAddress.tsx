@@ -8,7 +8,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useRouter } from "expo-router";
 import { useSearchParams } from "expo-router/build/hooks";
 
@@ -23,7 +23,17 @@ const ConfirmEmailAddress = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const [counter, setCounter] = useState(59);
+  const [resending, setResending] = useState(false);
+
   const inputs = useRef<(TextInput | null)[]>([]);
+
+  useEffect(() => {
+    if (counter > 0) {
+      const timer = setTimeout(() => setCounter(counter - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [counter]);
 
   const handleChange = (text: string, index: number) => {
     const newCode = [...code];
@@ -78,6 +88,35 @@ const ConfirmEmailAddress = () => {
       setError(`Network error. Please try again. ${err}`);
     } finally {
       setLoading(false);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    }
+  };
+
+  const handleResend = async () => {
+    setResending(true);
+    try {
+      const res = await fetch(`${API_URL}/resend-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) setError(data.error || "Failed to resend OTP");
+      else {
+        Alert.alert("Success", "A new OTP has been sent to your email.");
+        setCounter(59);
+      }
+    } catch (err) {
+      setError(`Network error. Please try again. ${err}`);
+      console.log(err);
+    } finally {
+      setResending(false);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
     }
   };
 
@@ -116,9 +155,23 @@ const ConfirmEmailAddress = () => {
             <Text className="text-red-500 text-[14px] mt-2">{error}</Text>
           ) : null}
 
-          <TouchableOpacity className="mt-2">
-            <Text className="text-[#6941C6] text-[14px]">
-              Didn&apos;t receive code? Try again in 00:59
+          <TouchableOpacity
+            className="mt-2"
+            disabled={counter > 0 || resending}
+            onPress={handleResend}
+          >
+            <Text
+              className={`text-[14px] ${
+                counter > 0 ? "text-gray-400" : "text-[#6941C6]"
+              }`}
+            >
+              {counter > 0
+                ? `Didn't receive code? Try again in 00:${
+                    counter < 10 ? `0${counter}` : counter
+                  }`
+                : resending
+                ? "Resending..."
+                : "Didn't receive code? Resend OTP"}
             </Text>
           </TouchableOpacity>
 
