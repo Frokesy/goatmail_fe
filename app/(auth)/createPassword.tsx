@@ -8,7 +8,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import EyeOffIcon from "../components/icons/EyeOff";
 import EyeIcon from "../components/icons/EyesIcon";
 import { useRouter } from "expo-router";
@@ -28,6 +28,24 @@ const CreatePassword = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const email = searchParams.get("email") || "";
+
+  const getPasswordStrength = (pwd: string) => {
+    let score = 0;
+    if (pwd.length >= 8) score++;
+    if (/[A-Z]/.test(pwd) && /[a-z]/.test(pwd)) score++;
+    if (/[0-9]/.test(pwd)) score++;
+    if (/[^A-Za-z0-9]/.test(pwd)) score++;
+
+    if (score <= 1) return { label: "Weak", color: "text-red-500" };
+    if (score === 2) return { label: "Medium", color: "text-orange-500" };
+    if (score >= 3) return { label: "Strong", color: "text-green-600" };
+    return { label: "", color: "" };
+  };
+
+  const passwordStrength = useMemo(
+    () => getPasswordStrength(password),
+    [password]
+  );
 
   const handleSetPassword = async () => {
     setError("");
@@ -102,9 +120,17 @@ const CreatePassword = () => {
               {showPassword ? <EyeOffIcon /> : <EyeIcon />}
             </TouchableOpacity>
           </View>
-          <Text className="text-[#667085] text-[14px] mt-2">
-            Password must contain at least 8 characters
-          </Text>
+          {password ? (
+            <Text
+              className={`mt-2 text-[14px] font-semibold ${passwordStrength.color}`}
+            >
+              Strength: {passwordStrength.label}
+            </Text>
+          ) : (
+            <Text className="text-[#667085] text-[14px] mt-2">
+              Password must contain at least 8 characters
+            </Text>
+          )}
         </View>
 
         <View className="flex flex-col w-[100%] mt-3">
