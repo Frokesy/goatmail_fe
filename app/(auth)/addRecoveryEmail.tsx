@@ -114,6 +114,7 @@ const AddRecoveryEmail = () => {
         <EmailAccountCreationStatusModal
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
+          email={email}
         />
       </SafeAreaView>
     </TouchableWithoutFeedback>

@@ -7,6 +7,7 @@ import {
   Modal,
   Animated,
   TouchableWithoutFeedback,
+  TouchableOpacity,
 } from "react-native";
 import { useRouter } from "expo-router";
 import Svg, { Circle } from "react-native-svg";
@@ -21,11 +22,16 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 const EmailAccountCreationStatusModal = ({
   modalVisible,
   setModalVisible,
+  email,
+  screen,
 }: {
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
+  email?: string;
+  screen?: string;
 }) => {
-  const [countdown, setCountdown] = useState(5);
+  const [countdown, setCountdown] = useState(screen === "pricing" ? 3 : 5);
+  const [completed, setCompleted] = useState(false);
   const slideAnim = useRef(new Animated.Value(1000)).current;
   const progressAnim = useRef(new Animated.Value(0)).current;
   const router = useRouter();
@@ -38,27 +44,33 @@ const EmailAccountCreationStatusModal = ({
         useNativeDriver: true,
       }).start();
 
-      setCountdown(5);
+      setCountdown(screen === "pricing" ? 3 : 5);
+      setCompleted(false);
       progressAnim.setValue(0);
 
       Animated.timing(progressAnim, {
         toValue: 1,
-        duration: 5000,
+        duration: screen === "pricing" ? 3000 : 5000,
         useNativeDriver: false,
       }).start();
     }
-  }, [modalVisible]);
+  }, [modalVisible, screen]);
 
   useEffect(() => {
     if (modalVisible && countdown > 0) {
       const timer = setTimeout(() => setCountdown((prev) => prev - 1), 1000);
       return () => clearTimeout(timer);
     }
+
     if (countdown === 0) {
-      setModalVisible(false);
-      router.push("/pricing");
+      if (screen === "pricing") {
+        setCompleted(true);
+      } else {
+        setModalVisible(false);
+        router.push({ pathname: "/pricing", params: { email } });
+      }
     }
-  }, [countdown, modalVisible]);
+  }, [countdown, modalVisible, screen]);
 
   return (
     <Modal
@@ -76,43 +88,51 @@ const EmailAccountCreationStatusModal = ({
         className="absolute bottom-0 h-[90%] w-full bg-white rounded-t-3xl p-5"
       >
         <SafeAreaView className="flex-1 items-center">
-          <View className="absolute top-5 right-5">
-            <Svg width={CIRCLE_SIZE} height={CIRCLE_SIZE}>
-              <Circle
-                stroke="#E5E5E5"
-                fill="none"
-                cx={CIRCLE_SIZE / 2}
-                cy={CIRCLE_SIZE / 2}
-                r={RADIUS}
-                strokeWidth={STROKE_WIDTH}
-              />
-              <Circle
-                stroke="#3D4294"
-                fill="none"
-                cx={CIRCLE_SIZE / 2}
-                cy={CIRCLE_SIZE / 2}
-                r={RADIUS}
-                strokeWidth={STROKE_WIDTH}
-                strokeDasharray={CIRCUMFERENCE}
-                strokeLinecap="round"
-              />
-            </Svg>
-            <View className="absolute inset-0 items-center justify-center">
-              <Text className="text-[#3D4294] font-bold">{countdown}</Text>
+          {!completed && (
+            <View className="absolute top-5 right-5">
+              <Svg width={CIRCLE_SIZE} height={CIRCLE_SIZE}>
+                <Circle
+                  stroke="#E5E5E5"
+                  fill="none"
+                  cx={CIRCLE_SIZE / 2}
+                  cy={CIRCLE_SIZE / 2}
+                  r={RADIUS}
+                  strokeWidth={STROKE_WIDTH}
+                />
+                <Circle
+                  stroke="#3D4294"
+                  fill="none"
+                  cx={CIRCLE_SIZE / 2}
+                  cy={CIRCLE_SIZE / 2}
+                  r={RADIUS}
+                  strokeWidth={STROKE_WIDTH}
+                  strokeDasharray={CIRCUMFERENCE}
+                  strokeLinecap="round"
+                />
+              </Svg>
+              <View className="absolute inset-0 items-center justify-center">
+                <Text className="text-[#3D4294] font-bold">{countdown}</Text>
+              </View>
             </View>
-          </View>
+          )}
 
           <Text className="text-[24px] font-bold mt-20 text-center">
-            Email account creation in Progress
+            {screen === "pricing" && completed
+              ? "Your account is ready for use"
+              : "Email account creation in Progress"}
           </Text>
           <Text className="text-[#A3A3A3] text-[14px] mt-2 text-center">
-            Give it a minute...
+            {screen === "pricing" && completed
+              ? "Let’s take you straight in 🚀"
+              : "Give it a minute..."}
           </Text>
 
-          <Image
-            source={require("../../../assets/images/double-envelope.gif")}
-            className="w-[180px] h-[180px]"
-          />
+          {!completed && (
+            <Image
+              source={require("../../../assets/images/double-envelope.gif")}
+              className="w-[180px] h-[180px]"
+            />
+          )}
 
           <View className="flex flex-col mt-10 w-[100%]">
             <View className="flex flex-row items-center">
@@ -121,12 +141,40 @@ const EmailAccountCreationStatusModal = ({
             </View>
             <View className="border-l-4 ml-3 border-[#d6d6d6] h-4"></View>
             <View className="flex flex-row items-center">
-              <GreyDot />
-              <Text className="ml-2 text-[14px] text-[#A3A3A3]">
+              {screen === "pricing" && completed ? (
+                <MiniTick />
+              ) : screen === "pricing" ? (
+                <GreyDot color="#3D4294" />
+              ) : (
+                <GreyDot />
+              )}
+              <Text
+                className={`ml-2 text-[14px] ${
+                  screen === "pricing" && !completed
+                    ? "text-[#3D4294]"
+                    : completed
+                    ? "text-black"
+                    : "text-[#A3A3A3]"
+                }`}
+              >
                 Choosing pricing plans
               </Text>
             </View>
           </View>
+
+          {screen === "pricing" && completed && (
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible(false);
+                router.push("/dashboard");
+              }}
+              className="mt-auto w-full py-4 bg-[#3D4294] rounded-full"
+            >
+              <Text className="text-white text-center font-bold text-[16px]">
+                Go to Inbox
+              </Text>
+            </TouchableOpacity>
+          )}
         </SafeAreaView>
       </Animated.View>
     </Modal>

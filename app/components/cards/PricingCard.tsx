@@ -7,6 +7,7 @@ import {
   LayoutAnimation,
   Platform,
   UIManager,
+  ActivityIndicator,
 } from "react-native";
 import CaretDown from "../icons/CaretDown";
 
@@ -19,6 +20,7 @@ type PricingCardProps = {
   bgColor?: string;
   onPress?: () => void;
   textColor?: string;
+  loading?: boolean;
 };
 
 if (
@@ -37,6 +39,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
   bgColor = "white",
   textColor,
   onPress,
+  loading,
 }) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -113,20 +116,24 @@ const PricingCard: React.FC<PricingCardProps> = ({
       )}
 
       <View className="w-full mt-10">
-        <TouchableOpacity
-          onPress={onPress}
-          className={`${
-            textColor === "#FFFFFF" ? "bg-[#ffffff]" : "bg-[#3D4294]"
-          } p-5 rounded-full items-center`}
-        >
-          <Text
+        {loading ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
+          <TouchableOpacity
+            onPress={onPress}
             className={`${
-              textColor === "#FFFFFF" ? "text-[#344054]" : "text-white"
-            } text-[16px] font-medium`}
+              textColor === "#FFFFFF" ? "bg-[#ffffff]" : "bg-[#3D4294]"
+            } p-5 rounded-full items-center`}
           >
-            {buttonText}
-          </Text>
-        </TouchableOpacity>
+            <Text
+              className={`${
+                textColor === "#FFFFFF" ? "text-[#344054]" : "text-white"
+              } text-[16px] font-medium`}
+            >
+              {buttonText}
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
