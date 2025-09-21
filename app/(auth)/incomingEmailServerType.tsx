@@ -5,6 +5,8 @@ import {
   TextInput,
   TouchableOpacity,
   Pressable,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { useState } from "react";
 import CustomSelect from "../components/CustomSelect";
@@ -74,111 +76,113 @@ const IncomingEmailServerType = () => {
   };
 
   return (
-    <SafeAreaView className="mt-[5vh] mx-6 flex flex-col items-center justify-center">
-      <Text className="text-[24px] font-bold">
-        Select incoming email server type
-      </Text>
-      <Text className="text-[#A3A3A3] text-[14px] mt-2 mx-4 text-center">
-        Enter your email credentials to connect your account.
-      </Text>
-
-      <View className="flex flex-col w-[100%] mt-3">
-        <Text className="text-[14px] text-[#344054] font-medium mt-6">
-          Select server
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <SafeAreaView className="mt-[5vh] mx-6 flex flex-col items-center justify-center">
+        <Text className="text-[24px] font-bold">
+          Select incoming email server type
         </Text>
-        <CustomSelect
-          options={serverOptions}
-          value={server}
-          onChange={(v) => setServer(v)}
-          placeholder="Select server"
-          searchable
-        />
-      </View>
-
-      <View className="flex flex-col w-[100%] mt-3">
-        <Text className="text-[14px] text-[#344054] font-medium mt-6">
-          Server name
+        <Text className="text-[#A3A3A3] text-[14px] mt-2 mx-4 text-center">
+          Enter your email credentials to connect your account.
         </Text>
-        <TextInput
-          className="border border-[#D6D6D6] mt-3 p-3 rounded-lg"
-          inputMode="text"
-          placeholder="Enter server name e.g imap.mail.com"
-          placeholderTextColor="#9ca3af"
-          value={serverName}
-          onChangeText={setServerName}
-        />
-      </View>
 
-      <View className="flex flex-col w-[100%] mt-3">
-        <Text className="text-[14px] text-[#344054] font-medium mt-6">
-          Password
-        </Text>
-        <View className="border border-[#D6D6D6] mt-3 rounded-lg p-3 flex flex-row justify-between items-center">
-          <TextInput
-            secureTextEntry={!showPassword}
-            textContentType="password"
-            placeholder="Enter password"
-            className="w-[90%]"
-            placeholderTextColor="#9ca3af"
-            value={password}
-            onChangeText={setPassword}
-          />
-          <TouchableOpacity onPress={() => toggleShowPassword(!showPassword)}>
-            {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View className="flex flex-col w-[100%] mt-3">
-        <Text className="text-[14px] text-[#344054] font-medium mt-6">
-          Port
-        </Text>
-        <TextInput
-          className="border border-[#D6D6D6] mt-3 p-3 rounded-lg"
-          inputMode="numeric"
-          placeholder="Enter port number e.g 993"
-          placeholderTextColor="#9ca3af"
-          value={port}
-          onChangeText={setPort}
-        />
-      </View>
-
-      <View className="flex flex-col w-[100%] mt-3">
-        <Text className="text-[14px] text-[#344054] font-medium mt-6">
-          Security
-        </Text>
-        <CustomSelect
-          options={securityTypeOptions}
-          value={securityType}
-          onChange={(v) => setSecurityType(v)}
-          placeholder="Select security type"
-          searchable
-        />
-      </View>
-
-      <View className="w-[100%] mt-10">
-        <Pressable
-          onPress={handleProceed}
-          className="bg-[#3D4294] p-5 rounded-full items-center"
-        >
-          <Text className="text-white font-medium text-[16px]">
-            Proceed to setup Server
+        <View className="flex flex-col w-[100%] mt-3">
+          <Text className="text-[14px] text-[#344054] font-medium mt-6">
+            Select server
           </Text>
-        </Pressable>
-      </View>
+          <CustomSelect
+            options={serverOptions}
+            value={server}
+            onChange={(v) => setServer(v)}
+            placeholder="Select server"
+            searchable
+          />
+        </View>
 
-      <SuccessModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        title="Success!"
-        message="Your server details have been verified and saved successfully."
-        buttonText="Setup outgoing server"
-        buttonLink={`/outgoingEmailServerType?email=${encodeURIComponent(
-          email
-        )}`}
-        image={SuccessImage}
-      />
-    </SafeAreaView>
+        <View className="flex flex-col w-[100%] mt-3">
+          <Text className="text-[14px] text-[#344054] font-medium mt-6">
+            Server name
+          </Text>
+          <TextInput
+            className="border border-[#D6D6D6] mt-3 p-3 rounded-lg"
+            inputMode="text"
+            placeholder="Enter server name e.g imap.mail.com"
+            placeholderTextColor="#9ca3af"
+            value={serverName}
+            onChangeText={setServerName}
+          />
+        </View>
+
+        <View className="flex flex-col w-[100%] mt-3">
+          <Text className="text-[14px] text-[#344054] font-medium mt-6">
+            Password
+          </Text>
+          <View className="border border-[#D6D6D6] mt-3 rounded-lg p-3 flex flex-row justify-between items-center">
+            <TextInput
+              secureTextEntry={!showPassword}
+              textContentType="password"
+              placeholder="Enter password"
+              className="w-[90%]"
+              placeholderTextColor="#9ca3af"
+              value={password}
+              onChangeText={setPassword}
+            />
+            <TouchableOpacity onPress={() => toggleShowPassword(!showPassword)}>
+              {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View className="flex flex-col w-[100%] mt-3">
+          <Text className="text-[14px] text-[#344054] font-medium mt-6">
+            Port
+          </Text>
+          <TextInput
+            className="border border-[#D6D6D6] mt-3 p-3 rounded-lg"
+            inputMode="numeric"
+            placeholder="Enter port number e.g 993"
+            placeholderTextColor="#9ca3af"
+            value={port}
+            onChangeText={setPort}
+          />
+        </View>
+
+        <View className="flex flex-col w-[100%] mt-3">
+          <Text className="text-[14px] text-[#344054] font-medium mt-6">
+            Security
+          </Text>
+          <CustomSelect
+            options={securityTypeOptions}
+            value={securityType}
+            onChange={(v) => setSecurityType(v)}
+            placeholder="Select security type"
+            searchable
+          />
+        </View>
+
+        <View className="w-[100%] mt-10">
+          <Pressable
+            onPress={handleProceed}
+            className="bg-[#3D4294] p-5 rounded-full items-center"
+          >
+            <Text className="text-white font-medium text-[16px]">
+              Proceed to setup Server
+            </Text>
+          </Pressable>
+        </View>
+
+        <SuccessModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          title="Success!"
+          message="Your server details have been verified and saved successfully."
+          buttonText="Setup outgoing server"
+          buttonLink={`/outgoingEmailServerType?email=${encodeURIComponent(
+            email
+          )}`}
+          image={SuccessImage}
+        />
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 

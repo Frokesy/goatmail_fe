@@ -5,6 +5,8 @@ import {
   TouchableOpacity,
   View,
   Alert,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import React, { useRef, useState } from "react";
 import { useRouter } from "expo-router";
@@ -80,60 +82,62 @@ const ConfirmEmailAddress = () => {
   };
 
   return (
-    <SafeAreaView className="mt-[5vh] mx-6 flex flex-col items-center justify-center">
-      <Text className="text-[24px] font-bold">Confirm email address</Text>
-      <Text className="text-[#A3A3A3] text-[14px] mt-2 mx-4 text-center">
-        Your provided email needs to be verified to complete your profile. A
-        6-digit code has been sent to your provided email address.
-      </Text>
-
-      <View className="flex flex-col w-[100%] mt-3">
-        <Text className="text-[14px] text-[#344054] font-medium mt-6">
-          Secure code
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <SafeAreaView className="mt-[5vh] mx-6 flex flex-col items-center justify-center">
+        <Text className="text-[24px] font-bold">Confirm email address</Text>
+        <Text className="text-[#A3A3A3] text-[14px] mt-2 mx-4 text-center">
+          Your provided email needs to be verified to complete your profile. A
+          6-digit code has been sent to your provided email address.
         </Text>
-        <View className="flex flex-row mt-3 justify-between items-center">
-          {code.map((digit, index) => (
-            <TextInput
-              key={index}
-              ref={(ref) => {
-                inputs.current[index] = ref;
-              }}
-              className="border border-[#D6D6D6] p-3 w-[13%] rounded-lg text-center text-[18px]"
-              keyboardType="number-pad"
-              maxLength={1}
-              value={digit}
-              onChangeText={(text) => handleChange(text, index)}
-              onKeyPress={(e) => handleKeyPress(e, index)}
-              editable={!loading}
-            />
-          ))}
-        </View>
 
-        {error ? (
-          <Text className="text-red-500 text-[14px] mt-2">{error}</Text>
-        ) : null}
-
-        <TouchableOpacity className="mt-2">
-          <Text className="text-[#6941C6] text-[14px]">
-            Didn&apos;t receive code? Try again in 00:59
+        <View className="flex flex-col w-[100%] mt-3">
+          <Text className="text-[14px] text-[#344054] font-medium mt-6">
+            Secure code
           </Text>
-        </TouchableOpacity>
+          <View className="flex flex-row mt-3 justify-between items-center">
+            {code.map((digit, index) => (
+              <TextInput
+                key={index}
+                ref={(ref) => {
+                  inputs.current[index] = ref;
+                }}
+                className="border border-[#D6D6D6] p-3 w-[13%] rounded-lg text-center text-[18px]"
+                keyboardType="number-pad"
+                maxLength={1}
+                value={digit}
+                onChangeText={(text) => handleChange(text, index)}
+                onKeyPress={(e) => handleKeyPress(e, index)}
+                editable={!loading}
+              />
+            ))}
+          </View>
 
-        <View className="w-[100%] mt-10">
-          <TouchableOpacity
-            className={`p-5 rounded-full items-center ${
-              loading ? "bg-gray-400" : "bg-[#3D4294]"
-            }`}
-            onPress={handleVerify}
-            disabled={loading}
-          >
-            <Text className="text-white font-medium text-[16px]">
-              {loading ? "Verifying..." : "Proceed to setup Password"}
+          {error ? (
+            <Text className="text-red-500 text-[14px] mt-2">{error}</Text>
+          ) : null}
+
+          <TouchableOpacity className="mt-2">
+            <Text className="text-[#6941C6] text-[14px]">
+              Didn&apos;t receive code? Try again in 00:59
             </Text>
           </TouchableOpacity>
+
+          <View className="w-[100%] mt-10">
+            <TouchableOpacity
+              className={`p-5 rounded-full items-center ${
+                loading ? "bg-gray-400" : "bg-[#3D4294]"
+              }`}
+              onPress={handleVerify}
+              disabled={loading}
+            >
+              <Text className="text-white font-medium text-[16px]">
+                {loading ? "Verifying..." : "Proceed to setup Password"}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
