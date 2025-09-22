@@ -111,7 +111,7 @@ const TwoFA = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <SafeAreaView className="mt-[10vh] mx-6">
         <Pressable className="flex flex-row justify-end">
-          <Link href="/addRecoveryEmail">
+          <Link href={`/addRecoveryEmail?email=${email}`}>
             <View className="flex flex-row justify-end items-center">
               <Text className="mr-3">Skip</Text>
               <CaretRight />
@@ -148,7 +148,7 @@ const TwoFA = () => {
 
           {secretKey && (
             <View className="w-[100%] mt-4 flex flex-row justify-between items-center">
-              <Text className="text-[#333333] font-semibold text-[16px] mr-4">
+              <Text className="text-[#333333] font-semibold text-[14px] mr-4">
                 {secretKey}
               </Text>
               <Pressable

@@ -8,8 +8,10 @@ import {
   Platform,
   UIManager,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import CaretDown from "../icons/CaretDown";
+import WhiteTick from "../icons/WhiteTick";
 
 type PricingCardProps = {
   cost: string;
@@ -42,6 +44,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
   loading,
 }) => {
   const [expanded, setExpanded] = useState(false);
+  const [selected, setSelected] = useState<string>("");
 
   const rotateAnim = useRef(new Animated.Value(0)).current;
 
@@ -65,22 +68,28 @@ const PricingCard: React.FC<PricingCardProps> = ({
 
   return (
     <View
-      className={` p-6 rounded-2xl mb-6`}
+      className={` p-6 rounded-2xl mb-10`}
       style={{ backgroundColor: bgColor }}
     >
       <View className="flex flex-row justify-between items-center">
         <Text
           className={`${
             textColor === "#FFFFFF" ? "text-white" : "text-black"
-          } text-[20px] font-semibold`}
+          } text-[20px] font-semibold pt-4`}
         >
-          {cost}
+          ${cost}
         </Text>
         <TouchableOpacity onPress={toggleExpand}>
           <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
             <CaretDown color={textColor} />
           </Animated.View>
         </TouchableOpacity>
+
+        {title.toLowerCase().includes("premium") && (
+          <View className="absolute -top-12 right-0">
+            <Image source={require("../../../assets/images/trial-img.png")} />
+          </View>
+        )}
       </View>
 
       <View className="mt-6">
@@ -103,21 +112,26 @@ const PricingCard: React.FC<PricingCardProps> = ({
       {expanded && features.length > 0 && (
         <View className="mt-4">
           {features.map((feature, index) => (
-            <Text
-              key={index}
-              className={`${
-                textColor === "#FFFFFF" ? "text-white" : "text-black"
-              } text-[14px] mb-2`}
-            >
-              • {feature}
-            </Text>
+            <View key={index} className="flex flex-row items-center mb-3">
+              <WhiteTick />
+              <Text
+                key={index}
+                className={`${
+                  textColor === "#FFFFFF" ? "text-white" : "text-black"
+                } text-[14px] ml-3`}
+              >
+                {feature}
+              </Text>
+            </View>
           ))}
         </View>
       )}
 
       <View className="w-full mt-10">
         {loading ? (
-          <ActivityIndicator color="#fff" />
+          <ActivityIndicator
+            color={textColor === "#FFFFFF" ? "#fff" : "#3D4294"}
+          />
         ) : (
           <TouchableOpacity
             onPress={onPress}

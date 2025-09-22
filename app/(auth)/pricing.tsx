@@ -10,6 +10,10 @@ import React, { useState, useEffect } from "react";
 import PricingCard from "../components/cards/PricingCard";
 import { useSearchParams } from "expo-router/build/hooks";
 import EmailAccountCreationStatusModal from "../components/modals/EmailAccountCreationStatusModal";
+import {
+  initPaymentSheet,
+  presentPaymentSheet,
+} from "@stripe/stripe-react-native";
 
 const API_URL = "http://192.168.1.117:3000/api/auth";
 
@@ -17,13 +21,82 @@ const Pricing = () => {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">(
     "monthly"
   );
-  const [loading, setLoading] = useState(false);
+  const [loadingPlan, setLoadingPlan] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [plans, setPlans] = useState<any | null>(null);
   const [fetching, setFetching] = useState(true);
 
   const searchParams = useSearchParams();
-  const email = searchParams.get("email") || "";
+  const email = searchParams.get("email") || "ayanfeoluwaakindele24@gmail.com";
+
+  const handleSubscribe = async (plan: any) => {
+    if (!email) {
+      Alert.alert("Error", "User email not found.");
+      return;
+    }
+    try {
+      setLoadingPlan(plan.title);
+
+      if (plan.title === "Free Plan") {
+        await fetch(`${API_URL}/subscribe`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            plan: plan.title,
+            billingCycle,
+            cost: plan.cost,
+          }),
+        });
+        setModalVisible(true);
+        return;
+      }
+
+      const res = await fetch(`${API_URL}/payment-sheet`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ priceId: plan.priceId, email }),
+      });
+
+      const { paymentIntentClientSecret, ephemeralKey, customer } =
+        await res.json();
+
+      const { error: initError } = await initPaymentSheet({
+        customerId: customer,
+        customerEphemeralKeySecret: ephemeralKey,
+        paymentIntentClientSecret,
+        merchantDisplayName: "Goatmail",
+      });
+
+      if (initError) {
+        Alert.alert("Init error", initError.message);
+        return;
+      }
+
+      const { error: presentError } = await presentPaymentSheet();
+
+      if (presentError) {
+        Alert.alert("Payment failed", presentError.message);
+      } else {
+        await fetch(`${API_URL}/subscribe`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            plan: plan.title,
+            billingCycle,
+            cost: plan.cost,
+          }),
+        });
+
+        setModalVisible(true);
+      }
+    } catch (err: any) {
+      Alert.alert("Error", err.message);
+    } finally {
+      setLoadingPlan("");
+    }
+  };
 
   useEffect(() => {
     const fetchPlans = async () => {
@@ -41,56 +114,6 @@ const Pricing = () => {
 
     fetchPlans();
   }, []);
-
-  const handleSubscribe = async (plan: any) => {
-    if (!email) {
-      Alert.alert("Error", "User email not found.");
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      if (plan.title === "Free Plan") {
-        await fetch(`${API_URL}/subscribe`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email,
-            plan: plan.title,
-            billingCycle,
-            cost: plan.cost,
-          }),
-        });
-
-        setModalVisible(true);
-      } else {
-        await new Promise((res) => setTimeout(res, 2000));
-
-        const response = await fetch(`${API_URL}/subscribe`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email,
-            plan: plan.title,
-            billingCycle,
-            cost: plan.cost,
-          }),
-        });
-
-        if (response.ok) {
-          setModalVisible(true);
-        } else {
-          Alert.alert("Error", "Subscription failed");
-        }
-      }
-    } catch (err) {
-      Alert.alert("Error", "Network or server error");
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <ScrollView className="pt-[5vh]">
@@ -143,7 +166,7 @@ const Pricing = () => {
               key={idx}
               {...plan}
               onPress={() => handleSubscribe(plan)}
-              loading={loading}
+              loading={loadingPlan === plan.title}
             />
           ))
         )}
