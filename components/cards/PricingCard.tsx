@@ -87,7 +87,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
 
         {title.toLowerCase().includes("premium") && (
           <View className="absolute -top-12 right-0">
-            <Image source={require("../../../assets/images/trial-img.png")} />
+            <Image source={require("../../assets/images/trial-img.png")} />
           </View>
         )}
       </View>

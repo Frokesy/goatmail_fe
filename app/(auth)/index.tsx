@@ -10,9 +10,9 @@ import {
   View,
   Alert,
 } from "react-native";
-import EyeIcon from "../components/icons/EyesIcon";
-import EyeOffIcon from "../components/icons/EyeOff";
-import { useState } from "react";
+import EyeIcon from "../../components/icons/EyesIcon";
+import EyeOffIcon from "../../components/icons/EyeOff";
+import { useEffect, useState } from "react";
 import { Link, useRouter } from "expo-router";
 import { useAuth } from "../context/authContext";
 
@@ -25,6 +25,7 @@ export default function Login() {
   const { login } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const { user, loading: contextLoading } = useAuth();
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -51,7 +52,7 @@ export default function Login() {
       }
 
       login({ email: data.email, userId: data.userId }, data.token);
-      router.push("/dashboard");
+      router.push("/inbox");
     } catch (err) {
       Alert.alert("Error", "Something went wrong. Try again.");
       console.log(err);
@@ -59,6 +60,20 @@ export default function Login() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!contextLoading && user) {
+      router.replace("/inbox");
+    }
+  }, [contextLoading, user, router]);
+
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>

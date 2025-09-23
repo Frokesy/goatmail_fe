@@ -10,10 +10,10 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import React, { useRef, useState, useEffect } from "react";
-import CaretRight from "../components/icons/CaretRight";
-import CopyIcon from "../components/icons/CopyIcon";
+import CaretRight from "../../components/icons/CaretRight";
+import CopyIcon from "../../components/icons/CopyIcon";
 import { Link } from "expo-router";
-import SuccessModal from "../components/modals/SuccessModal";
+import SuccessModal from "../../components/modals/SuccessModal";
 import CircledTick from "../../assets/images/circledtick.png";
 import { useSearchParams } from "expo-router/build/hooks";
 import * as Clipboard from "expo-clipboard";

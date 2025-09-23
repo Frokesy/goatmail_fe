@@ -10,9 +10,9 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { Link } from "expo-router";
-import CaretRight from "../components/icons/CaretRight";
-import CaretLeft from "../components/icons/CaretLeft";
-import EmailAccountCreationStatusModal from "../components/modals/EmailAccountCreationStatusModal";
+import CaretRight from "../../components/icons/CaretRight";
+import CaretLeft from "../../components/icons/CaretLeft";
+import EmailAccountCreationStatusModal from "../../components/modals/EmailAccountCreationStatusModal";
 import { useSearchParams } from "expo-router/build/hooks";
 
 const API_URL = "http://192.168.1.117:3000/api/auth";

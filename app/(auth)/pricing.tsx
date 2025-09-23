@@ -7,9 +7,9 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import PricingCard from "../components/cards/PricingCard";
+import PricingCard from "../../components/cards/PricingCard";
 import { useSearchParams } from "expo-router/build/hooks";
-import EmailAccountCreationStatusModal from "../components/modals/EmailAccountCreationStatusModal";
+import EmailAccountCreationStatusModal from "../../components/modals/EmailAccountCreationStatusModal";
 import {
   initPaymentSheet,
   presentPaymentSheet,

@@ -9,10 +9,10 @@ import {
   Keyboard,
 } from "react-native";
 import { useState } from "react";
-import CustomSelect from "../components/CustomSelect";
-import EyeOffIcon from "../components/icons/EyeOff";
-import EyeIcon from "../components/icons/EyesIcon";
-import SuccessModal from "../components/modals/SuccessModal";
+import CustomSelect from "../../components/CustomSelect";
+import EyeOffIcon from "../../components/icons/EyeOff";
+import EyeIcon from "../../components/icons/EyesIcon";
+import SuccessModal from "../../components/modals/SuccessModal";
 import SuccessImage from "../../assets/images/success.png";
 import { useSearchParams } from "expo-router/build/hooks";
 

@@ -129,7 +129,7 @@ const EmailAccountCreationStatusModal = ({
 
           {!completed ? (
             <Image
-              source={require("../../../assets/images/double-envelope.gif")}
+              source={require("../../assets/images/double-envelope.gif")}
               className="w-[180px] h-[180px]"
             />
           ) : (
@@ -168,7 +168,7 @@ const EmailAccountCreationStatusModal = ({
             <TouchableOpacity
               onPress={() => {
                 setModalVisible(false);
-                router.push("/dashboard");
+                router.push("/inbox");
               }}
               className="mt-auto w-full py-4 bg-[#3D4294] rounded-full"
             >

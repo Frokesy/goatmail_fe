@@ -9,8 +9,8 @@ import {
   Keyboard,
 } from "react-native";
 import React, { useState, useMemo } from "react";
-import EyeOffIcon from "../components/icons/EyeOff";
-import EyeIcon from "../components/icons/EyesIcon";
+import EyeOffIcon from "../../components/icons/EyeOff";
+import EyeIcon from "../../components/icons/EyesIcon";
 import { useRouter } from "expo-router";
 import { Checkbox } from "expo-checkbox";
 import { useSearchParams } from "expo-router/build/hooks";
