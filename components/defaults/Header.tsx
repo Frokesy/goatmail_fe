@@ -21,6 +21,7 @@ const Header = ({ title }: HeaderProps) => {
       <SearchIcon />
 
       <Drawer
+        title={title}
         drawerVisible={drawerVisible}
         setDrawerVisible={setDrawerVisible}
       />
