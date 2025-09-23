@@ -9,7 +9,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type User = {
   email: string;
-  userId: string;
 };
 
 type AuthContextType = {

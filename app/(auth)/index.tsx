@@ -22,10 +22,9 @@ export default function Login() {
   const [showPassword, toggleShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const { user, loading: contextLoading } = useAuth();
+  const { login, user, loading: contextLoading } = useAuth();
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -51,8 +50,8 @@ export default function Login() {
         return;
       }
 
-      login({ email: data.email, userId: data.userId }, data.token);
-      router.push("/inbox");
+      await login({ email: data.email }, data.token);
+      router.replace("/inbox");
     } catch (err) {
       Alert.alert("Error", "Something went wrong. Try again.");
       console.log(err);
@@ -67,7 +66,7 @@ export default function Login() {
     }
   }, [contextLoading, user, router]);
 
-  if (loading) {
+  if (contextLoading) {
     return (
       <View className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" />

@@ -1,10 +1,18 @@
 import { Text, ScrollView, View, Image } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/defaults/Header";
 import PenIcon from "@/components/icons/PenIcon";
+import { useAuth } from "./context/authContext";
 
 const Inbox = () => {
+  const { user, token } = useAuth();
+
+  useEffect(() => {
+    console.log("✅ Context user:", user);
+    console.log("✅ Context token:", token);
+  }, [user, token]);
+
   return (
     <SafeAreaView className="flex-1 px-4 pt-10 bg-white">
       <Header title="Inbox" />
