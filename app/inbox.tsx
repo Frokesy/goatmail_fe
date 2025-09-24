@@ -1,12 +1,14 @@
-import { Text, ScrollView, View, Image } from "react-native";
-import React, { useEffect } from "react";
+import { Text, ScrollView, View, Image, Pressable } from "react-native";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/defaults/Header";
 import PenIcon from "@/components/icons/PenIcon";
 import { useAuth } from "./context/authContext";
+import ComposeEmailModal from "@/components/modals/ComposeEmailModal";
 
 const Inbox = () => {
   const { user, token } = useAuth();
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
     console.log("✅ Context user:", user);
@@ -30,9 +32,17 @@ const Inbox = () => {
           </Text>
         </View>
       </ScrollView>
-      <View className="absolute bottom-20 right-10 bg-[#EEF0F4] rounded-full h-[64px] w-[64px] flex items-center justify-center">
+      <Pressable
+        onPress={() => setModalVisible(true)}
+        className="absolute bottom-20 right-10 bg-[#EEF0F4] rounded-full h-[64px] w-[64px] flex items-center justify-center"
+      >
         <PenIcon />
-      </View>
+      </Pressable>
+
+      <ComposeEmailModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
     </SafeAreaView>
   );
 };
