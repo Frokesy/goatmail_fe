@@ -16,6 +16,9 @@ import XIcon from "../icons/XIcon";
 import ShareIcon from "../icons/ShareIcon";
 import ScheduledIcon from "../icons/ScheduledIcon";
 import EmailLockIcon from "../icons/EmailLockIcon";
+import Checkbox from "expo-checkbox";
+import SendEmailIcon from "../icons/SendEmailIcon";
+import AttachFilesModal from "./AttachFilesModal";
 
 const ComposeEmailModal = ({
   modalVisible,
@@ -36,6 +39,11 @@ const ComposeEmailModal = ({
     useState<string>("");
   const [currentBCCRecipientInput, setCurrentBCCRecipientInput] =
     useState<string>("");
+  const [subject, setSubject] = useState<string>("");
+  const [mail, setMail] = useState<string>("");
+  const [isChecked, setChecked] = useState(false);
+  const [showAttachFilesModal, setShowAttachFilesModal] =
+    useState<boolean>(false);
 
   const addRecipient = (cat: string) => {
     if (cat === "recipient") {
@@ -106,7 +114,9 @@ const ComposeEmailModal = ({
                 </Text>
               </View>
               <View className="flex flex-row items-center justify-between w-[40%]">
-                <ShareIcon />
+                <Pressable onPress={() => setShowAttachFilesModal(true)}>
+                  <ShareIcon />
+                </Pressable>
                 <ScheduledIcon />
                 <EmailLockIcon />
                 <Image
@@ -123,6 +133,7 @@ const ComposeEmailModal = ({
                 onChangeText={setCurrentRecipientInput}
                 onSubmitEditing={() => addRecipient("recipient")}
                 submitBehavior={"submit"}
+                returnKeyType="done"
                 className="border-b-2 border-[#D0D5DD] w-[90vw] ml-3 pb-2"
                 placeholder="Enter recipients"
                 placeholderTextColor="#9ca3af"
@@ -170,6 +181,7 @@ const ComposeEmailModal = ({
                     onChangeText={setCurrentCCRecipientInput}
                     onSubmitEditing={() => addRecipient("ccrecipient")}
                     submitBehavior={"submit"}
+                    returnKeyType="done"
                     className="border-b-2 border-[#D0D5DD] ml-3 w-[90vw] pb-2"
                     placeholder="Enter CC recipients"
                     placeholderTextColor="#9ca3af"
@@ -211,6 +223,7 @@ const ComposeEmailModal = ({
                     onChangeText={setCurrentBCCRecipientInput}
                     onSubmitEditing={() => addRecipient("bccrecipient")}
                     submitBehavior={"submit"}
+                    returnKeyType="done"
                     className="border-b-2 border-[#D0D5DD] ml-3 w-[90vw] pb-2"
                     placeholder="Enter BCC recipients"
                     placeholderTextColor="#9ca3af"
@@ -246,6 +259,8 @@ const ComposeEmailModal = ({
             <View className="flex flex-row items-center mt-10">
               <Text>Subject:</Text>
               <TextInput
+                value={subject}
+                onChangeText={setSubject}
                 className="border-b-2 border-[#D0D5DD] ml-3 w-[85%] pb-2"
                 placeholder="Enter subject"
                 placeholderTextColor="#9ca3af"
@@ -254,25 +269,48 @@ const ComposeEmailModal = ({
             <TextInput
               multiline
               numberOfLines={10}
+              value={mail}
+              onChangeText={setMail}
               style={{ textAlignVertical: "top" }}
-              className="border border-[#D0D5DD] w-[100%] h-[30vh] mt-10 p-3 rounded-lg"
+              className="border border-[#D0D5DD] w-[100%] min-h-[30vh] mt-10 p-3 rounded-lg"
               placeholder="Compose your mail..."
               placeholderTextColor="#9ca3af"
             />
 
+            {recipients.length === 0 ||
+              subject === "" ||
+              (mail === "" && (
+                <View className="flex items-center border border-[#ccc] p-3 rounded-xl flex-row mt-4">
+                  <Checkbox value={isChecked} onValueChange={setChecked} />
+                  <Text className="ml-3">Enable mail tracking</Text>
+                </View>
+              ))}
+
             <TouchableOpacity
-              onPress={() => {
-                setModalVisible(false);
-              }}
-              className="mt-20 w-full py-4 bg-[#3D4294] rounded-full"
+              onPress={() => setModalVisible(false)}
+              disabled={
+                recipients.length === 0 || subject === "" || mail === ""
+              }
+              className={`mt-20 w-full py-4 flex items-center flex-row justify-center rounded-full ${
+                recipients.length === 0 || subject === "" || mail === ""
+                  ? "bg-gray-400 opacity-50"
+                  : "bg-[#3D4294]"
+              }`}
+              activeOpacity={0.7}
             >
-              <Text className="text-white text-center font-bold text-[16px]">
+              <SendEmailIcon />
+              <Text className="text-white font-bold text-[16px] ml-3">
                 Send
               </Text>
             </TouchableOpacity>
           </ScrollView>
         </Animated.View>
       </TouchableWithoutFeedback>
+
+      <AttachFilesModal
+        modalVisible={showAttachFilesModal}
+        setModalVisible={setShowAttachFilesModal}
+      />
     </Modal>
   );
 };
