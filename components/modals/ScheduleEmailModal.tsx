@@ -9,8 +9,8 @@ import {
   Platform,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import AddPhotoFromLibraryIcon from "../icons/AddPhotoFromLibraryIcon";
-import UploadFromFileManagerIcon from "../icons/UploadFromFileManagerIcon";
+import ScheduledIcon from "../icons/ScheduledIcon";
+import TimerIcon from "../icons/TimerIcon";
 
 const isToday = (date: Date) => {
   const now = new Date();
@@ -71,7 +71,7 @@ const ScheduleEmailModal = ({
             className="flex flex-row justify-between items-center border border-[#E5E5E5] rounded-lg px-4 py-3"
           >
             <Text className="text-[16px]">{date.toLocaleDateString()}</Text>
-            <AddPhotoFromLibraryIcon />
+            <ScheduledIcon />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -84,9 +84,15 @@ const ScheduleEmailModal = ({
                 minute: "2-digit",
               })}
             </Text>
-            <UploadFromFileManagerIcon />
+            <TimerIcon />
           </TouchableOpacity>
         </View>
+
+        <TouchableOpacity className="bg-[#3D4294] mt-20 py-4 rounded-full">
+          <Text className="text-white text-center font-bold text-[16px]">
+            Schedule Email
+          </Text>
+        </TouchableOpacity>
       </Animated.View>
 
       {pickerMode && (
