@@ -13,9 +13,13 @@ import DoubleStarIcon from "../icons/DoubleStarIcon";
 const AiWritingAssistantModal = ({
   modalVisible,
   setModalVisible,
+  subject,
+  recipients,
 }: {
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
+  subject: string;
+  recipients: string[];
 }) => {
   return (
     <Modal
@@ -43,16 +47,37 @@ const AiWritingAssistantModal = ({
                 <Text className="text-[14px] font-semibold text-[#182A62]">
                   To:
                 </Text>
-                <Text className="text-[14px] ml-3 text-[#182A62]">
-                  Not Specified
-                </Text>
+                <View className="flex-row flex-wrap ml-3">
+                  {recipients.length > 0 ? (
+                    recipients.map((recipient, idx) => (
+                      <View
+                        key={idx}
+                        className="flex flex-row items-center bg-[#EEF0F4] mt-1 px-2 py-2 rounded-full ml-2"
+                      >
+                        <View className="bg-[#fff] flex items-center justify-center flex-row mr-2 rounded-full w-[20px] h-[20px]">
+                          <Text className="text-[12px]">
+                            {recipient.charAt(0).toUpperCase()}
+                          </Text>
+                        </View>
+
+                        <Text className="text-[14px] mr-1 text-[#182A62]">
+                          {recipient}
+                        </Text>
+                      </View>
+                    ))
+                  ) : (
+                    <Text className="text-[14px] text-[#182A62]">
+                      Not Specified
+                    </Text>
+                  )}
+                </View>
               </View>
               <View className="flex flex-row mt-4">
                 <Text className="text-[14px] font-semibold text-[#182A62]">
                   Subject:
                 </Text>
                 <Text className="text-[14px] ml-3 text-[#182A62]">
-                  Not Specified
+                  {subject ? subject : "Not specified"}
                 </Text>
               </View>
             </View>
@@ -62,7 +87,7 @@ const AiWritingAssistantModal = ({
 
           <View className="mt-6">
             <Text>What would you like to write about?</Text>
-            <View className="w-full border border-[#D6D6D6] mt-3 p-3 flex flex-row justify-between rounded-lg">
+            <View className="w-full border border-[#D6D6D6] mt-3 p-3 flex flex-row items-center justify-between rounded-lg">
               <TextInput
                 multiline
                 placeholder="e.g a professional follow up email"

@@ -5,7 +5,6 @@ import {
   Keyboard,
   Modal,
   Pressable,
-  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -22,6 +21,7 @@ import AttachFilesModal from "./AttachFilesModal";
 import ScheduleEmailModal from "./ScheduleEmailModal";
 import EmailProtectionModal from "./EmailProtectionModal";
 import AiWritingAssistantModal from "./AiWritingAssistantModal";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const ComposeEmailModal = ({
   modalVisible,
@@ -98,7 +98,11 @@ const ComposeEmailModal = ({
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <Animated.View className="absolute bottom-0 h-[95%] w-full bg-white rounded-t-3xl p-5">
-          <ScrollView>
+          <KeyboardAwareScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            enableOnAndroid
+            extraScrollHeight={10}
+          >
             <View className="flex flex-row justify-between items-center mt-10 border-b-2 border-[#f1f1f1] pb-3">
               <View className="flex items-center flex-row">
                 <Pressable onPress={() => setModalVisible(false)}>
@@ -140,31 +144,28 @@ const ComposeEmailModal = ({
                 placeholderTextColor="#9ca3af"
               />
             </View>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              className="mt-3"
-            >
+            <View className="flex flex-row flex-wrap mt-2">
               {recipients.map((email, i) => (
                 <View
                   key={i}
-                  className="flex flex-row items-center bg-[#EEF0F4] px-2 py-2 rounded-full ml-2"
+                  className="flex flex-row items-center bg-[#EEF0F4] px-2 py-2 rounded-full mr-2 mb-2"
                 >
-                  <View className="bg-[#fff] flex items-center justify-center flex-row mr-2 rounded-full w-[20px] h-[20px]">
+                  <View className="bg-white flex items-center justify-center rounded-full w-[20px] h-[20px] mr-2">
                     <Text className="text-[12px]">
                       {email.charAt(0).toUpperCase()}
                     </Text>
                   </View>
                   <Text className="text-[12px]">{email}</Text>
                   <TouchableOpacity
-                    className="ml-3"
+                    className="ml-2"
                     onPress={() => removeRecipient(email, "recipient")}
                   >
                     <Text>✕</Text>
                   </TouchableOpacity>
                 </View>
               ))}
-            </ScrollView>
+            </View>
+
             <View className="flex flex-row mt-10">
               <Pressable onPress={() => setShowCC(!showCC)}>
                 <Text>{showCC ? "Remove CC" : "Add CC"}</Text>
@@ -188,31 +189,27 @@ const ComposeEmailModal = ({
                     placeholderTextColor="#9ca3af"
                   />
                 </View>
-                <ScrollView
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  className="mt-3"
-                >
+                <View className="flex flex-row flex-wrap mt-3">
                   {ccrecipients.map((email, i) => (
                     <View
                       key={i}
-                      className="flex flex-row items-center bg-[#EEF0F4] px-2 py-2 rounded-full ml-2"
+                      className="flex flex-row items-center bg-[#EEF0F4] px-2 py-2 rounded-full mr-2 mb-2"
                     >
-                      <View className="bg-[#fff] flex items-center justify-center flex-row mr-2 rounded-full w-[20px] h-[20px]">
+                      <View className="bg-white flex items-center justify-center rounded-full w-[20px] h-[20px] mr-2">
                         <Text className="text-[12px]">
                           {email.charAt(0).toUpperCase()}
                         </Text>
                       </View>
                       <Text className="text-[12px]">{email}</Text>
                       <TouchableOpacity
-                        className="ml-3"
+                        className="ml-2"
                         onPress={() => removeRecipient(email, "ccrecipient")}
                       >
                         <Text>✕</Text>
                       </TouchableOpacity>
                     </View>
                   ))}
-                </ScrollView>
+                </View>
               </View>
             )}
             {showBCC && (
@@ -230,31 +227,27 @@ const ComposeEmailModal = ({
                     placeholderTextColor="#9ca3af"
                   />
                 </View>
-                <ScrollView
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  className="mt-3"
-                >
+                <View className="flex flex-row flex-wrap mt-3">
                   {bccrecipients.map((email, i) => (
                     <View
                       key={i}
-                      className="flex flex-row items-center bg-[#EEF0F4] px-2 py-2 rounded-full ml-2"
+                      className="flex flex-row items-center bg-[#EEF0F4] px-2 py-2 rounded-full mr-2 mb-2"
                     >
-                      <View className="bg-[#fff] flex items-center justify-center flex-row mr-2 rounded-full w-[20px] h-[20px]">
+                      <View className="bg-white flex items-center justify-center rounded-full w-[20px] h-[20px] mr-2">
                         <Text className="text-[12px]">
                           {email.charAt(0).toUpperCase()}
                         </Text>
                       </View>
                       <Text className="text-[12px]">{email}</Text>
                       <TouchableOpacity
-                        className="ml-3"
+                        className="ml-2"
                         onPress={() => removeRecipient(email, "bccrecipient")}
                       >
                         <Text>✕</Text>
                       </TouchableOpacity>
                     </View>
                   ))}
-                </ScrollView>
+                </View>
               </View>
             )}
             <View className="flex flex-row items-center mt-10">
@@ -304,7 +297,7 @@ const ComposeEmailModal = ({
                 Send
               </Text>
             </TouchableOpacity>
-          </ScrollView>
+          </KeyboardAwareScrollView>
         </Animated.View>
       </TouchableWithoutFeedback>
 
@@ -323,6 +316,8 @@ const ComposeEmailModal = ({
       <AiWritingAssistantModal
         modalVisible={showAiModal}
         setModalVisible={setShowAiModal}
+        subject={subject}
+        recipients={recipients}
       />
     </Modal>
   );
