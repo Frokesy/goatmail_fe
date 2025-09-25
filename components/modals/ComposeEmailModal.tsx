@@ -21,6 +21,7 @@ import SendEmailIcon from "../icons/SendEmailIcon";
 import AttachFilesModal from "./AttachFilesModal";
 import ScheduleEmailModal from "./ScheduleEmailModal";
 import EmailProtectionModal from "./EmailProtectionModal";
+import AiWritingAssistantModal from "./AiWritingAssistantModal";
 
 const ComposeEmailModal = ({
   modalVisible,
@@ -49,6 +50,7 @@ const ComposeEmailModal = ({
     useState<boolean>(false);
   const [showEmailProtectionModal, setShowEmailProtectionModal] =
     useState<boolean>(false);
+  const [showAiModal, setShowAiModal] = useState<boolean>(false);
 
   const addRecipient = (cat: string) => {
     if (cat === "recipient") {
@@ -116,10 +118,12 @@ const ComposeEmailModal = ({
                 <Pressable onPress={() => setShowEmailProtectionModal(true)}>
                   <EmailLockIcon />
                 </Pressable>
-                <Image
-                  source={require("../../assets/images/ai-generate.png")}
-                  className="w-[44px] h-[44px] mt-3"
-                />
+                <Pressable onPress={() => setShowAiModal(true)}>
+                  <Image
+                    source={require("../../assets/images/ai-generate.png")}
+                    className="w-[44px] h-[44px] mt-3"
+                  />
+                </Pressable>
               </View>
             </View>
 
@@ -315,6 +319,10 @@ const ComposeEmailModal = ({
       <EmailProtectionModal
         modalVisible={showEmailProtectionModal}
         setModalVisible={setShowEmailProtectionModal}
+      />
+      <AiWritingAssistantModal
+        modalVisible={showAiModal}
+        setModalVisible={setShowAiModal}
       />
     </Modal>
   );
