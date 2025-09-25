@@ -20,6 +20,7 @@ import { Checkbox } from "expo-checkbox";
 import SendEmailIcon from "../icons/SendEmailIcon";
 import AttachFilesModal from "./AttachFilesModal";
 import ScheduleEmailModal from "./ScheduleEmailModal";
+import EmailProtectionModal from "./EmailProtectionModal";
 
 const ComposeEmailModal = ({
   modalVisible,
@@ -45,6 +46,8 @@ const ComposeEmailModal = ({
   const [showAttachFilesModal, setShowAttachFilesModal] =
     useState<boolean>(false);
   const [showScheduleMailModal, setShowScheduleMailModal] =
+    useState<boolean>(false);
+  const [showEmailProtectionModal, setShowEmailProtectionModal] =
     useState<boolean>(false);
 
   const addRecipient = (cat: string) => {
@@ -110,7 +113,9 @@ const ComposeEmailModal = ({
                 <Pressable onPress={() => setShowScheduleMailModal(true)}>
                   <ScheduledIcon />
                 </Pressable>
-                <EmailLockIcon />
+                <Pressable onPress={() => setShowEmailProtectionModal(true)}>
+                  <EmailLockIcon />
+                </Pressable>
                 <Image
                   source={require("../../assets/images/ai-generate.png")}
                   className="w-[44px] h-[44px] mt-3"
@@ -306,6 +311,10 @@ const ComposeEmailModal = ({
       <ScheduleEmailModal
         modalVisible={showScheduleMailModal}
         setModalVisible={setShowScheduleMailModal}
+      />
+      <EmailProtectionModal
+        modalVisible={showEmailProtectionModal}
+        setModalVisible={setShowEmailProtectionModal}
       />
     </Modal>
   );
