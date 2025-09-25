@@ -32,18 +32,11 @@ const EmailAccountCreationStatusModal = ({
 }) => {
   const [countdown, setCountdown] = useState(screen === "pricing" ? 3 : 5);
   const [completed, setCompleted] = useState(false);
-  const slideAnim = useRef(new Animated.Value(1000)).current;
   const progressAnim = useRef(new Animated.Value(0)).current;
   const router = useRouter();
 
   useEffect(() => {
     if (modalVisible) {
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-
       setCountdown(5);
       setCompleted(false);
       progressAnim.setValue(0);
@@ -74,7 +67,7 @@ const EmailAccountCreationStatusModal = ({
 
   return (
     <Modal
-      animationType="none"
+      animationType="slide"
       transparent
       visible={modalVisible}
       onRequestClose={() => setModalVisible(false)}
@@ -83,10 +76,7 @@ const EmailAccountCreationStatusModal = ({
         <View className="flex-1 bg-black/40" />
       </TouchableWithoutFeedback>
 
-      <Animated.View
-        style={{ transform: [{ translateY: slideAnim }] }}
-        className="absolute bottom-0 h-[90%] w-full bg-white rounded-t-3xl p-5"
-      >
+      <Animated.View className="absolute bottom-0 h-[90%] w-full bg-white rounded-t-3xl p-5">
         <SafeAreaView className="flex-1 items-center">
           {!completed && (
             <View className="absolute top-5 right-5">

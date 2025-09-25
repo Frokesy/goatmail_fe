@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import {
   Animated,
   Image,
@@ -16,9 +16,10 @@ import XIcon from "../icons/XIcon";
 import ShareIcon from "../icons/ShareIcon";
 import ScheduledIcon from "../icons/ScheduledIcon";
 import EmailLockIcon from "../icons/EmailLockIcon";
-import Checkbox from "expo-checkbox";
+import { Checkbox } from "expo-checkbox";
 import SendEmailIcon from "../icons/SendEmailIcon";
 import AttachFilesModal from "./AttachFilesModal";
+import ScheduleEmailModal from "./ScheduleEmailModal";
 
 const ComposeEmailModal = ({
   modalVisible,
@@ -27,7 +28,6 @@ const ComposeEmailModal = ({
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
 }) => {
-  const slideAnim = useRef(new Animated.Value(1000)).current;
   const [showCC, setShowCC] = useState<boolean>(false);
   const [showBCC, setShowBCC] = useState<boolean>(false);
   const [recipients, setRecipients] = useState<any[]>([]);
@@ -43,6 +43,8 @@ const ComposeEmailModal = ({
   const [mail, setMail] = useState<string>("");
   const [isChecked, setChecked] = useState(false);
   const [showAttachFilesModal, setShowAttachFilesModal] =
+    useState<boolean>(false);
+  const [showScheduleMailModal, setShowScheduleMailModal] =
     useState<boolean>(false);
 
   const addRecipient = (cat: string) => {
@@ -80,18 +82,9 @@ const ComposeEmailModal = ({
     }
   };
 
-  useEffect(() => {
-    if (modalVisible) {
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-    }
-  }, [modalVisible]);
   return (
     <Modal
-      animationType="none"
+      animationType="slide"
       transparent
       visible={modalVisible}
       onRequestClose={() => setModalVisible(false)}
@@ -99,10 +92,7 @@ const ComposeEmailModal = ({
       <View className="flex-1 bg-black/40" />
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <Animated.View
-          style={{ transform: [{ translateY: slideAnim }] }}
-          className="absolute bottom-0 h-[95%] w-full bg-white rounded-t-3xl p-5"
-        >
+        <Animated.View className="absolute bottom-0 h-[95%] w-full bg-white rounded-t-3xl p-5">
           <ScrollView>
             <View className="flex flex-row justify-between items-center mt-10 border-b-2 border-[#f1f1f1] pb-3">
               <View className="flex items-center flex-row">
@@ -117,7 +107,9 @@ const ComposeEmailModal = ({
                 <Pressable onPress={() => setShowAttachFilesModal(true)}>
                   <ShareIcon />
                 </Pressable>
-                <ScheduledIcon />
+                <Pressable onPress={() => setShowScheduleMailModal(true)}>
+                  <ScheduledIcon />
+                </Pressable>
                 <EmailLockIcon />
                 <Image
                   source={require("../../assets/images/ai-generate.png")}
@@ -310,6 +302,10 @@ const ComposeEmailModal = ({
       <AttachFilesModal
         modalVisible={showAttachFilesModal}
         setModalVisible={setShowAttachFilesModal}
+      />
+      <ScheduleEmailModal
+        modalVisible={showScheduleMailModal}
+        setModalVisible={setShowScheduleMailModal}
       />
     </Modal>
   );

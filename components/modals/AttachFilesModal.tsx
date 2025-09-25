@@ -1,11 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
   Modal,
   Animated,
   TouchableWithoutFeedback,
-  TouchableOpacity,
 } from "react-native";
 import AddPhotoFromLibraryIcon from "../icons/AddPhotoFromLibraryIcon";
 import UploadFromFileManagerIcon from "../icons/UploadFromFileManagerIcon";
@@ -18,21 +16,9 @@ const AttachFilesModal = ({
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
 }) => {
-  const slideAnim = useRef(new Animated.Value(1000)).current;
-
-  useEffect(() => {
-    if (modalVisible) {
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-    }
-  }, [modalVisible]);
-
   return (
     <Modal
-      animationType="none"
+      animationType="slide"
       transparent
       visible={modalVisible}
       onRequestClose={() => setModalVisible(false)}
@@ -41,10 +27,7 @@ const AttachFilesModal = ({
         <View className="flex-1 bg-black/40" />
       </TouchableWithoutFeedback>
 
-      <Animated.View
-        style={{ transform: [{ translateY: slideAnim }] }}
-        className="absolute bottom-0 h-[40%] w-full bg-white rounded-t-3xl p-5"
-      >
+      <Animated.View className="absolute bottom-0 h-[40%] w-full bg-white rounded-t-3xl p-5">
         <Text className="text-[20px] font-semibold mb-2">Attach files</Text>
         <Text>Choose files to attach to your email</Text>
         <View className="border-t-2 border-[#f1f1f1] mt-2 pt-4">
