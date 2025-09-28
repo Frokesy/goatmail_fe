@@ -8,18 +8,28 @@ import React, {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type User = {
+  _id: string;
   email: string;
+  verified: boolean;
+  incomingServer: string[];
+  outgoingEmail: string[];
+  recoveryEmail: string;
+  subscription: string[];
+  twoFASecret: string;
+  twoFAEnabled: boolean;
+  createdAt: string;
 };
 
 type AuthContextType = {
   user: User | null;
   token: string | null;
-  login: (user: User, token: string) => Promise<void>;
+  login: (user: { email: string }, token: string) => Promise<void>;
   logout: () => Promise<void>;
   loading: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const API_URL = "http://192.168.1.117:3000/api";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -46,12 +56,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     loadSession();
   }, []);
 
-  const login = async (userData: User, jwtToken: string) => {
-    setUser(userData);
+  const login = async (userData: { email: string }, jwtToken: string) => {
     setToken(jwtToken);
-
     await AsyncStorage.setItem("user", JSON.stringify(userData));
     await AsyncStorage.setItem("token", jwtToken);
+
+    await getUser(jwtToken);
+  };
+
+  const getUser = async (jwtToken: string) => {
+    try {
+      const res = await fetch(`${API_URL}/get-user`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch user details");
+      }
+
+      const data = await res.json();
+      setUser(data.user);
+      await AsyncStorage.setItem("user", JSON.stringify(data.user));
+    } catch (err) {
+      console.error("❌ Error fetching user:", err);
+    }
   };
 
   const logout = async () => {
