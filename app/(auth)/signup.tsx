@@ -13,6 +13,7 @@ import { Link, useRouter } from "expo-router";
 const API_URL = "http://192.168.1.117:3000/api/auth/signup";
 
 const Signup = () => {
+  const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -20,8 +21,8 @@ const Signup = () => {
   const [success, setSuccess] = useState<boolean>(false);
 
   const handleSignup = async () => {
-    if (!email) {
-      setError("Please enter your email");
+    if (!email || !name) {
+      setError("All fields are required");
       return;
     }
 
@@ -33,7 +34,7 @@ const Signup = () => {
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ name, email }),
       });
 
       const data = await res.json();
@@ -51,6 +52,9 @@ const Signup = () => {
       console.log(err);
       setError("Network error. Please try again.");
     } finally {
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       setLoading(false);
     }
   };
@@ -66,6 +70,16 @@ const Signup = () => {
         </Text>
         <View className="flex flex-col w-[100%] mt-3">
           <Text className="text-[14px] text-[#344054] font-medium mt-6">
+            Full Name
+          </Text>
+          <TextInput
+            value={name}
+            onChangeText={(text) => setName(text)}
+            className="border border-[#D6D6D6] mt-3 p-3 rounded-lg"
+          />
+        </View>
+        <View className="flex flex-col w-[100%] mt-3">
+          <Text className="text-[14px] text-[#344054] font-medium mt-3">
             Email address
           </Text>
           <TextInput

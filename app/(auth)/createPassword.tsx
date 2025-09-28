@@ -14,6 +14,7 @@ import EyeIcon from "../../components/icons/EyesIcon";
 import { useRouter } from "expo-router";
 import { Checkbox } from "expo-checkbox";
 import { useSearchParams } from "expo-router/build/hooks";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const API_URL = "http://192.168.1.117:3000/api/auth";
 
@@ -78,6 +79,7 @@ const CreatePassword = () => {
 
       if (!res.ok) setError(data.error || "Failed to set password");
       else {
+        await AsyncStorage.setItem("password", password);
         Alert.alert("Success", "Password set successfully!");
         router.push({
           pathname: "/incomingEmailServerType",
