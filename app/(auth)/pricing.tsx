@@ -175,6 +175,7 @@ const Pricing = () => {
       <EmailAccountCreationStatusModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        email={email}
         screen="pricing"
       />
     </ScrollView>

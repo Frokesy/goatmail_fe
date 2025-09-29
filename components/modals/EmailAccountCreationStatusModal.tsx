@@ -8,16 +8,22 @@ import {
   Animated,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { useRouter } from "expo-router";
 import Svg, { Circle } from "react-native-svg";
 import MiniTick from "../icons/MiniTick";
 import GreyDot from "../icons/GreyDot";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuth } from "@/app/context/authContext";
 
 const CIRCLE_SIZE = 36;
 const STROKE_WIDTH = 3;
 const RADIUS = (CIRCLE_SIZE - STROKE_WIDTH) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+
+const API_URL = "http://192.168.1.117:3000/api/auth";
 
 const EmailAccountCreationStatusModal = ({
   modalVisible,
@@ -33,7 +39,49 @@ const EmailAccountCreationStatusModal = ({
   const [countdown, setCountdown] = useState(screen === "pricing" ? 3 : 5);
   const [completed, setCompleted] = useState(false);
   const progressAnim = useRef(new Animated.Value(0)).current;
+  const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
+  const { login } = useAuth();
+
+  const handlePress = async () => {
+    const storedPass = await AsyncStorage.getItem("password");
+    try {
+      if (!storedPass) {
+        alert("No saved password found, please log in again.");
+        return;
+      }
+
+      const res = await fetch(`${API_URL}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password: storedPass }),
+      });
+
+      console.log(email, storedPass);
+
+      const data = await res.json();
+
+      console.log(data.error);
+
+      if (!res.ok) {
+        Alert.alert(
+          "Error Occured in Account Creation",
+          data.error || "Invalid credentials"
+        );
+        setLoading(false);
+        return;
+      }
+
+      await login({ email: data.email }, data.token);
+      router.replace("/inbox");
+      setModalVisible(false);
+    } catch (err) {
+      console.error("Error going to inbox:", err);
+      alert("Something went wrong. Please try again.");
+    }
+  };
 
   useEffect(() => {
     if (modalVisible) {
@@ -156,15 +204,16 @@ const EmailAccountCreationStatusModal = ({
 
           {screen === "pricing" && completed && (
             <TouchableOpacity
-              onPress={() => {
-                setModalVisible(false);
-                router.push("/inbox");
-              }}
+              onPress={handlePress}
               className="mt-auto w-full py-4 bg-[#3D4294] rounded-full"
             >
-              <Text className="text-white text-center font-bold text-[16px]">
-                Go to Inbox
-              </Text>
+              {loading ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <Text className="text-white font-medium text-[16px]">
+                  Go to inbox
+                </Text>
+              )}
             </TouchableOpacity>
           )}
         </SafeAreaView>
