@@ -39,7 +39,7 @@ const EmailAccountCreationStatusModal = ({
   const [countdown, setCountdown] = useState(screen === "pricing" ? 3 : 5);
   const [completed, setCompleted] = useState(false);
   const progressAnim = useRef(new Animated.Value(0)).current;
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const { login } = useAuth();
 

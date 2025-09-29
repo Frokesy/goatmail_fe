@@ -11,7 +11,7 @@ interface HeaderProps {
 const Header = ({ title }: HeaderProps) => {
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
   return (
-    <View className="flex flex-row items-center justify-between border-b-2 border-[#f1f1f1] pb-6">
+    <View className="flex flex-row items-center justify-between border-b-2 border-[#f1f1f1] px-6 pt-10 pb-6">
       <View className="flex flex-row items-center">
         <Pressable onPress={() => setDrawerVisible(true)}>
           <Hamburger />
