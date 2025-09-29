@@ -7,14 +7,12 @@ import {
   Image,
   SafeAreaView,
   Pressable,
-  TouchableOpacity,
 } from "react-native";
 import { useAuth } from "./context/authContext";
 import Header from "@/components/defaults/Header";
 import PenIcon from "@/components/icons/PenIcon";
 import ComposeEmailModal from "@/components/modals/ComposeEmailModal";
 import UpdateIncomingServerModal from "@/components/modals/UpdateIncomingServerModal";
-import { Star, StarOff } from "lucide-react-native";
 
 interface Mail {
   uid: string;
@@ -22,6 +20,7 @@ interface Mail {
   from: string;
   date: string;
   excerpt: string;
+  starred: boolean;
 }
 
 interface IncomingServer {
@@ -47,8 +46,6 @@ const Inbox = () => {
   const [security, setSecurity] = useState("");
   const [password, setPassword] = useState("");
   const [updating, setUpdating] = useState(false);
-
-  const [starred, setStarred] = useState<{ [key: string]: boolean }>({});
 
   const API_URL = "http://192.168.1.117:3000/api";
 
@@ -82,6 +79,7 @@ const Inbox = () => {
             from: msg.from || "Unknown sender",
             date: formattedDate,
             excerpt: msg.excerpt || "",
+            starred: Boolean(msg.starred),
           };
         });
 
@@ -170,8 +168,43 @@ const Inbox = () => {
     }
   };
 
-  const toggleStar = (id: string) => {
-    setStarred((prev) => ({ ...prev, [id]: !prev[id] }));
+  const toggleStar = async (mailId: string, isStarred: boolean) => {
+    try {
+      // Optimistically update UI
+      setMails((prev) =>
+        prev.map((m) => (m.uid === mailId ? { ...m, starred: !isStarred } : m))
+      );
+
+      let res;
+      if (isStarred) {
+        // UNSTAR
+        res = await fetch(`${API_URL}/unstar-mail/${mailId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } else {
+        // STAR
+        res = await fetch(`${API_URL}/star-mail`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ mailId }),
+        });
+      }
+
+      if (!res.ok) {
+        throw new Error("Failed to update star status");
+      }
+    } catch (err) {
+      console.error(err);
+      setMails((prev) =>
+        prev.map((m) => (m.uid === mailId ? { ...m, starred: isStarred } : m))
+      );
+    }
   };
 
   useEffect(() => {
@@ -214,16 +247,11 @@ const Inbox = () => {
                 key={mail.uid}
                 className="flex-row items-start border-b border-gray-200 px-4 py-3"
               >
-                <TouchableOpacity
-                  onPress={() => toggleStar(mail.uid)}
-                  className="mr-3 mt-1"
-                >
-                  {starred[mail.uid] ? (
-                    <Star size={20} color="#facc15" fill="#facc15" />
-                  ) : (
-                    <StarOff size={20} color="#9ca3af" />
-                  )}
-                </TouchableOpacity>
+                <Pressable onPress={() => toggleStar(mail.uid, mail.starred)}>
+                  <Text className="text-xl mr-3">
+                    {mail.starred ? "⭐" : "☆"}
+                  </Text>
+                </Pressable>
 
                 <View className="flex-1">
                   <View className="flex-row justify-between">
