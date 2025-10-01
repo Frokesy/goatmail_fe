@@ -8,6 +8,7 @@ export async function sendEmail(payload: {
   bcc?: string[];
   subject: string;
   body: string;
+  track: boolean;
 }) {
   const res = await fetch(`${API_URL}/send-email`, {
     method: "POST",

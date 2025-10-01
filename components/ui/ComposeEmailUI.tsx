@@ -89,6 +89,7 @@ const ComposeEmailUI = ({
         bcc: bccrecipients,
         subject,
         body: mail,
+        track: isChecked,
       });
 
       Alert.alert("Success", "Email sent successfully!");
@@ -96,6 +97,12 @@ const ComposeEmailUI = ({
     } catch (err: any) {
       Alert.alert("Error", err.message || "Failed to send email");
     } finally {
+      // setMail("");
+      // setSubject("");
+      // setRecipients([]);
+      // setCCRecipients([]);
+      // setBCCRecipients([]);
+      // setChecked(false);
       setLoading(false);
     }
   };
