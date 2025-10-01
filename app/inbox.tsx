@@ -13,6 +13,7 @@ import Header from "@/components/defaults/Header";
 import PenIcon from "@/components/icons/PenIcon";
 import ComposeEmailModal from "@/components/modals/ComposeEmailModal";
 import UpdateIncomingServerModal from "@/components/modals/UpdateIncomingServerModal";
+import { useRouter } from "expo-router";
 
 interface Mail {
   uid: string;
@@ -38,6 +39,7 @@ const Inbox = () => {
   const [error, setError] = useState("");
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
+  const router = useRouter();
 
   // incoming server fields
   const [serverType, setServerType] = useState("");
@@ -170,14 +172,12 @@ const Inbox = () => {
 
   const toggleStar = async (mailId: string, isStarred: boolean) => {
     try {
-      // Optimistically update UI
       setMails((prev) =>
         prev.map((m) => (m.uid === mailId ? { ...m, starred: !isStarred } : m))
       );
 
       let res;
       if (isStarred) {
-        // UNSTAR
         res = await fetch(`${API_URL}/unstar-mail/${mailId}`, {
           method: "DELETE",
           headers: {
@@ -185,7 +185,6 @@ const Inbox = () => {
           },
         });
       } else {
-        // STAR
         res = await fetch(`${API_URL}/star-mail`, {
           method: "POST",
           headers: {
@@ -253,7 +252,15 @@ const Inbox = () => {
                   </Text>
                 </Pressable>
 
-                <View className="flex-1">
+                <Pressable
+                  onPress={() =>
+                    router.push({
+                      pathname: "/viewMail",
+                      params: { uid: mail.uid },
+                    })
+                  }
+                  className="flex-1"
+                >
                   <View className="flex-row justify-between">
                     <Text className="font-semibold text-[15px] flex-1">
                       {mail.from}
@@ -274,7 +281,7 @@ const Inbox = () => {
                   >
                     {mail.excerpt}
                   </Text>
-                </View>
+                </Pressable>
               </View>
             ))}
         </ScrollView>
