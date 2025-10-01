@@ -9,6 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type User = {
   _id: string;
+  name: string;
   email: string;
   verified: boolean;
   incomingServer: string[];
