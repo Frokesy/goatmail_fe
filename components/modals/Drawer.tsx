@@ -36,7 +36,7 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
 
   const navItems = [
     { id: 1, name: "Inbox", href: "/inbox", icon: <InboxIcon /> },
-    { id: 2, name: "Sent", icon: <SentIcon /> },
+    { id: 2, name: "Sent", href: "/sent", icon: <SentIcon /> },
     { id: 3, name: "Scheduled", icon: <ScheduledIcon /> },
     { id: 4, name: "Starred", href: "/starred", icon: <StarIcon /> },
     { id: 5, name: "Drafts", icon: <DraftsIcon /> },
