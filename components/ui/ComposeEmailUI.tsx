@@ -108,7 +108,7 @@ const ComposeEmailUI = ({
       });
 
       if (draftId) {
-        await fetch(`${API_URL}/delete-drafts/${draftId}`, {
+        await fetch(`${API_URL}/drafts/${draftId}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,

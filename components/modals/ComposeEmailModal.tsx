@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Animated,
   Image,
@@ -20,33 +20,38 @@ import ShareIcon from "../icons/ShareIcon";
 import XIcon from "../icons/XIcon";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useAuth } from "@/app/context/authContext";
+import { Draft } from "@/app/drafts";
 
 const API_URL = "http://192.168.1.117:3000/api";
 
 const ComposeEmailModal = ({
   modalVisible,
   setModalVisible,
+  initialDraft,
 }: {
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
+  initialDraft?: Draft | null;
 }) => {
-  const [recipients, setRecipients] = useState<any[]>([]);
-
-  const [subject, setSubject] = useState<string>("");
-
   const { token } = useAuth();
+  const [recipients, setRecipients] = useState<any[]>(initialDraft?.to || []);
+  const [ccrecipients, setCcrecipients] = useState<any[]>(
+    initialDraft?.cc || []
+  );
+  const [bccrecipients, setBccrecipients] = useState<any[]>(
+    initialDraft?.bcc || []
+  );
+  const [subject, setSubject] = useState<string>(initialDraft?.subject || "");
+  const [mail, setMail] = useState<string>(initialDraft?.body || "");
+  const [draftId, setDraftId] = useState<string | null>(
+    initialDraft?._id || null
+  );
 
-  const [showAttachFilesModal, setShowAttachFilesModal] =
-    useState<boolean>(false);
-  const [showScheduleMailModal, setShowScheduleMailModal] =
-    useState<boolean>(false);
+  const [showAttachFilesModal, setShowAttachFilesModal] = useState(false);
+  const [showScheduleMailModal, setShowScheduleMailModal] = useState(false);
   const [showEmailProtectionModal, setShowEmailProtectionModal] =
-    useState<boolean>(false);
-  const [showAiModal, setShowAiModal] = useState<boolean>(false);
-  const [ccrecipients, setCcrecipients] = useState<any[]>([]);
-  const [bccrecipients, setBccrecipients] = useState<any[]>([]);
-  const [mail, setMail] = useState<string>("");
-  const [draftId, setDraftId] = useState<string | null>(null);
+    useState(false);
+  const [showAiModal, setShowAiModal] = useState(false);
 
   const handleClose = async () => {
     if (
@@ -85,6 +90,17 @@ const ComposeEmailModal = ({
 
     setModalVisible(false);
   };
+
+  useEffect(() => {
+    if (modalVisible && initialDraft) {
+      setRecipients(initialDraft.to || []);
+      setCcrecipients(initialDraft.cc || []);
+      setBccrecipients(initialDraft.bcc || []);
+      setSubject(initialDraft.subject || "");
+      setMail(initialDraft.body || "");
+      setDraftId(initialDraft._id || null);
+    }
+  }, [modalVisible, initialDraft]);
 
   return (
     <Modal

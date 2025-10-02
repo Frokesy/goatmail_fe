@@ -20,6 +20,7 @@ export default function RootLayout() {
             <Stack.Screen name="starred" options={{ headerShown: false }} />
             <Stack.Screen name="archived" options={{ headerShown: false }} />
             <Stack.Screen name="trash" options={{ headerShown: false }} />
+            <Stack.Screen name="drafts" options={{ headerShown: false }} />
           </Stack>
         </GestureHandlerRootView>
       </AuthProvider>
