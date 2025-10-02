@@ -31,7 +31,7 @@ interface DrawerProps {
 }
 
 const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const router = useRouter();
 
   const navItems = [
@@ -39,7 +39,7 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
     { id: 2, name: "Sent", href: "/sent", icon: <SentIcon /> },
     { id: 3, name: "Scheduled", icon: <ScheduledIcon /> },
     { id: 4, name: "Starred", href: "/starred", icon: <StarIcon /> },
-    { id: 5, name: "Drafts", href: "drafts", icon: <DraftsIcon /> },
+    { id: 5, name: "Drafts", href: "/drafts", icon: <DraftsIcon /> },
     { id: 6, name: "Archive", href: "/archived", icon: <ArchiveIcon /> },
     { id: 7, name: "Spam", icon: <SpamIcon /> },
     { id: 8, name: "Trash", href: "/trash", icon: <TrashIcon /> },
@@ -75,6 +75,7 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
       subgroup: "extras",
     },
   ];
+
   const slideAnim = useRef(new Animated.Value(-900)).current;
 
   useEffect(() => {
@@ -98,6 +99,12 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
     setDrawerVisible(false);
   };
 
+  const handleLogout = async () => {
+    await logout();
+    setDrawerVisible(false);
+    router.replace("/");
+  };
+
   return (
     <Modal
       animationType="none"
@@ -110,9 +117,7 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
       </TouchableWithoutFeedback>
 
       <Animated.View
-        style={{
-          transform: [{ translateX: slideAnim }],
-        }}
+        style={{ transform: [{ translateX: slideAnim }] }}
         className="absolute left-0 top-0 h-full w-[70%] bg-white p-5 pt-[10vh]"
       >
         <View>
@@ -139,15 +144,11 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
             {navItems.map((item) => (
               <View key={item.id}>
                 {!item.subgroup && (
-                  <Pressable
-                    onPress={() => handlePress(item.href as Route)}
-                    className="w-[100%]"
-                  >
+                  <Pressable onPress={() => handlePress(item.href as Route)}>
                     <View
-                      key={item.id}
                       className={`${
                         item.name === title && "bg-[#E8EAF0]"
-                      } flex flex-row items-center py-2 px-3 rounded-lg mt-1 w-[100%]`}
+                      } flex flex-row items-center py-2 px-3 rounded-lg mt-1`}
                     >
                       <View>{item.icon}</View>
                       <Text
@@ -160,13 +161,11 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
                     </View>
                   </Pressable>
                 )}
+
                 {item.subgroup === "label" && (
                   <View className="mt-10">
                     <Text className="text-[12px] uppercase">Labels</Text>
-                    <View
-                      key={item.id}
-                      className="flex flex-row items-center mt-3"
-                    >
+                    <View className="flex flex-row items-center mt-3">
                       <View>{item.icon}</View>
                       <Text className="text-[14px] text-[#101828] ml-3">
                         {item.name}
@@ -174,13 +173,11 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
                     </View>
                   </View>
                 )}
+
                 {item.subgroup === "group" && (
                   <View className="my-10">
                     <Text className="text-[12px] uppercase">Groups</Text>
-                    <View
-                      key={item.id}
-                      className="flex flex-row items-center mt-3"
-                    >
+                    <View className="flex flex-row items-center mt-3">
                       <View>{item.icon}</View>
                       <Text className="text-[14px] text-[#101828] ml-3">
                         {item.name}
@@ -190,15 +187,25 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
                 )}
 
                 {item.subgroup === "extras" && (
-                  <View
-                    key={item.id}
-                    className="flex flex-row items-center mt-3"
-                  >
-                    <View>{item.icon}</View>
-                    <Text className="text-[14px] text-[#101828] ml-3">
-                      {item.name}
-                    </Text>
-                  </View>
+                  <>
+                    {item.name === "Sign out" ? (
+                      <Pressable onPress={handleLogout}>
+                        <View className="flex flex-row items-center mt-3">
+                          <View>{item.icon}</View>
+                          <Text className="text-[14px] text-[#101828] ml-3">
+                            {item.name}
+                          </Text>
+                        </View>
+                      </Pressable>
+                    ) : (
+                      <View className="flex flex-row items-center mt-3">
+                        <View>{item.icon}</View>
+                        <Text className="text-[14px] text-[#101828] ml-3">
+                          {item.name}
+                        </Text>
+                      </View>
+                    )}
+                  </>
                 )}
               </View>
             ))}
