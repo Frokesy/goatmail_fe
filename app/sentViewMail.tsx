@@ -1,72 +1,70 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   ScrollView,
   SafeAreaView,
-  Pressable,
   ActivityIndicator,
   useWindowDimensions,
 } from "react-native";
-import Header from "@/components/defaults/Header";
 import { useSearchParams } from "expo-router/build/hooks";
-import { useAuth } from "./context/authContext";
+import { useAuth } from "@/app/context/authContext";
 import RenderHtml from "react-native-render-html";
+import Header from "@/components/defaults/Header";
 
-interface MailDetail {
+interface SentMailDetail {
   uid: string;
   subject: string;
   from: string;
-  to: string;
+  to: string[];
   date: string;
-  starred: boolean;
   body: string;
 }
 
 const API_URL = "http://192.168.1.117:3000/api";
 
-const ViewMail = () => {
+const SentViewMail = () => {
   const { width } = useWindowDimensions();
-  const searchParams = useSearchParams();
   const { token } = useAuth();
+  const searchParams = useSearchParams();
   const uid = searchParams.get("uid") || "";
-  const [mail, setMail] = useState<MailDetail | null>(null);
+
+  const [mail, setMail] = useState<SentMailDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchMail = async () => {
       try {
-        if (!uid) throw new Error("Mail UID is missing");
+        if (!uid) throw new Error("Mail ID missing");
 
-        setLoading(true);
-        const res = await fetch(`${API_URL}/mail/${uid}`, {
+        const res = await fetch(`${API_URL}/sent-emails/${uid}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (!res.ok) throw new Error("Failed to fetch email");
+        if (!res.ok) throw new Error("Failed to fetch sent email");
 
         const data = await res.json();
-        if (!data.mail) throw new Error("Email not found");
+        if (!data.email) throw new Error("Email not found");
+
+        const msg = data.email;
 
         setMail({
-          uid: data.mail.id.toString(),
-          subject: data.mail.subject || "(no subject)",
-          from: data.mail.from || "(unknown sender)",
-          to: data.mail.to || "you@example.com",
-          date: data.mail.date
-            ? new Date(data.mail.date).toLocaleString("en-US", {
+          uid: msg._id,
+          subject: msg.subject || "(no subject)",
+          from: msg.from || "Me",
+          to: msg.to || [],
+          date: msg.sentAt
+            ? new Date(msg.sentAt).toLocaleString("en-US", {
                 month: "short",
                 day: "numeric",
                 hour: "numeric",
                 minute: "numeric",
               })
             : "",
-          starred: Boolean(data.mail.starred),
-          body: data.mail.body || "",
+          body: msg.body || "",
         });
       } catch (err: any) {
-        console.error(err);
         setError(err.message || "Something went wrong");
       } finally {
         setLoading(false);
@@ -76,69 +74,23 @@ const ViewMail = () => {
     fetchMail();
   }, [uid, token]);
 
-  const toggleStar = async () => {
-    if (!mail) return;
-    const isStarred = mail.starred;
-
-    setMail((prev) => prev && { ...prev, starred: !isStarred });
-
-    try {
-      const url = `${API_URL}/${isStarred ? "unstar-mail" : "star-mail"}`;
-      const res = await fetch(isStarred ? `${url}/${mail.uid}` : url, {
-        method: isStarred ? "DELETE" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: isStarred ? null : JSON.stringify({ mailId: mail.uid }),
-      });
-
-      if (!res.ok) throw new Error("Failed to update star status");
-    } catch (err) {
-      console.error(err);
-      setMail((prev) => prev && { ...prev, starred: isStarred });
-    }
-  };
-
-  const actionButton = (label: string) => (
-    <Pressable
-      className="px-3 py-1 rounded mr-2"
-      style={{ backgroundColor: "#f1f3f4" }}
-    >
-      <Text className="text-gray-700 font-medium">{label}</Text>
-    </Pressable>
-  );
-
   return (
     <SafeAreaView className="flex-1 bg-white">
       <Header title="Mail" />
-
       {loading ? (
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#000" />
+          <ActivityIndicator size="large" />
         </View>
       ) : error ? (
         <View className="flex-1 items-center justify-center p-4">
           <Text className="text-red-500">{error}</Text>
         </View>
       ) : mail ? (
-        <ScrollView className="flex-1">
-          <View className="flex-row justify-end items-center p-2">
-            {actionButton("Reply")}
-            {actionButton("Forward")}
-            {actionButton("Archive")}
-          </View>
-
-          <View className="px-4 py-3 flex-row justify-between items-center">
-            <Text className="text-xl font-semibold flex-1 pr-3">
-              {mail.subject}
-            </Text>
-            <Pressable onPress={toggleStar}>
-              <Text className="text-2xl">{mail.starred ? "⭐" : "☆"}</Text>
-            </Pressable>
-          </View>
-
-          <View className="px-4 py-3 flex-row items-center">
+        <ScrollView className="flex-1 p-4">
+          <Text className="text-xl font-semibold flex-1 pr-3">
+            {mail.subject}
+          </Text>
+          <View className="py-3 flex-row items-center border-b-2 border-[#f1f1f1]">
             <View className="w-10 h-10 bg-blue-500 rounded-full items-center justify-center mr-3">
               <Text className="text-white font-bold text-lg">
                 {mail.from[0].toUpperCase()}
@@ -179,15 +131,10 @@ const ViewMail = () => {
               ignoredDomTags={["meta", "link", "style"]}
             />
           </View>
-
-          <View className="px-4 py-3 flex-row justify-start">
-            {actionButton("Reply")}
-            {actionButton("Forward")}
-          </View>
         </ScrollView>
       ) : null}
     </SafeAreaView>
   );
 };
 
-export default ViewMail;
+export default SentViewMail;

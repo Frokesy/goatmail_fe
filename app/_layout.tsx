@@ -11,6 +11,7 @@ export default function RootLayout() {
           <Stack.Screen name="(auth)" />
           <Stack.Screen name="inbox" options={{ headerShown: false }} />
           <Stack.Screen name="sent" options={{ headerShown: false }} />
+          <Stack.Screen name="sentViewEmail" options={{ headerShown: false }} />
           <Stack.Screen name="starred" options={{ headerShown: false }} />
         </Stack>
       </AuthProvider>

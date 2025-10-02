@@ -120,7 +120,7 @@ const SentEmailsScreen = () => {
               <Pressable
                 onPress={() =>
                   router.push({
-                    pathname: "/viewMail",
+                    pathname: "/sentViewMail",
                     params: { uid: mail.uid },
                   })
                 }
