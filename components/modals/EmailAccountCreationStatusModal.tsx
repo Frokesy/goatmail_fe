@@ -210,7 +210,7 @@ const EmailAccountCreationStatusModal = ({
               {loading ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
-                <Text className="text-white font-medium text-[16px]">
+                <Text className="text-white text-center font-medium text-[16px]">
                   Go to inbox
                 </Text>
               )}

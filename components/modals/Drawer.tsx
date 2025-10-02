@@ -6,6 +6,7 @@ import {
   Modal,
   Animated,
   TouchableWithoutFeedback,
+  Pressable,
 } from "react-native";
 import InboxIcon from "../icons/InboxIcon";
 import SentIcon from "../icons/SentIcon";
@@ -21,6 +22,7 @@ import PeopleIcon from "../icons/PeopleIcon";
 import SubscriptionIcon from "../icons/SubscriptionIcon";
 import SettingsIcon from "../icons/SettingsIcon";
 import SignoutIcon from "../icons/SignoutIcon";
+import { Route, useRouter } from "expo-router";
 
 interface DrawerProps {
   drawerVisible: boolean;
@@ -30,50 +32,45 @@ interface DrawerProps {
 
 const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
   const { user } = useAuth();
+  const router = useRouter();
 
   const navItems = [
     { id: 1, name: "Inbox", href: "/inbox", icon: <InboxIcon /> },
-    { id: 2, name: "Sent", href: "", icon: <SentIcon /> },
-    { id: 3, name: "Scheduled", href: "", icon: <ScheduledIcon /> },
-    { id: 4, name: "Starred", href: "", icon: <StarIcon /> },
-    { id: 5, name: "Drafts", href: "", icon: <DraftsIcon /> },
-    { id: 6, name: "Archive", href: "", icon: <ArchiveIcon /> },
-    { id: 7, name: "Spam", href: "", icon: <SpamIcon /> },
-    { id: 8, name: "Trash", href: "", icon: <TrashIcon /> },
-    { id: 9, name: "All mail", href: "", icon: <EmailIcon /> },
-    { id: 10, name: "Drafts", href: "", icon: <DraftsIcon /> },
+    { id: 2, name: "Sent", icon: <SentIcon /> },
+    { id: 3, name: "Scheduled", icon: <ScheduledIcon /> },
+    { id: 4, name: "Starred", href: "/starred", icon: <StarIcon /> },
+    { id: 5, name: "Drafts", icon: <DraftsIcon /> },
+    { id: 6, name: "Archive", icon: <ArchiveIcon /> },
+    { id: 7, name: "Spam", icon: <SpamIcon /> },
+    { id: 8, name: "Trash", icon: <TrashIcon /> },
+    { id: 9, name: "All mail", icon: <EmailIcon /> },
     {
       id: 11,
       name: "New Label",
-      href: "",
       icon: <LabelIcon />,
       subgroup: "label",
     },
     {
       id: 12,
       name: "Create group",
-      href: "",
       icon: <PeopleIcon />,
       subgroup: "group",
     },
     {
       id: 13,
       name: "Subscription",
-      href: "",
       icon: <SubscriptionIcon />,
       subgroup: "extras",
     },
     {
       id: 14,
       name: "Settings",
-      href: "",
       icon: <SettingsIcon />,
       subgroup: "extras",
     },
     {
       id: 15,
       name: "Sign out",
-      href: "",
       icon: <SignoutIcon />,
       subgroup: "extras",
     },
@@ -95,6 +92,11 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
       }).start();
     }
   }, [drawerVisible, slideAnim]);
+
+  const handlePress = (href: Route | undefined) => {
+    router.replace(href ? href : "/+not-found");
+    setDrawerVisible(false);
+  };
 
   return (
     <Modal
@@ -130,21 +132,26 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
             {navItems.map((item) => (
               <View key={item.id}>
                 {!item.subgroup && (
-                  <View
-                    key={item.id}
-                    className={`${
-                      item.name === title && "bg-[#E8EAF0]"
-                    } flex flex-row items-center py-2 px-3 rounded-lg mt-1`}
+                  <Pressable
+                    onPress={() => handlePress(item.href as Route)}
+                    className="w-[100%]"
                   >
-                    <View>{item.icon}</View>
-                    <Text
+                    <View
+                      key={item.id}
                       className={`${
-                        item.name === title && "font-semibold"
-                      } text-[14px] text-[#101828] ml-3`}
+                        item.name === title && "bg-[#E8EAF0]"
+                      } flex flex-row items-center py-2 px-3 rounded-lg mt-1 w-[100%]`}
                     >
-                      {item.name}
-                    </Text>
-                  </View>
+                      <View>{item.icon}</View>
+                      <Text
+                        className={`${
+                          item.name === title && "font-semibold"
+                        } text-[14px] text-[#101828] ml-3`}
+                      >
+                        {item.name}
+                      </Text>
+                    </View>
+                  </Pressable>
                 )}
                 {item.subgroup === "label" && (
                   <View className="mt-10">

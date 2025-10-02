@@ -97,12 +97,12 @@ const ComposeEmailUI = ({
     } catch (err: any) {
       Alert.alert("Error", err.message || "Failed to send email");
     } finally {
-      // setMail("");
-      // setSubject("");
-      // setRecipients([]);
-      // setCCRecipients([]);
-      // setBCCRecipients([]);
-      // setChecked(false);
+      setMail("");
+      setSubject("");
+      setRecipients([]);
+      setCCRecipients([]);
+      setBCCRecipients([]);
+      setChecked(false);
       setLoading(false);
     }
   };
