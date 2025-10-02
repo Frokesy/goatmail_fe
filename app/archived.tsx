@@ -7,7 +7,7 @@ const Archived = () => {
       endpoint="/archived"
       emptyImage={require("@/assets/images/empty-inbox.png")}
       emptyText="No archived emails"
-      emptySubtext="Swipe left on any email in the inbox to save it here."
+      emptySubtext="Swipe right on any email in the inbox to save it here."
     />
   );
 };
