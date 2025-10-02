@@ -71,7 +71,6 @@ const UpdateIncomingServerModal: React.FC<UpdateIncomingServerModalProps> = ({
         setPort(data.port?.toString() || "");
         setSecurity(data.security || "");
       }
-      console.log("incoming", data);
     } catch (err) {
       console.log("Failed to fetch incoming server settings:", err);
     }

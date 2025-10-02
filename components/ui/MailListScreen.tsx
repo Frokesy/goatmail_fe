@@ -12,7 +12,6 @@ import Header from "@/components/defaults/Header";
 import { useAuth } from "@/app/context/authContext";
 import PenIcon from "@/components/icons/PenIcon";
 import ComposeEmailModal from "@/components/modals/ComposeEmailModal";
-import UpdateIncomingServerModal from "@/components/modals/UpdateIncomingServerModal";
 import { useRouter } from "expo-router";
 
 interface Mail {
@@ -22,14 +21,6 @@ interface Mail {
   date: string;
   excerpt: string;
   starred: boolean;
-}
-
-interface IncomingServer {
-  serverType: string;
-  serverName: string;
-  port: string;
-  security: string;
-  password?: string;
 }
 
 interface MailListScreenProps {
@@ -52,15 +43,7 @@ const MailListScreen: React.FC<MailListScreenProps> = ({
   const [mails, setMails] = useState<Mail[]>([]);
   const [error, setError] = useState("");
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
   const router = useRouter();
-
-  // incoming server fields
-  const [serverType, setServerType] = useState("");
-  const [serverName, setServerName] = useState("");
-  const [port, setPort] = useState("");
-  const [security, setSecurity] = useState("");
-  const [updating, setUpdating] = useState(false);
 
   const API_URL = "http://192.168.1.117:3000/api";
 
@@ -104,79 +87,8 @@ const MailListScreen: React.FC<MailListScreenProps> = ({
       }
     } catch (err: any) {
       setError(err.message || "Something went wrong");
-      setUpdateModalVisible(true);
-      fetchIncomingServer();
     } finally {
       setLoading(false);
-    }
-  };
-
-  const fetchIncomingServer = async () => {
-    try {
-      const res = await fetch(`${API_URL}/incoming-server`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (!res.ok) return;
-
-      const data: IncomingServer = await res.json();
-      if (data) {
-        setServerType(data.serverType || "");
-        setServerName(data.serverName || "");
-        setPort(data.port?.toString() || "");
-        setSecurity(data.security || "");
-      }
-    } catch (err) {
-      console.log("Failed to fetch incoming server settings:", err);
-    }
-  };
-
-  const handleUpdateIncomingServer = async ({
-    serverType,
-    serverName,
-    port,
-    security,
-    password,
-  }: {
-    serverType: string;
-    serverName: string;
-    port: string;
-    security: string;
-    password: string;
-  }) => {
-    if (!serverType || !serverName || !port || !security || !password) {
-      setError("All fields are required");
-      return;
-    }
-
-    try {
-      setUpdating(true);
-      const res = await fetch(`${API_URL}/update-incoming-password`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          email: user?.email,
-          serverType,
-          serverName,
-          port,
-          security,
-          password,
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to update server settings");
-      }
-
-      setUpdateModalVisible(false);
-      fetchMails();
-    } catch (err: any) {
-      setError(err.message || "Error updating server settings");
-    } finally {
-      setUpdating(false);
     }
   };
 
@@ -298,16 +210,6 @@ const MailListScreen: React.FC<MailListScreenProps> = ({
       <ComposeEmailModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-      />
-      <UpdateIncomingServerModal
-        visible={updateModalVisible}
-        onClose={() => setUpdateModalVisible(false)}
-        initialValues={{ serverType, serverName, port, security }}
-        loading={updating}
-        error={error}
-        onUpdate={async (values) => {
-          await handleUpdateIncomingServer(values);
-        }}
       />
     </SafeAreaView>
   );

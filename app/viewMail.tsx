@@ -151,7 +151,7 @@ const ViewMail = () => {
             </View>
           </View>
 
-          <View className="py-4">
+          <View className="px-4 py-4">
             <RenderHtml
               contentWidth={width - 32}
               source={{ html: mail.body }}

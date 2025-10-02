@@ -40,7 +40,7 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
     { id: 3, name: "Scheduled", icon: <ScheduledIcon /> },
     { id: 4, name: "Starred", href: "/starred", icon: <StarIcon /> },
     { id: 5, name: "Drafts", icon: <DraftsIcon /> },
-    { id: 6, name: "Archive", icon: <ArchiveIcon /> },
+    { id: 6, name: "Archive", href: "/archived", icon: <ArchiveIcon /> },
     { id: 7, name: "Spam", icon: <SpamIcon /> },
     { id: 8, name: "Trash", icon: <TrashIcon /> },
     { id: 9, name: "All mail", icon: <EmailIcon /> },

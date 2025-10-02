@@ -185,7 +185,6 @@ const Inbox = () => {
                       body: JSON.stringify({ mailId: mail.uid }),
                     });
                     setMails((prev) => prev.filter((m) => m.uid !== mail.uid));
-                    console.log("archived", mail.subject);
                   } catch (err) {
                     console.error("Archive error:", err);
                   }
@@ -200,7 +199,6 @@ const Inbox = () => {
                       body: JSON.stringify({ mailId: mail.uid }),
                     });
                     setMails((prev) => prev.filter((m) => m.uid !== mail.uid));
-                    console.log("deleted", mail.subject, mail.uid);
                   } catch (err) {
                     console.error("Delete error:", err);
                   }
