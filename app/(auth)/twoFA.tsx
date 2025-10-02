@@ -18,7 +18,7 @@ import CircledTick from "../../assets/images/circledtick.png";
 import { useSearchParams } from "expo-router/build/hooks";
 import * as Clipboard from "expo-clipboard";
 
-const API_URL = "http://192.168.1.117:3000/api/auth";
+const API_URL = "https://goatmailbe-production.up.railway.app/api/auth";
 
 const TwoFA = () => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);

@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { Link, useRouter } from "expo-router";
 import { useAuth } from "../context/authContext";
 
-const API_URL = "http://192.168.1.117:3000/api/auth";
+const API_URL = "https://goatmailbe-production.up.railway.app/api/auth";
 
 export default function Login() {
   const [showPassword, toggleShowPassword] = useState(false);

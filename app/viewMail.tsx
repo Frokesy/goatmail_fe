@@ -23,7 +23,7 @@ interface MailDetail {
   body: string;
 }
 
-const API_URL = "http://192.168.1.117:3000/api";
+const API_URL = "https://goatmailbe-production.up.railway.app/api";
 
 const ViewMail = () => {
   const { width } = useWindowDimensions();

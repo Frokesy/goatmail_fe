@@ -22,7 +22,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useAuth } from "@/app/context/authContext";
 import { Draft } from "@/app/drafts";
 
-const API_URL = "http://192.168.1.117:3000/api";
+const API_URL = "https://goatmailbe-production.up.railway.app/api";
 
 const ComposeEmailModal = ({
   modalVisible,

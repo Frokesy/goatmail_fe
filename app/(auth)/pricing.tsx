@@ -15,7 +15,7 @@ import {
   presentPaymentSheet,
 } from "@stripe/stripe-react-native";
 
-const API_URL = "http://192.168.1.117:3000/api/auth";
+const API_URL = "https://goatmailbe-production.up.railway.app/api/auth";
 
 const Pricing = () => {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">(

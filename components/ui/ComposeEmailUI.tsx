@@ -28,7 +28,7 @@ interface ComposeEmailUIProps {
   setDraftId: (draft: string | null) => void;
 }
 
-const API_URL = "http://192.168.1.117:3000/api";
+const API_URL = "https://goatmailbe-production.up.railway.app/api";
 
 const ComposeEmailUI = ({
   setModalVisible,

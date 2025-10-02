@@ -16,7 +16,7 @@ import { Checkbox } from "expo-checkbox";
 import { useSearchParams } from "expo-router/build/hooks";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const API_URL = "http://192.168.1.117:3000/api/auth";
+const API_URL = "https://goatmailbe-production.up.railway.app/api/auth";
 
 const CreatePassword = () => {
   const [showPassword, toggleShowPassword] = useState(false);

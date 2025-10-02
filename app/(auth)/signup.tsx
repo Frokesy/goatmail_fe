@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { Link, useRouter } from "expo-router";
-const API_URL = "http://192.168.1.117:3000/api/auth/signup";
+const API_URL = "https://goatmailbe-production.up.railway.app/api/auth/signup";
 
 const Signup = () => {
   const [name, setName] = useState<string>("");

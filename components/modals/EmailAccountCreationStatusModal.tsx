@@ -23,7 +23,7 @@ const STROKE_WIDTH = 3;
 const RADIUS = (CIRCLE_SIZE - STROKE_WIDTH) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-const API_URL = "http://192.168.1.117:3000/api/auth";
+const API_URL = "https://goatmailbe-production.up.railway.app/api/auth";
 
 const EmailAccountCreationStatusModal = ({
   modalVisible,

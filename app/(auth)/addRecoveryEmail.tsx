@@ -15,7 +15,7 @@ import CaretLeft from "../../components/icons/CaretLeft";
 import EmailAccountCreationStatusModal from "../../components/modals/EmailAccountCreationStatusModal";
 import { useSearchParams } from "expo-router/build/hooks";
 
-const API_URL = "http://192.168.1.117:3000/api/auth";
+const API_URL = "https://goatmailbe-production.up.railway.app/api/auth";
 
 const AddRecoveryEmail = () => {
   const [modalVisible, setModalVisible] = useState(false);

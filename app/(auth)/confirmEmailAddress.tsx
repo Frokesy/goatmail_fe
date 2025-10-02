@@ -12,7 +12,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { useRouter } from "expo-router";
 import { useSearchParams } from "expo-router/build/hooks";
 
-const API_URL = "http://192.168.1.117:3000/api/auth";
+const API_URL = "https://goatmailbe-production.up.railway.app/api/auth";
 
 const ConfirmEmailAddress = () => {
   const searchParams = useSearchParams();

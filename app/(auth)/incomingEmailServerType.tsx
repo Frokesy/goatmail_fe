@@ -27,7 +27,7 @@ const securityTypeOptions = [
   { label: "None", value: "None" },
 ];
 
-const API_URL = "http://192.168.1.117:3000/api/auth";
+const API_URL = "https://goatmailbe-production.up.railway.app/api/auth";
 
 const IncomingEmailServerType = () => {
   const [server, setServer] = useState<string | number | null>(null);
