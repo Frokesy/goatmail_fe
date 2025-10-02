@@ -118,12 +118,19 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
         <View>
           <View className="flex flex-row items-center">
             <View className="bg-[#EEF0F4] text-[#333333] mr-4 h-[40px] w-[40px] rounded-full flex items-center justify-center">
-              <Text>AA</Text>
+              <Text className="font-semibold text-[#333333]">
+                {(() => {
+                  if (!user?.name) return "";
+                  const parts = user.name.trim().split(" ");
+                  if (parts.length === 1) {
+                    return parts[0].substring(0, 2).toUpperCase();
+                  }
+                  return (parts[0][0] + parts[1][0]).toUpperCase();
+                })()}
+              </Text>
             </View>
             <View>
-              <Text className="text-[16px] font-semibold">
-                Ayanfeoluwa Akindele
-              </Text>
+              <Text className="text-[16px] font-semibold">{user?.name}</Text>
               <Text className="text-[12px] text-[#737373]">{user?.email}</Text>
             </View>
           </View>
