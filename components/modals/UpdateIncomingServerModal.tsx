@@ -13,25 +13,11 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import CustomSelect from "../../components/CustomSelect";
 import EyeOffIcon from "../../components/icons/EyeOff";
 import EyeIcon from "../../components/icons/EyesIcon";
+import { useAuth } from "@/app/context/authContext";
 
 interface UpdateIncomingServerModalProps {
   visible: boolean;
   onClose: () => void;
-  onUpdate: (fields: {
-    serverType: string;
-    serverName: string;
-    port: string;
-    security: string;
-    password: string;
-  }) => void;
-  initialValues: {
-    serverType: string;
-    serverName: string;
-    port: string;
-    security: string;
-  };
-  loading: boolean;
-  error?: string;
 }
 
 const serverOptions = [
@@ -45,34 +31,103 @@ const securityTypeOptions = [
   { label: "None", value: "None" },
 ];
 
+interface IncomingServer {
+  serverType: string;
+  serverName: string;
+  port: string;
+  security: string;
+  password?: string;
+}
+
 const UpdateIncomingServerModal: React.FC<UpdateIncomingServerModalProps> = ({
   visible,
   onClose,
-  onUpdate,
-  initialValues,
-  loading,
-  error,
 }) => {
-  const [serverType, setServerType] = useState<string | number | null>(
-    initialValues.serverType || null
-  );
-  const [serverName, setServerName] = useState(initialValues.serverName || "");
-  const [port, setPort] = useState(initialValues.port || "");
-  const [security, setSecurity] = useState<string | number | null>(
-    initialValues.security || null
-  );
+  // incoming server fields
+  const [serverType, setServerType] = useState("");
+  const [serverName, setServerName] = useState("");
+  const [port, setPort] = useState("");
+  const { token, user } = useAuth();
+  const [security, setSecurity] = useState("");
   const [password, setPassword] = useState("");
+  const [updating, setUpdating] = useState(false);
+  const [error, setError] = useState<string>("");
+
+  const API_URL = "http://192.168.1.117:3000/api";
   const [showPassword, toggleShowPassword] = useState(false);
 
-  useEffect(() => {
-    if (visible) {
-      setServerType(initialValues.serverType || null);
-      setServerName(initialValues.serverName || "");
-      setPort(initialValues.port || "");
-      setSecurity(initialValues.security || null);
-      setPassword("");
+  const fetchIncomingServer = async () => {
+    try {
+      const res = await fetch(`${API_URL}/incoming-server`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) return;
+
+      const data: IncomingServer = await res.json();
+      if (data) {
+        setServerType(data.serverType || "");
+        setServerName(data.serverName || "");
+        setPort(data.port?.toString() || "");
+        setSecurity(data.security || "");
+      }
+      console.log("incoming", data);
+    } catch (err) {
+      console.log("Failed to fetch incoming server settings:", err);
     }
-  }, [visible, initialValues]);
+  };
+  const handleUpdateIncomingServer = async ({
+    serverType,
+    serverName,
+    port,
+    security,
+    password,
+  }: {
+    serverType: string;
+    serverName: string;
+    port: string;
+    security: string;
+    password: string;
+  }) => {
+    if (!serverType || !serverName || !port || !security || !password) {
+      setError("All fields are required");
+      return;
+    }
+
+    try {
+      setUpdating(true);
+      const res = await fetch(`${API_URL}/update-incoming-password`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          email: user?.email,
+          serverType,
+          serverName,
+          port,
+          security,
+          password,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to update server settings");
+      }
+
+      onClose();
+      setPassword("");
+    } catch (err: any) {
+      setError(err.message || "Error updating server settings");
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchIncomingServer();
+  }, []);
 
   return (
     <Modal
@@ -103,7 +158,6 @@ const UpdateIncomingServerModal: React.FC<UpdateIncomingServerModalProps> = ({
             <CustomSelect
               options={serverOptions}
               value={serverType}
-              onChange={setServerType}
               placeholder="Select server type"
               searchable
             />
@@ -140,7 +194,6 @@ const UpdateIncomingServerModal: React.FC<UpdateIncomingServerModalProps> = ({
             <CustomSelect
               options={securityTypeOptions}
               value={security}
-              onChange={setSecurity}
               placeholder="Select security type"
               searchable
             />
@@ -166,7 +219,7 @@ const UpdateIncomingServerModal: React.FC<UpdateIncomingServerModalProps> = ({
             </View>
 
             {/* Submit */}
-            <TouchableOpacity
+            {/* <TouchableOpacity
               disabled={loading}
               onPress={() =>
                 onUpdate({
@@ -182,7 +235,7 @@ const UpdateIncomingServerModal: React.FC<UpdateIncomingServerModalProps> = ({
               <Text className="text-white text-center font-semibold">
                 {loading ? "Updating..." : "Update"}
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             {/* Cancel */}
             <TouchableOpacity onPress={onClose} className="mt-3">

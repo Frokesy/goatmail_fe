@@ -14,6 +14,7 @@ import PenIcon from "@/components/icons/PenIcon";
 import ComposeEmailModal from "@/components/modals/ComposeEmailModal";
 import UpdateIncomingServerModal from "@/components/modals/UpdateIncomingServerModal";
 import { useRouter } from "expo-router";
+import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 
 interface Mail {
   uid: string;
@@ -24,14 +25,6 @@ interface Mail {
   starred: boolean;
 }
 
-interface IncomingServer {
-  serverType: string;
-  serverName: string;
-  port: string;
-  security: string;
-  password?: string;
-}
-
 const Inbox = () => {
   const { user, token } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -40,14 +33,6 @@ const Inbox = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
   const router = useRouter();
-
-  // incoming server fields
-  const [serverType, setServerType] = useState("");
-  const [serverName, setServerName] = useState("");
-  const [port, setPort] = useState("");
-  const [security, setSecurity] = useState("");
-  const [password, setPassword] = useState("");
-  const [updating, setUpdating] = useState(false);
 
   const API_URL = "http://192.168.1.117:3000/api";
 
@@ -60,7 +45,9 @@ const Inbox = () => {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to fetch inbox");
+        throw new Error(
+          "Failed to fetch inbox, please update your server details"
+        );
       }
 
       const data = await res.json();
@@ -91,82 +78,8 @@ const Inbox = () => {
       }
     } catch (err: any) {
       setError(err.message || "Something went wrong");
-      console.log(password);
-      setUpdateModalVisible(true);
-      fetchIncomingServer();
     } finally {
       setLoading(false);
-    }
-  };
-
-  const fetchIncomingServer = async () => {
-    try {
-      const res = await fetch(`${API_URL}/incoming-server`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (!res.ok) return;
-
-      const data: IncomingServer = await res.json();
-      if (data) {
-        setServerType(data.serverType || "");
-        setServerName(data.serverName || "");
-        setPort(data.port?.toString() || "");
-        setSecurity(data.security || "");
-      }
-      console.log("incoming", data);
-    } catch (err) {
-      console.log("Failed to fetch incoming server settings:", err);
-    }
-  };
-
-  const handleUpdateIncomingServer = async ({
-    serverType,
-    serverName,
-    port,
-    security,
-    password,
-  }: {
-    serverType: string;
-    serverName: string;
-    port: string;
-    security: string;
-    password: string;
-  }) => {
-    if (!serverType || !serverName || !port || !security || !password) {
-      setError("All fields are required");
-      return;
-    }
-
-    try {
-      setUpdating(true);
-      const res = await fetch(`${API_URL}/update-incoming-password`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          email: user?.email,
-          serverType,
-          serverName,
-          port,
-          security,
-          password,
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to update server settings");
-      }
-
-      setUpdateModalVisible(false);
-      setPassword("");
-      fetchInbox();
-    } catch (err: any) {
-      setError(err.message || "Error updating server settings");
-    } finally {
-      setUpdating(false);
     }
   };
 
@@ -206,6 +119,21 @@ const Inbox = () => {
     }
   };
 
+  const renderLeftActions = (progress: any, dragX: any) => {
+    return (
+      <View className="bg-green-500 justify-center flex-1">
+        <Text className="text-white pl-5 font-semibold">Archive</Text>
+      </View>
+    );
+  };
+  const renderRightActions = (progress: any, dragX: any) => {
+    return (
+      <View className="bg-red-500 justify-center items-end flex-1 pr-5">
+        <Text className="text-white font-semibold">Delete</Text>
+      </View>
+    );
+  };
+
   useEffect(() => {
     if (user && token) {
       fetchInbox();
@@ -240,12 +168,22 @@ const Inbox = () => {
         </ScrollView>
       ) : (
         <ScrollView>
-          {Array.isArray(mails) &&
-            mails.map((mail) => (
-              <View
-                key={mail.uid}
-                className="flex-row items-start border-b border-gray-200 px-4 py-3"
-              >
+          {mails.map((mail) => (
+            <Swipeable
+              key={mail.uid}
+              renderLeftActions={renderLeftActions}
+              renderRightActions={renderRightActions}
+              onSwipeableOpen={(direction) => {
+                if (direction === "left") {
+                  console.log("Archive action");
+                  // Call your archive handler here
+                } else if (direction === "right") {
+                  console.log("Delete action");
+                  // Call your delete handler here
+                }
+              }}
+            >
+              <View className="flex-row items-start border-b border-gray-200 bg-[#fff] px-4 py-3">
                 <Pressable onPress={() => toggleStar(mail.uid, mail.starred)}>
                   <Text className="text-xl mr-3">
                     {mail.starred ? "⭐" : "☆"}
@@ -283,7 +221,8 @@ const Inbox = () => {
                   </Text>
                 </Pressable>
               </View>
-            ))}
+            </Swipeable>
+          ))}
         </ScrollView>
       )}
       <Pressable
@@ -299,12 +238,6 @@ const Inbox = () => {
       <UpdateIncomingServerModal
         visible={updateModalVisible}
         onClose={() => setUpdateModalVisible(false)}
-        initialValues={{ serverType, serverName, port, security }}
-        loading={updating}
-        error={error}
-        onUpdate={async (values) => {
-          await handleUpdateIncomingServer(values);
-        }}
       />
     </SafeAreaView>
   );
