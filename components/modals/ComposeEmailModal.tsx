@@ -142,6 +142,8 @@ const ComposeEmailModal = ({
               setBCCRecipients={setBccrecipients}
               mail={mail}
               setMail={setMail}
+              draftId={draftId}
+              setDraftId={setDraftId}
             />
           </KeyboardAwareScrollView>
         </Animated.View>

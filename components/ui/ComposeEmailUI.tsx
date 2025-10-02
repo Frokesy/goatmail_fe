@@ -24,7 +24,11 @@ interface ComposeEmailUIProps {
   setBCCRecipients: (recipients: any[]) => void;
   mail: string;
   setMail: (mail: string) => void;
+  draftId: string | null;
+  setDraftId: (draft: string | null) => void;
 }
+
+const API_URL = "http://192.168.1.117:3000/api";
 
 const ComposeEmailUI = ({
   setModalVisible,
@@ -38,6 +42,8 @@ const ComposeEmailUI = ({
   setBCCRecipients,
   mail,
   setMail,
+  draftId,
+  setDraftId,
 }: ComposeEmailUIProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { user, token } = useAuth();
@@ -100,6 +106,17 @@ const ComposeEmailUI = ({
         body: mail,
         track: isChecked,
       });
+
+      if (draftId) {
+        await fetch(`${API_URL}/delete-drafts/${draftId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("Draft deleted after sending");
+        setDraftId(null);
+      }
 
       Alert.alert("Success", "Email sent successfully!");
       setModalVisible(false);
