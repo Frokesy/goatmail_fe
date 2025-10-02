@@ -19,6 +19,9 @@ import ScheduledIcon from "../icons/ScheduledIcon";
 import ShareIcon from "../icons/ShareIcon";
 import XIcon from "../icons/XIcon";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useAuth } from "@/app/context/authContext";
+
+const API_URL = "http://192.168.1.117:3000/api";
 
 const ComposeEmailModal = ({
   modalVisible,
@@ -31,6 +34,8 @@ const ComposeEmailModal = ({
 
   const [subject, setSubject] = useState<string>("");
 
+  const { token } = useAuth();
+
   const [showAttachFilesModal, setShowAttachFilesModal] =
     useState<boolean>(false);
   const [showScheduleMailModal, setShowScheduleMailModal] =
@@ -38,6 +43,48 @@ const ComposeEmailModal = ({
   const [showEmailProtectionModal, setShowEmailProtectionModal] =
     useState<boolean>(false);
   const [showAiModal, setShowAiModal] = useState<boolean>(false);
+  const [ccrecipients, setCcrecipients] = useState<any[]>([]);
+  const [bccrecipients, setBccrecipients] = useState<any[]>([]);
+  const [mail, setMail] = useState<string>("");
+  const [draftId, setDraftId] = useState<string | null>(null);
+
+  const handleClose = async () => {
+    if (
+      subject.trim() ||
+      mail.trim() ||
+      recipients.length > 0 ||
+      ccrecipients.length > 0 ||
+      bccrecipients.length > 0
+    ) {
+      try {
+        const res = await fetch(`${API_URL}/save-draft`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            draftId,
+            to: recipients,
+            cc: ccrecipients,
+            bcc: bccrecipients,
+            subject,
+            body: mail,
+          }),
+        });
+
+        const data = await res.json();
+        if (data.draftId) {
+          setDraftId(data.draftId);
+          console.log("Draft saved:", data.draftId);
+        }
+      } catch (err) {
+        console.error("Failed to save draft:", err);
+      }
+    }
+
+    setModalVisible(false);
+  };
 
   return (
     <Modal
@@ -57,7 +104,7 @@ const ComposeEmailModal = ({
           >
             <View className="flex flex-row justify-between items-center mt-10 border-b-2 border-[#f1f1f1] pb-3">
               <View className="flex items-center flex-row">
-                <Pressable onPress={() => setModalVisible(false)}>
+                <Pressable onPress={handleClose}>
                   <XIcon />
                 </Pressable>
                 <Text className="ml-4 text-[20px] font-semibold">
@@ -89,6 +136,12 @@ const ComposeEmailModal = ({
               setSubject={setSubject}
               recipients={recipients}
               setRecipients={setRecipients}
+              ccrecipients={ccrecipients}
+              setCCRecipients={setCcrecipients}
+              bccrecipients={bccrecipients}
+              setBCCRecipients={setBccrecipients}
+              mail={mail}
+              setMail={setMail}
             />
           </KeyboardAwareScrollView>
         </Animated.View>

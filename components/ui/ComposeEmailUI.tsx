@@ -18,6 +18,12 @@ interface ComposeEmailUIProps {
   setSubject: (subject: string) => void;
   recipients: any[];
   setRecipients: (recipients: any[]) => void;
+  ccrecipients: any[];
+  setCCRecipients: (recipients: any[]) => void;
+  bccrecipients: any[];
+  setBCCRecipients: (recipients: any[]) => void;
+  mail: string;
+  setMail: (mail: string) => void;
 }
 
 const ComposeEmailUI = ({
@@ -26,20 +32,23 @@ const ComposeEmailUI = ({
   setSubject,
   recipients,
   setRecipients,
+  ccrecipients,
+  setCCRecipients,
+  bccrecipients,
+  setBCCRecipients,
+  mail,
+  setMail,
 }: ComposeEmailUIProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { user, token } = useAuth();
   const [showCC, setShowCC] = useState<boolean>(false);
   const [showBCC, setShowBCC] = useState<boolean>(false);
-  const [ccrecipients, setCCRecipients] = useState<any[]>([]);
-  const [bccrecipients, setBCCRecipients] = useState<any[]>([]);
   const [currentRecipientInput, setCurrentRecipientInput] =
     useState<string>("");
   const [currentCCRecipientInput, setCurrentCCRecipientInput] =
     useState<string>("");
   const [currentBCCRecipientInput, setCurrentBCCRecipientInput] =
     useState<string>("");
-  const [mail, setMail] = useState<string>("");
   const [isChecked, setChecked] = useState(false);
 
   const addRecipient = (cat: string) => {
