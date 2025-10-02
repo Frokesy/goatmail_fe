@@ -173,13 +173,37 @@ const Inbox = () => {
               key={mail.uid}
               renderLeftActions={renderLeftActions}
               renderRightActions={renderRightActions}
-              onSwipeableOpen={(direction) => {
-                if (direction === "left") {
-                  console.log("Archive action");
-                  // Call your archive handler here
-                } else if (direction === "right") {
-                  console.log("Delete action");
-                  // Call your delete handler here
+              onSwipeableOpen={async (direction) => {
+                if (direction === "right") {
+                  try {
+                    await fetch(`${API_URL}/archive-mail`, {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                      },
+                      body: JSON.stringify({ mailId: mail.uid }),
+                    });
+                    setMails((prev) => prev.filter((m) => m.uid !== mail.uid));
+                    console.log("archived", mail.subject);
+                  } catch (err) {
+                    console.error("Archive error:", err);
+                  }
+                } else if (direction === "left") {
+                  try {
+                    await fetch(`${API_URL}/delete-mail`, {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                      },
+                      body: JSON.stringify({ mailId: mail.uid }),
+                    });
+                    setMails((prev) => prev.filter((m) => m.uid !== mail.uid));
+                    console.log("deleted", mail.subject, mail.uid);
+                  } catch (err) {
+                    console.error("Delete error:", err);
+                  }
                 }
               }}
             >
