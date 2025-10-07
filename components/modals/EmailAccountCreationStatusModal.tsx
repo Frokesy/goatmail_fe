@@ -23,8 +23,8 @@ const STROKE_WIDTH = 3;
 const RADIUS = (CIRCLE_SIZE - STROKE_WIDTH) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-
+const apiUrl =
+  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
 const EmailAccountCreationStatusModal = ({
   modalVisible,
   setModalVisible,
@@ -58,8 +58,6 @@ const EmailAccountCreationStatusModal = ({
         },
         body: JSON.stringify({ email, password: storedPass }),
       });
-
-      console.log(email, storedPass);
 
       const data = await res.json();
 

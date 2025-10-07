@@ -22,8 +22,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useAuth } from "@/app/context/authContext";
 import { Draft } from "@/app/drafts";
 
-const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-
+const apiUrl =
+  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
 const ComposeEmailModal = ({
   modalVisible,
   setModalVisible,
@@ -81,7 +81,6 @@ const ComposeEmailModal = ({
         const data = await res.json();
         if (data.draftId) {
           setDraftId(data.draftId);
-          console.log("Draft saved:", data.draftId);
         }
       } catch (err) {
         console.error("Failed to save draft:", err);

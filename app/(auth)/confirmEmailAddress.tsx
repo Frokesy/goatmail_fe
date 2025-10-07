@@ -12,7 +12,8 @@ import React, { useRef, useState, useEffect } from "react";
 import { useRouter } from "expo-router";
 import { useSearchParams } from "expo-router/build/hooks";
 
-const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+const apiUrl =
+  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
 
 const ConfirmEmailAddress = () => {
   const searchParams = useSearchParams();

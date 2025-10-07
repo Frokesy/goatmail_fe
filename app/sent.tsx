@@ -22,8 +22,8 @@ interface SentEmail {
   excerpt: string;
 }
 
-const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-
+const apiUrl =
+  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
 const SentEmailsScreen = () => {
   const router = useRouter();
   const { token } = useAuth();

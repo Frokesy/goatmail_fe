@@ -30,8 +30,8 @@ type AuthContextType = {
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-
+const apiUrl =
+  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);

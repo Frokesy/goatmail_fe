@@ -53,7 +53,8 @@ const UpdateIncomingServerModal: React.FC<UpdateIncomingServerModalProps> = ({
   const [updating, setUpdating] = useState(false);
   const [error, setError] = useState<string>("");
 
-  const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+  const apiUrl =
+    "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
   const [showPassword, toggleShowPassword] = useState(false);
 
   const fetchIncomingServer = async () => {

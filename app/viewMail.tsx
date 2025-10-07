@@ -23,8 +23,8 @@ interface MailDetail {
   body: string;
 }
 
-const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-
+const apiUrl =
+  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
 const ViewMail = () => {
   const { width } = useWindowDimensions();
   const searchParams = useSearchParams();

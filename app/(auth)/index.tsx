@@ -16,8 +16,8 @@ import { useEffect, useState } from "react";
 import { Link, useRouter } from "expo-router";
 import { useAuth } from "../context/authContext";
 
-const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-
+const apiUrl =
+  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
 export default function Login() {
   const [showPassword, toggleShowPassword] = useState(false);
   const [email, setEmail] = useState("");

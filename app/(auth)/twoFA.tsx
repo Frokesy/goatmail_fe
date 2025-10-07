@@ -18,8 +18,8 @@ import CircledTick from "../../assets/images/circledtick.png";
 import { useSearchParams } from "expo-router/build/hooks";
 import * as Clipboard from "expo-clipboard";
 
-const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-
+const apiUrl =
+  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
 const TwoFA = () => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [modalVisible, setModalVisible] = useState(false);
