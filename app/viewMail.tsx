@@ -23,7 +23,7 @@ interface MailDetail {
   body: string;
 }
 
-const API_URL = "https://goatmailbe-production.up.railway.app/api";
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 const ViewMail = () => {
   const { width } = useWindowDimensions();
@@ -40,7 +40,7 @@ const ViewMail = () => {
         if (!uid) throw new Error("Mail UID is missing");
 
         setLoading(true);
-        const res = await fetch(`${API_URL}/mail/${uid}`, {
+        const res = await fetch(`${apiUrl}/mail/${uid}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -83,7 +83,7 @@ const ViewMail = () => {
     setMail((prev) => prev && { ...prev, starred: !isStarred });
 
     try {
-      const url = `${API_URL}/${isStarred ? "unstar-mail" : "star-mail"}`;
+      const url = `${apiUrl}/${isStarred ? "unstar-mail" : "star-mail"}`;
       const res = await fetch(isStarred ? `${url}/${mail.uid}` : url, {
         method: isStarred ? "DELETE" : "POST",
         headers: {

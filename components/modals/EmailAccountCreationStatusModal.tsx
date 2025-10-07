@@ -23,7 +23,7 @@ const STROKE_WIDTH = 3;
 const RADIUS = (CIRCLE_SIZE - STROKE_WIDTH) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-const API_URL = "https://goatmailbe-production.up.railway.app/api/auth";
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 const EmailAccountCreationStatusModal = ({
   modalVisible,
@@ -51,7 +51,7 @@ const EmailAccountCreationStatusModal = ({
         return;
       }
 
-      const res = await fetch(`${API_URL}/login`, {
+      const res = await fetch(`${apiUrl}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

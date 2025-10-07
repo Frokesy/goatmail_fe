@@ -16,7 +16,7 @@ import { Checkbox } from "expo-checkbox";
 import { useSearchParams } from "expo-router/build/hooks";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const API_URL = "https://goatmailbe-production.up.railway.app/api/auth";
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 const CreatePassword = () => {
   const [showPassword, toggleShowPassword] = useState(false);
@@ -70,7 +70,7 @@ const CreatePassword = () => {
 
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/set-password`, {
+      const res = await fetch(`${apiUrl}/auth/set-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

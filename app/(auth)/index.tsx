@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { Link, useRouter } from "expo-router";
 import { useAuth } from "../context/authContext";
 
-const API_URL = "https://goatmailbe-production.up.railway.app/api/auth";
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 export default function Login() {
   const [showPassword, toggleShowPassword] = useState(false);
@@ -34,7 +34,7 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/login`, {
+      const res = await fetch(`${apiUrl}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

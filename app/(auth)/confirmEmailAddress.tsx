@@ -12,7 +12,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { useRouter } from "expo-router";
 import { useSearchParams } from "expo-router/build/hooks";
 
-const API_URL = "https://goatmailbe-production.up.railway.app/api/auth";
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 const ConfirmEmailAddress = () => {
   const searchParams = useSearchParams();
@@ -68,7 +68,7 @@ const ConfirmEmailAddress = () => {
     setError("");
 
     try {
-      const res = await fetch(`${API_URL}/verify-otp`, {
+      const res = await fetch(`${apiUrl}/auth/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp }),
@@ -97,7 +97,7 @@ const ConfirmEmailAddress = () => {
   const handleResend = async () => {
     setResending(true);
     try {
-      const res = await fetch(`${API_URL}/resend-otp`, {
+      const res = await fetch(`${apiUrl}/auth/resend-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

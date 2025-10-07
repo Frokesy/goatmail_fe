@@ -24,7 +24,7 @@ export interface Draft {
   updatedAt: string;
 }
 
-const API_URL = "https://goatmailbe-production.up.railway.app/api";
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 const DraftsScreen = () => {
   const { token } = useAuth();
@@ -40,7 +40,7 @@ const DraftsScreen = () => {
       setLoading(true);
       setError("");
 
-      const res = await fetch(`${API_URL}/drafts`, {
+      const res = await fetch(`${apiUrl}/drafts`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

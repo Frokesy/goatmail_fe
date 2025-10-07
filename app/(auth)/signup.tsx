@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { Link, useRouter } from "expo-router";
-const API_URL = "https://goatmailbe-production.up.railway.app/api/auth/signup";
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 const Signup = () => {
   const [name, setName] = useState<string>("");
@@ -31,7 +31,7 @@ const Signup = () => {
     setSuccess(false);
 
     try {
-      const res = await fetch(API_URL, {
+      const res = await fetch(`${apiUrl}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email }),

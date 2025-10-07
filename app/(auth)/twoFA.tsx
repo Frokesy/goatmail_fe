@@ -18,7 +18,7 @@ import CircledTick from "../../assets/images/circledtick.png";
 import { useSearchParams } from "expo-router/build/hooks";
 import * as Clipboard from "expo-clipboard";
 
-const API_URL = "https://goatmailbe-production.up.railway.app/api/auth";
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 const TwoFA = () => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
@@ -36,7 +36,7 @@ const TwoFA = () => {
   useEffect(() => {
     const fetch2FASetup = async () => {
       try {
-        const res = await fetch(`${API_URL}/2fa/setup?email=${email}`);
+        const res = await fetch(`${apiUrl}/auth/2fa/setup?email=${email}`);
         const data = await res.json();
         if (res.ok) {
           setQrCode(data.qrCode);
@@ -82,7 +82,7 @@ const TwoFA = () => {
     setError("");
     try {
       const token = code.join("");
-      const res = await fetch(`${API_URL}/2fa/verify`, {
+      const res = await fetch(`${apiUrl}/auth/2fa/verify`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, token }),

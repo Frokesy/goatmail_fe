@@ -28,7 +28,7 @@ interface ComposeEmailUIProps {
   setDraftId: (draft: string | null) => void;
 }
 
-const API_URL = "https://goatmailbe-production.up.railway.app/api";
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 const ComposeEmailUI = ({
   setModalVisible,
@@ -108,7 +108,7 @@ const ComposeEmailUI = ({
       });
 
       if (draftId) {
-        await fetch(`${API_URL}/drafts/${draftId}`, {
+        await fetch(`${apiUrl}/drafts/${draftId}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,

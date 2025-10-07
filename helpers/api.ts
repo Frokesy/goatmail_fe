@@ -1,4 +1,4 @@
-const API_URL = "https://goatmailbe-production.up.railway.app/api";
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 export async function sendEmail(payload: {
   name: string;
@@ -10,7 +10,7 @@ export async function sendEmail(payload: {
   body: string;
   track: boolean;
 }) {
-  const res = await fetch(`${API_URL}/send-email`, {
+  const res = await fetch(`${apiUrl}/send-email`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

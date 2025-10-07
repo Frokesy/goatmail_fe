@@ -27,7 +27,7 @@ const securityTypeOptions = [
   { label: "None", value: "None" },
 ];
 
-const API_URL = "https://goatmailbe-production.up.railway.app/api/auth";
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 const IncomingEmailServerType = () => {
   const [server, setServer] = useState<string | number | null>(null);
@@ -50,7 +50,7 @@ const IncomingEmailServerType = () => {
     }
 
     try {
-      const res = await fetch(`${API_URL}/set-incoming-server`, {
+      const res = await fetch(`${apiUrl}/auth/set-incoming-server`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

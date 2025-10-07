@@ -45,13 +45,13 @@ const MailListScreen: React.FC<MailListScreenProps> = ({
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const router = useRouter();
 
-  const API_URL = "https://goatmailbe-production.up.railway.app/api";
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
   const fetchMails = async () => {
     try {
       setLoading(true);
       setError("");
-      const res = await fetch(`${API_URL}${endpoint}`, {
+      const res = await fetch(`${apiUrl}${endpoint}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -100,14 +100,14 @@ const MailListScreen: React.FC<MailListScreenProps> = ({
 
       let res;
       if (isStarred) {
-        res = await fetch(`${API_URL}/unstar-mail/${mailId}`, {
+        res = await fetch(`${apiUrl}/unstar-mail/${mailId}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
       } else {
-        res = await fetch(`${API_URL}/star-mail`, {
+        res = await fetch(`${apiUrl}/star-mail`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

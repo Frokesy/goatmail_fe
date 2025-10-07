@@ -21,7 +21,7 @@ interface SentMailDetail {
   body: string;
 }
 
-const API_URL = "https://goatmailbe-production.up.railway.app/api";
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 const SentViewMail = () => {
   const { width } = useWindowDimensions();
@@ -38,7 +38,7 @@ const SentViewMail = () => {
       try {
         if (!uid) throw new Error("Mail ID missing");
 
-        const res = await fetch(`${API_URL}/sent-emails/${uid}`, {
+        const res = await fetch(`${apiUrl}/sent-emails/${uid}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

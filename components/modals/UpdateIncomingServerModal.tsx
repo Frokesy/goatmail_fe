@@ -53,12 +53,12 @@ const UpdateIncomingServerModal: React.FC<UpdateIncomingServerModalProps> = ({
   const [updating, setUpdating] = useState(false);
   const [error, setError] = useState<string>("");
 
-  const API_URL = "https://goatmailbe-production.up.railway.app/api";
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   const [showPassword, toggleShowPassword] = useState(false);
 
   const fetchIncomingServer = async () => {
     try {
-      const res = await fetch(`${API_URL}/incoming-server`, {
+      const res = await fetch(`${apiUrl}/incoming-server`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -95,7 +95,7 @@ const UpdateIncomingServerModal: React.FC<UpdateIncomingServerModalProps> = ({
 
     try {
       setUpdating(true);
-      const res = await fetch(`${API_URL}/update-incoming-password`, {
+      const res = await fetch(`${apiUrl}/update-incoming-password`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -22,7 +22,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useAuth } from "@/app/context/authContext";
 import { Draft } from "@/app/drafts";
 
-const API_URL = "https://goatmailbe-production.up.railway.app/api";
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 const ComposeEmailModal = ({
   modalVisible,
@@ -62,7 +62,7 @@ const ComposeEmailModal = ({
       bccrecipients.length > 0
     ) {
       try {
-        const res = await fetch(`${API_URL}/save-draft`, {
+        const res = await fetch(`${apiUrl}/save-draft`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

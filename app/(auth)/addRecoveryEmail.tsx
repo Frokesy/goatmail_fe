@@ -15,7 +15,7 @@ import CaretLeft from "../../components/icons/CaretLeft";
 import EmailAccountCreationStatusModal from "../../components/modals/EmailAccountCreationStatusModal";
 import { useSearchParams } from "expo-router/build/hooks";
 
-const API_URL = "https://goatmailbe-production.up.railway.app/api/auth";
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 const AddRecoveryEmail = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -35,7 +35,7 @@ const AddRecoveryEmail = () => {
 
     try {
       setLoading(true);
-      const res = await fetch(`${API_URL}/recovery-email`, {
+      const res = await fetch(`${apiUrl}/auth/recovery-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, recoveryEmail }),

@@ -30,7 +30,7 @@ type AuthContextType = {
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-const API_URL = "https://goatmailbe-production.up.railway.app/api";
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const getUser = async (jwtToken: string) => {
     try {
-      const res = await fetch(`${API_URL}/get-user`, {
+      const res = await fetch(`${apiUrl}/get-user`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${jwtToken}`,

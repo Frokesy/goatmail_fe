@@ -15,7 +15,7 @@ import {
   presentPaymentSheet,
 } from "@stripe/stripe-react-native";
 
-const API_URL = "https://goatmailbe-production.up.railway.app/api/auth";
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 const Pricing = () => {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">(
@@ -38,7 +38,7 @@ const Pricing = () => {
       setLoadingPlan(plan.title);
 
       if (plan.title === "Free Plan") {
-        await fetch(`${API_URL}/subscribe`, {
+        await fetch(`${apiUrl}/auth/subscribe`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -52,7 +52,7 @@ const Pricing = () => {
         return;
       }
 
-      const res = await fetch(`${API_URL}/payment-sheet`, {
+      const res = await fetch(`${apiUrl}/auth/payment-sheet`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ priceId: plan.priceId, email }),
@@ -78,7 +78,7 @@ const Pricing = () => {
       if (presentError) {
         Alert.alert("Payment failed", presentError.message);
       } else {
-        await fetch(`${API_URL}/subscribe`, {
+        await fetch(`${apiUrl}/auth/subscribe`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -101,7 +101,7 @@ const Pricing = () => {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const response = await fetch(`${API_URL}/plans`);
+        const response = await fetch(`${apiUrl}/auth/plans`);
         const data = await response.json();
         setPlans(data);
       } catch (err) {

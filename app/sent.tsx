@@ -22,7 +22,7 @@ interface SentEmail {
   excerpt: string;
 }
 
-const API_URL = "https://goatmailbe-production.up.railway.app/api";
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 const SentEmailsScreen = () => {
   const router = useRouter();
@@ -37,7 +37,7 @@ const SentEmailsScreen = () => {
       setLoading(true);
       setError("");
 
-      const res = await fetch(`${API_URL}/sent-emails`, {
+      const res = await fetch(`${apiUrl}/sent-emails`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
