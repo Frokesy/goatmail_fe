@@ -29,6 +29,10 @@ export default function RootLayout() {
               name="changePassword"
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="updateRecoveryEmail"
+              options={{ headerShown: false }}
+            />
           </Stack>
         </GestureHandlerRootView>
       </AuthProvider>

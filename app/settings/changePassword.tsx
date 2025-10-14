@@ -62,6 +62,8 @@ const ChangePassword = () => {
               value={currentPassword}
               onChangeText={setCurrentPassword}
               textContentType="password"
+              placeholder="Enter password"
+              placeholderTextColor="#9ca3af"
               className="w-[90%]"
             />
             <TouchableOpacity onPress={() => toggleShowPassword(!showPassword)}>
@@ -79,6 +81,8 @@ const ChangePassword = () => {
               value={password}
               onChangeText={setPassword}
               textContentType="password"
+              placeholder="Enter password"
+              placeholderTextColor="#9ca3af"
               className="w-[90%]"
             />
             <TouchableOpacity onPress={() => toggleShowPassword(!showPassword)}>
@@ -107,6 +111,8 @@ const ChangePassword = () => {
               value={confirmPassword}
               onChangeText={setConfirmPassword}
               textContentType="password"
+              placeholder="Enter password again"
+              placeholderTextColor="#9ca3af"
               className="w-[90%]"
             />
             <TouchableOpacity onPress={() => toggleShowPassword(!showPassword)}>

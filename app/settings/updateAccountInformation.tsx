@@ -75,10 +75,13 @@ const UpdateAccountInformation = () => {
               </Text>
               <ArrowRight />
             </Pressable>
-            <View className="border-b border-[#E4E4E7] py-3 flex items-center flex-row justify-between">
+            <Pressable
+              onPress={() => router.push("/settings/updateRecoveryEmail")}
+              className="border-b border-[#E4E4E7] py-3 flex items-center flex-row justify-between"
+            >
               <Text className="text-[14px] text-[#333333]">Recovery email</Text>
               <ArrowRight />
-            </View>
+            </Pressable>
             <View className="border-b border-[#E4E4E7] py-3 flex items-center flex-row justify-between">
               <Text className="text-[14px] text-[#333333]">
                 Enable Two-factor authentication
