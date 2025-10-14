@@ -34,7 +34,8 @@ const Inbox = () => {
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
   const router = useRouter();
 
-  const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+  const apiUrl =
+    "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
 
   const fetchInbox = async () => {
     try {

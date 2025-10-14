@@ -66,6 +66,7 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
       id: 14,
       name: "Settings",
       icon: <SettingsIcon />,
+      href: "/accountSettings",
       subgroup: "extras",
     },
     {
@@ -198,12 +199,24 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
                         </View>
                       </Pressable>
                     ) : (
-                      <View className="flex flex-row items-center mt-3">
-                        <View>{item.icon}</View>
-                        <Text className="text-[14px] text-[#101828] ml-3">
-                          {item.name}
-                        </Text>
-                      </View>
+                      <Pressable
+                        onPress={() => handlePress(item.href as Route)}
+                      >
+                        <View
+                          className={`${
+                            item.name === title && "bg-[#E8EAF0]"
+                          } flex flex-row items-center py-2 rounded-lg mt-1`}
+                        >
+                          <View>{item.icon}</View>
+                          <Text
+                            className={`${
+                              item.name === title && "font-semibold"
+                            } text-[14px] text-[#101828] ml-3`}
+                          >
+                            {item.name}
+                          </Text>
+                        </View>
+                      </Pressable>
                     )}
                   </>
                 )}
