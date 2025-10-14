@@ -1,8 +1,8 @@
 import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
 import Header from "@/components/defaults/Header";
-import { useAuth } from "./context/authContext";
 import ArrowRight from "@/components/icons/ArrowRight";
 import { useRouter } from "expo-router";
+import { useAuth } from "../context/authContext";
 
 const AccountSettings = () => {
   const { user } = useAuth();
@@ -16,7 +16,7 @@ const AccountSettings = () => {
             Account Settings
           </Text>
           <Pressable
-            onPress={() => router.push("/updateAccountInformation")}
+            onPress={() => router.push("/settings/updateAccountInformation")}
             className="border-y border-[#E4E4E7] py-3 flex items-center flex-row justify-between"
           >
             <View className="flex flex-row items-center ">

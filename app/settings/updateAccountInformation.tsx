@@ -66,12 +66,15 @@ const UpdateAccountInformation = () => {
 
           <View className="mt-10">
             <Text className="text-[16px] font-semibold mb-4">Security</Text>
-            <View className="border-y border-[#E4E4E7] py-3 flex items-center flex-row justify-between">
+            <Pressable
+              onPress={() => router.push("/settings/changePassword")}
+              className="border-y border-[#E4E4E7] py-3 flex items-center flex-row justify-between"
+            >
               <Text className="text-[14px] text-[#333333]">
                 Change password
               </Text>
               <ArrowRight />
-            </View>
+            </Pressable>
             <View className="border-b border-[#E4E4E7] py-3 flex items-center flex-row justify-between">
               <Text className="text-[14px] text-[#333333]">Recovery email</Text>
               <ArrowRight />

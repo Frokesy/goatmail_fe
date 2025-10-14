@@ -25,6 +25,10 @@ export default function RootLayout() {
               name="updateAccountInformation"
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="changePassword"
+              options={{ headerShown: false }}
+            />
           </Stack>
         </GestureHandlerRootView>
       </AuthProvider>

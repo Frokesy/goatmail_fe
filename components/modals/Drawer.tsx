@@ -66,7 +66,7 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
       id: 14,
       name: "Settings",
       icon: <SettingsIcon />,
-      href: "/accountSettings",
+      href: "/settings/accountSettings",
       subgroup: "extras",
     },
     {
