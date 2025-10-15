@@ -82,12 +82,15 @@ const UpdateAccountInformation = () => {
               <Text className="text-[14px] text-[#333333]">Recovery email</Text>
               <ArrowRight />
             </Pressable>
-            <View className="border-b border-[#E4E4E7] py-3 flex items-center flex-row justify-between">
+            <Pressable
+              onPress={() => router.push("/settings/update2FAStatus")}
+              className="border-b border-[#E4E4E7] py-3 flex items-center flex-row justify-between"
+            >
               <Text className="text-[14px] text-[#333333]">
                 Enable Two-factor authentication
               </Text>
               <ArrowRight />
-            </View>
+            </Pressable>
             <View className="border-b border-[#E4E4E7] py-3 flex items-center flex-row justify-between">
               <Text className="text-[14px] text-[#333333]">Sign out</Text>
               <ArrowRight />

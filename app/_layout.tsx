@@ -18,19 +18,19 @@ export default function RootLayout() {
             <Stack.Screen name="trash" options={{ headerShown: false }} />
             <Stack.Screen name="drafts" options={{ headerShown: false }} />
             <Stack.Screen
-              name="accountSettings"
+              name="settings/accountSettings"
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="updateAccountInformation"
+              name="settings/updateAccountInformation"
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="changePassword"
+              name="settings/changePassword"
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="updateRecoveryEmail"
+              name="settings/updateRecoveryEmail"
               options={{ headerShown: false }}
             />
           </Stack>
