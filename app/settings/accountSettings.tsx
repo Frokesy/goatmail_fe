@@ -51,10 +51,13 @@ const AccountSettings = () => {
             <Text className="text-[16px] font-semibold mb-4">
               Email settings
             </Text>
-            <View className="border-y border-[#E4E4E7] py-3 flex items-center flex-row justify-between">
+            <Pressable
+              onPress={() => router.push("/settings/swipeActions")}
+              className="border-y border-[#E4E4E7] py-3 flex items-center flex-row justify-between"
+            >
               <Text className="text-[14px] text-[#333333]">Swipe actions</Text>
               <ArrowRight />
-            </View>
+            </Pressable>
             <View className="border-b border-[#E4E4E7] py-3 flex items-center flex-row justify-between">
               <Text className="text-[14px] text-[#333333]">
                 Swipe to next message

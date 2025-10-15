@@ -33,6 +33,10 @@ export default function RootLayout() {
               name="settings/updateRecoveryEmail"
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="settings/swipeActions"
+              options={{ headerShown: false }}
+            />
           </Stack>
         </GestureHandlerRootView>
       </AuthProvider>
