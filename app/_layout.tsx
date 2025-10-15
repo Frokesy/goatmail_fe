@@ -41,6 +41,10 @@ export default function RootLayout() {
               name="settings/swipeToNextMessage"
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="settings/conversationMode"
+              options={{ headerShown: false }}
+            />
           </Stack>
         </GestureHandlerRootView>
       </AuthProvider>
