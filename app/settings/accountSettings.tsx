@@ -58,12 +58,15 @@ const AccountSettings = () => {
               <Text className="text-[14px] text-[#333333]">Swipe actions</Text>
               <ArrowRight />
             </Pressable>
-            <View className="border-b border-[#E4E4E7] py-3 flex items-center flex-row justify-between">
+            <Pressable
+              onPress={() => router.push("/settings/swipeToNextMessage")}
+              className="border-b border-[#E4E4E7] py-3 flex items-center flex-row justify-between"
+            >
               <Text className="text-[14px] text-[#333333]">
                 Swipe to next message
               </Text>
               <ArrowRight />
-            </View>
+            </Pressable>
             <View className="border-b border-[#E4E4E7] py-3 flex items-center flex-row justify-between">
               <Text className="text-[14px] text-[#333333]">
                 Conversation mode
