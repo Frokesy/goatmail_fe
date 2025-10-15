@@ -48,6 +48,7 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
       id: 11,
       name: "New Label",
       icon: <LabelIcon />,
+      href: "/newLabel",
       subgroup: "label",
     },
     {
@@ -166,12 +167,17 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
                 {item.subgroup === "label" && (
                   <View className="mt-10">
                     <Text className="text-[12px] uppercase">Labels</Text>
-                    <View className="flex flex-row items-center mt-3">
+                    <Pressable
+                      onPress={() => handlePress(item.href as Route)}
+                      className={`${
+                        item.name === title && "bg-[#E8EAF0] px-3"
+                      } flex flex-row items-center py-2 rounded-lg mt-1`}
+                    >
                       <View>{item.icon}</View>
                       <Text className="text-[14px] text-[#101828] ml-3">
                         {item.name}
                       </Text>
-                    </View>
+                    </Pressable>
                   </View>
                 )}
 

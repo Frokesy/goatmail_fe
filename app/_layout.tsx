@@ -17,6 +17,7 @@ export default function RootLayout() {
             <Stack.Screen name="archived" options={{ headerShown: false }} />
             <Stack.Screen name="trash" options={{ headerShown: false }} />
             <Stack.Screen name="drafts" options={{ headerShown: false }} />
+            <Stack.Screen name="newLabel" options={{ headerShown: false }} />
             <Stack.Screen
               name="settings/accountSettings"
               options={{ headerShown: false }}
