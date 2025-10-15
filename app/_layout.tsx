@@ -49,6 +49,10 @@ export default function RootLayout() {
               name="settings/pushNotifications"
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="settings/appPreferences"
+              options={{ headerShown: false }}
+            />
           </Stack>
         </GestureHandlerRootView>
       </AuthProvider>
