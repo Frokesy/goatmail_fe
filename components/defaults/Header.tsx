@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import SearchIcon from "../icons/SearchIcon";
 import Hamburger from "../icons/Hamburger";
 import Drawer from "../modals/Drawer";
+import LabelIcon from "../icons/LabelIcon";
 
 interface HeaderProps {
   title: string;
@@ -18,7 +19,7 @@ const Header = ({ title }: HeaderProps) => {
         </Pressable>
         <Text className="text-[20px] font-semibold ml-4">{title}</Text>
       </View>
-      <SearchIcon />
+      {title === "Create group" ? <LabelIcon /> : <SearchIcon />}
 
       <Drawer
         title={title}

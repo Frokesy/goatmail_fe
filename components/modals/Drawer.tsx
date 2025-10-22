@@ -56,6 +56,7 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
       name: "Create group",
       icon: <PeopleIcon />,
       subgroup: "group",
+      href: "/createGroup",
     },
     {
       id: 13,
@@ -184,12 +185,19 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
                 {item.subgroup === "group" && (
                   <View className="my-10">
                     <Text className="text-[12px] uppercase">Groups</Text>
-                    <View className="flex flex-row items-center mt-3">
-                      <View>{item.icon}</View>
-                      <Text className="text-[14px] text-[#101828] ml-3">
-                        {item.name}
-                      </Text>
-                    </View>
+                    <Pressable
+                      onPress={() => handlePress(item.href as Route)}
+                      className={`${
+                        item.name === title && "bg-[#E8EAF0] px-3"
+                      } flex flex-row items-center py-2 rounded-lg mt-1`}
+                    >
+                      <View className="flex flex-row items-center">
+                        <View>{item.icon}</View>
+                        <Text className="text-[14px] text-[#101828] ml-3">
+                          {item.name}
+                        </Text>
+                      </View>
+                    </Pressable>
                   </View>
                 )}
 

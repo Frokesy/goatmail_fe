@@ -54,6 +54,10 @@ export default function RootLayout() {
               name="settings/appPreferences"
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="/createGroup"
+              options={{ headerShown: false }}
+            />
           </Stack>
         </GestureHandlerRootView>
       </AuthProvider>
