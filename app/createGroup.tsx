@@ -10,12 +10,18 @@ import Header from "@/components/defaults/Header";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import SearchIcon from "@/components/icons/SearchIcon";
 import UserIcon from "@/components/icons/UserIcon";
+import GroupActionsModal from "@/components/modals/GroupActionsModal";
 
 const CreateGroup = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [showActions, setShowActions] = useState<boolean>(false);
+
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <Header title="Create group" />
+      <Header
+        title="Create group"
+        triggerGroupModal={() => setShowActions(true)}
+      />
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         enableOnAndroid
@@ -55,6 +61,10 @@ const CreateGroup = () => {
           </TouchableOpacity>
         </View>
       </KeyboardAwareScrollView>
+      <GroupActionsModal
+        modalVisible={showActions}
+        setModalVisible={setShowActions}
+      />
     </SafeAreaView>
   );
 };
