@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import UserPlusIcon from "../icons/UserPlusIcon";
 import UploadIcon from "../icons/UploadIcon";
+import { useState } from "react";
+import CreateContactModal from "./CreateContactModal";
 
 const GroupActionsModal = ({
   modalVisible,
@@ -16,10 +18,17 @@ const GroupActionsModal = ({
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
 }) => {
+  const [showContactModal, setShowContactModal] = useState<boolean>(false);
   const actions = [
     { label: "Create Contact", value: "createContact", icon: <UserPlusIcon /> },
     { label: "Upload Contacts", value: "uploadContacts", icon: <UploadIcon /> },
   ];
+
+  const handlePress = (value: string) => {
+    if (value === "createContact") {
+      setShowContactModal(true);
+    }
+  };
 
   return (
     <Modal
@@ -39,7 +48,11 @@ const GroupActionsModal = ({
 
         <View className="">
           {actions.map((action) => (
-            <TouchableOpacity key={action.value} activeOpacity={0.8}>
+            <TouchableOpacity
+              key={action.value}
+              onPress={() => handlePress(action.value)}
+              activeOpacity={0.8}
+            >
               <View className="flex flex-row items-center p-3 rounded-lg mt-3 border border-[#E4E4E7]">
                 {action.icon}
                 <Text className="text-[14px] ml-4">{action.label}</Text>
@@ -48,6 +61,11 @@ const GroupActionsModal = ({
           ))}
         </View>
       </Animated.View>
+
+      <CreateContactModal
+        modalVisible={showContactModal}
+        setModalVisible={setShowContactModal}
+      />
     </Modal>
   );
 };
