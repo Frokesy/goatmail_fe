@@ -7,6 +7,7 @@ import {
   Animated,
   TouchableWithoutFeedback,
   Pressable,
+  ScrollView,
 } from "react-native";
 import InboxIcon from "../icons/InboxIcon";
 import SentIcon from "../icons/SentIcon";
@@ -125,7 +126,7 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
         style={{ transform: [{ translateX: slideAnim }] }}
         className="absolute left-0 top-0 h-full w-[70%] bg-white p-5 pt-[10vh]"
       >
-        <View>
+        <ScrollView>
           <View className="flex flex-row items-center">
             <View className="bg-[#EEF0F4] text-[#333333] mr-4 h-[40px] w-[40px] rounded-full flex items-center justify-center">
               <Text className="font-semibold text-[#333333]">
@@ -258,7 +259,7 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
               </View>
             ))}
           </View>
-        </View>
+        </ScrollView>
       </Animated.View>
     </Modal>
   );
