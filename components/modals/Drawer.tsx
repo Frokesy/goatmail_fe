@@ -23,6 +23,7 @@ import SubscriptionIcon from "../icons/SubscriptionIcon";
 import SettingsIcon from "../icons/SettingsIcon";
 import SignoutIcon from "../icons/SignoutIcon";
 import { Route, useRouter } from "expo-router";
+import { useGroups } from "@/app/context/groupsContext";
 
 interface DrawerProps {
   drawerVisible: boolean;
@@ -33,6 +34,7 @@ interface DrawerProps {
 const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
   const { user, logout } = useAuth();
   const router = useRouter();
+  const { groups } = useGroups();
 
   const navItems = [
     { id: 1, name: "Inbox", href: "/inbox", icon: <InboxIcon /> },
@@ -184,12 +186,13 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
 
                 {item.subgroup === "group" && (
                   <View className="my-10">
-                    <Text className="text-[12px] uppercase">Groups</Text>
+                    <Text className="text-[12px] uppercase mb-1">Groups</Text>
+
                     <Pressable
                       onPress={() => handlePress(item.href as Route)}
                       className={`${
-                        item.name === title && "bg-[#E8EAF0] px-3"
-                      } flex flex-row items-center py-2 rounded-lg mt-1`}
+                        item.name === title && "bg-[#E8EAF0]"
+                      } flex flex-row items-center py-2 rounded-lg px-3`}
                     >
                       <View className="flex flex-row items-center">
                         <View>{item.icon}</View>
@@ -198,6 +201,24 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
                         </Text>
                       </View>
                     </Pressable>
+
+                    {groups.length > 0
+                      ? groups.map((group) => (
+                          <Pressable
+                            key={group.id}
+                            onPress={() => {
+                              console.log("Opening group:", group.name);
+                            }}
+                          >
+                            <View className="flex flex-row items-center py-2 px-3 rounded-lg mt-1">
+                              <View className="h-2 w-2 rounded-full bg-[#4F46E5] mr-3" />
+                              <Text className="text-[14px] text-[#101828]">
+                                {group.name}
+                              </Text>
+                            </View>
+                          </Pressable>
+                        ))
+                      : null}
                   </View>
                 )}
 
