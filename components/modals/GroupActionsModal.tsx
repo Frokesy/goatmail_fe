@@ -36,9 +36,6 @@ const GroupActionsModal = ({
     }
   };
 
-  console.log(showContactModal);
-  console.log(showUploadContactsModal);
-
   return (
     <Modal
       animationType="slide"
