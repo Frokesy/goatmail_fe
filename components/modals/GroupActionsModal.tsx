@@ -10,6 +10,7 @@ import UserPlusIcon from "../icons/UserPlusIcon";
 import UploadIcon from "../icons/UploadIcon";
 import { useState } from "react";
 import CreateContactModal from "./CreateContactModal";
+import UploadContactsModal from "./UploadContactsModal";
 
 const GroupActionsModal = ({
   modalVisible,
@@ -19,6 +20,8 @@ const GroupActionsModal = ({
   setModalVisible: (visible: boolean) => void;
 }) => {
   const [showContactModal, setShowContactModal] = useState<boolean>(false);
+  const [showUploadContactsModal, setShowUploadContactsModal] =
+    useState<boolean>(false);
   const actions = [
     { label: "Create Contact", value: "createContact", icon: <UserPlusIcon /> },
     { label: "Upload Contacts", value: "uploadContacts", icon: <UploadIcon /> },
@@ -27,8 +30,14 @@ const GroupActionsModal = ({
   const handlePress = (value: string) => {
     if (value === "createContact") {
       setShowContactModal(true);
+    } else if (value === "uploadContacts") {
+      setShowUploadContactsModal(true);
+      setShowContactModal(false);
     }
   };
+
+  console.log(showContactModal);
+  console.log(showUploadContactsModal);
 
   return (
     <Modal
@@ -66,6 +75,12 @@ const GroupActionsModal = ({
         modalVisible={showContactModal}
         setModalVisible={setShowContactModal}
       />
+      {showUploadContactsModal && (
+        <UploadContactsModal
+          modalVisible={showUploadContactsModal}
+          setModalVisible={setShowUploadContactsModal}
+        />
+      )}
     </Modal>
   );
 };
