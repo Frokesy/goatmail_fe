@@ -7,44 +7,44 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ActivityIndicator,
-} from "react-native";
-import React, { useState } from "react";
-import { Link } from "expo-router";
-import CaretRight from "../../components/icons/CaretRight";
-import CaretLeft from "../../components/icons/CaretLeft";
-import EmailAccountCreationStatusModal from "../../components/modals/EmailAccountCreationStatusModal";
-import { useSearchParams } from "expo-router/build/hooks";
+} from 'react-native';
+import React, { useState } from 'react';
+import { Link } from 'expo-router';
+import CaretRight from '../../components/icons/CaretRight';
+import CaretLeft from '../../components/icons/CaretLeft';
+import EmailAccountCreationStatusModal from '../../components/modals/EmailAccountCreationStatusModal';
+import { useSearchParams } from 'expo-router/build/hooks';
 
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 
 const AddRecoveryEmail = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [recoveryEmail, setRecoveryEmail] = useState("");
+  const [recoveryEmail, setRecoveryEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const searchParams = useSearchParams();
-  const email = searchParams.get("email") || "";
+  const email = searchParams.get('email') || '';
 
   const handleSaveRecoveryEmail = async () => {
-    setError("");
-    if (!recoveryEmail.includes("@") || !recoveryEmail.includes(".")) {
-      setError("Please enter a valid email address");
+    setError('');
+    if (!recoveryEmail.includes('@') || !recoveryEmail.includes('.')) {
+      setError('Please enter a valid email address');
       return;
     }
 
     try {
       setLoading(true);
       const res = await fetch(`${apiUrl}/auth/recovery-email`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, recoveryEmail }),
       });
 
       const data = await res.json();
       if (!res.ok)
-        throw new Error(data.error || "Failed to save recovery email");
+        throw new Error(data.error || 'Failed to save recovery email');
 
       setModalVisible(true);
     } catch (err: any) {

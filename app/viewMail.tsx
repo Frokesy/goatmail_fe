@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,11 +7,11 @@ import {
   Pressable,
   ActivityIndicator,
   useWindowDimensions,
-} from "react-native";
-import Header from "@/components/defaults/Header";
-import { useSearchParams } from "expo-router/build/hooks";
-import { useAuth } from "./context/authContext";
-import RenderHtml from "react-native-render-html";
+} from 'react-native';
+import Header from '@/components/defaults/Header';
+import { useSearchParams } from 'expo-router/build/hooks';
+import { useAuth } from './context/authContext';
+import RenderHtml from 'react-native-render-html';
 
 interface MailDetail {
   uid: string;
@@ -24,50 +24,50 @@ interface MailDetail {
 }
 
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 const ViewMail = () => {
   const { width } = useWindowDimensions();
   const searchParams = useSearchParams();
   const { token } = useAuth();
-  const uid = searchParams.get("uid") || "";
+  const uid = searchParams.get('uid') || '';
   const [mail, setMail] = useState<MailDetail | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchMail = async () => {
       try {
-        if (!uid) throw new Error("Mail UID is missing");
+        if (!uid) throw new Error('Mail UID is missing');
 
         setLoading(true);
         const res = await fetch(`${apiUrl}/mail/${uid}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (!res.ok) throw new Error("Failed to fetch email");
+        if (!res.ok) throw new Error('Failed to fetch email');
 
         const data = await res.json();
-        if (!data.mail) throw new Error("Email not found");
+        if (!data.mail) throw new Error('Email not found');
 
         setMail({
           uid: data.mail.id.toString(),
-          subject: data.mail.subject || "(no subject)",
-          from: data.mail.from || "(unknown sender)",
-          to: data.mail.to || "you@example.com",
+          subject: data.mail.subject || '(no subject)',
+          from: data.mail.from || '(unknown sender)',
+          to: data.mail.to || 'you@example.com',
           date: data.mail.date
-            ? new Date(data.mail.date).toLocaleString("en-US", {
-                month: "short",
-                day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
+            ? new Date(data.mail.date).toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
               })
-            : "",
+            : '',
           starred: Boolean(data.mail.starred),
-          body: data.mail.body || "",
+          body: data.mail.body || '',
         });
       } catch (err: any) {
         console.error(err);
-        setError(err.message || "Something went wrong");
+        setError(err.message || 'Something went wrong');
       } finally {
         setLoading(false);
       }
@@ -83,17 +83,17 @@ const ViewMail = () => {
     setMail((prev) => prev && { ...prev, starred: !isStarred });
 
     try {
-      const url = `${apiUrl}/${isStarred ? "unstar-mail" : "star-mail"}`;
+      const url = `${apiUrl}/${isStarred ? 'unstar-mail' : 'star-mail'}`;
       const res = await fetch(isStarred ? `${url}/${mail.uid}` : url, {
-        method: isStarred ? "DELETE" : "POST",
+        method: isStarred ? 'DELETE' : 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: isStarred ? null : JSON.stringify({ mailId: mail.uid }),
       });
 
-      if (!res.ok) throw new Error("Failed to update star status");
+      if (!res.ok) throw new Error('Failed to update star status');
     } catch (err) {
       console.error(err);
       setMail((prev) => prev && { ...prev, starred: isStarred });
@@ -103,7 +103,7 @@ const ViewMail = () => {
   const actionButton = (label: string) => (
     <Pressable
       className="px-3 py-1 rounded mr-2"
-      style={{ backgroundColor: "#f1f3f4" }}
+      style={{ backgroundColor: '#f1f3f4' }}
     >
       <Text className="text-gray-700 font-medium">{label}</Text>
     </Pressable>
@@ -124,9 +124,9 @@ const ViewMail = () => {
       ) : mail ? (
         <ScrollView className="flex-1">
           <View className="flex-row justify-end items-center p-2">
-            {actionButton("Reply")}
-            {actionButton("Forward")}
-            {actionButton("Archive")}
+            {actionButton('Reply')}
+            {actionButton('Forward')}
+            {actionButton('Archive')}
           </View>
 
           <View className="px-4 py-3 flex-row justify-between items-center">
@@ -134,7 +134,7 @@ const ViewMail = () => {
               {mail.subject}
             </Text>
             <Pressable onPress={toggleStar}>
-              <Text className="text-2xl">{mail.starred ? "⭐" : "☆"}</Text>
+              <Text className="text-2xl">{mail.starred ? '⭐' : '☆'}</Text>
             </Pressable>
           </View>
 
@@ -155,9 +155,9 @@ const ViewMail = () => {
             <RenderHtml
               contentWidth={width - 32}
               source={{ html: mail.body }}
-              baseStyle={{ fontSize: 15, lineHeight: 24, color: "#202124" }}
+              baseStyle={{ fontSize: 15, lineHeight: 24, color: '#202124' }}
               tagsStyles={{
-                a: { color: "#1a73e8", textDecorationLine: "underline" },
+                a: { color: '#1a73e8', textDecorationLine: 'underline' },
                 p: { marginVertical: 6 },
                 img: {
                   borderRadius: 8,
@@ -165,10 +165,10 @@ const ViewMail = () => {
                 },
                 blockquote: {
                   paddingLeft: 12,
-                  color: "#5f6368",
-                  fontStyle: "italic",
+                  color: '#5f6368',
+                  fontStyle: 'italic',
                   marginVertical: 8,
-                  backgroundColor: "#f8f9fa",
+                  backgroundColor: '#f8f9fa',
                   borderLeftWidth: 0,
                 },
                 ul: { marginVertical: 6, paddingLeft: 20 },
@@ -176,13 +176,13 @@ const ViewMail = () => {
                 table: { borderWidth: 0, marginVertical: 8 },
                 td: { padding: 8, borderWidth: 0 },
               }}
-              ignoredDomTags={["meta", "link", "style"]}
+              ignoredDomTags={['meta', 'link', 'style']}
             />
           </View>
 
           <View className="px-4 py-3 flex-row justify-start">
-            {actionButton("Reply")}
-            {actionButton("Forward")}
+            {actionButton('Reply')}
+            {actionButton('Forward')}
           </View>
         </ScrollView>
       ) : null}

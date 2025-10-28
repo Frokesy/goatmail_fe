@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -6,11 +6,11 @@ import {
   SafeAreaView,
   ActivityIndicator,
   useWindowDimensions,
-} from "react-native";
-import { useSearchParams } from "expo-router/build/hooks";
-import { useAuth } from "@/app/context/authContext";
-import RenderHtml from "react-native-render-html";
-import Header from "@/components/defaults/Header";
+} from 'react-native';
+import { useSearchParams } from 'expo-router/build/hooks';
+import { useAuth } from '@/app/context/authContext';
+import RenderHtml from 'react-native-render-html';
+import Header from '@/components/defaults/Header';
 
 interface SentMailDetail {
   uid: string;
@@ -22,50 +22,50 @@ interface SentMailDetail {
 }
 
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 const SentViewMail = () => {
   const { width } = useWindowDimensions();
   const { token } = useAuth();
   const searchParams = useSearchParams();
-  const uid = searchParams.get("uid") || "";
+  const uid = searchParams.get('uid') || '';
 
   const [mail, setMail] = useState<SentMailDetail | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchMail = async () => {
       try {
-        if (!uid) throw new Error("Mail ID missing");
+        if (!uid) throw new Error('Mail ID missing');
 
         const res = await fetch(`${apiUrl}/sent-emails/${uid}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (!res.ok) throw new Error("Failed to fetch sent email");
+        if (!res.ok) throw new Error('Failed to fetch sent email');
 
         const data = await res.json();
-        if (!data.email) throw new Error("Email not found");
+        if (!data.email) throw new Error('Email not found');
 
         const msg = data.email;
 
         setMail({
           uid: msg._id,
-          subject: msg.subject || "(no subject)",
-          from: msg.from || "Me",
+          subject: msg.subject || '(no subject)',
+          from: msg.from || 'Me',
           to: msg.to || [],
           date: msg.sentAt
-            ? new Date(msg.sentAt).toLocaleString("en-US", {
-                month: "short",
-                day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
+            ? new Date(msg.sentAt).toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
               })
-            : "",
-          body: msg.body || "",
+            : '',
+          body: msg.body || '',
         });
       } catch (err: any) {
-        setError(err.message || "Something went wrong");
+        setError(err.message || 'Something went wrong');
       } finally {
         setLoading(false);
       }
@@ -107,9 +107,9 @@ const SentViewMail = () => {
             <RenderHtml
               contentWidth={width - 32}
               source={{ html: mail.body }}
-              baseStyle={{ fontSize: 15, lineHeight: 24, color: "#202124" }}
+              baseStyle={{ fontSize: 15, lineHeight: 24, color: '#202124' }}
               tagsStyles={{
-                a: { color: "#1a73e8", textDecorationLine: "underline" },
+                a: { color: '#1a73e8', textDecorationLine: 'underline' },
                 p: { marginVertical: 6 },
                 img: {
                   borderRadius: 8,
@@ -117,10 +117,10 @@ const SentViewMail = () => {
                 },
                 blockquote: {
                   paddingLeft: 12,
-                  color: "#5f6368",
-                  fontStyle: "italic",
+                  color: '#5f6368',
+                  fontStyle: 'italic',
                   marginVertical: 8,
-                  backgroundColor: "#f8f9fa",
+                  backgroundColor: '#f8f9fa',
                   borderLeftWidth: 0,
                 },
                 ul: { marginVertical: 6, paddingLeft: 20 },
@@ -128,7 +128,7 @@ const SentViewMail = () => {
                 table: { borderWidth: 0, marginVertical: 8 },
                 td: { padding: 8, borderWidth: 0 },
               }}
-              ignoredDomTags={["meta", "link", "style"]}
+              ignoredDomTags={['meta', 'link', 'style']}
             />
           </View>
         </ScrollView>

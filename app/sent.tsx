@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -8,10 +8,10 @@ import {
   SafeAreaView,
   ScrollView,
   Image,
-} from "react-native";
-import { useRouter } from "expo-router";
-import { useAuth } from "@/app/context/authContext";
-import Header from "@/components/defaults/Header";
+} from 'react-native';
+import { useRouter } from 'expo-router';
+import { useAuth } from '@/app/context/authContext';
+import Header from '@/components/defaults/Header';
 
 interface SentEmail {
   uid: string;
@@ -23,25 +23,25 @@ interface SentEmail {
 }
 
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 const SentEmailsScreen = () => {
   const router = useRouter();
   const { token } = useAuth();
 
   const [emails, setEmails] = useState<SentEmail[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const fetchSentEmails = useCallback(async () => {
     try {
       setLoading(true);
-      setError("");
+      setError('');
 
       const res = await fetch(`${apiUrl}/sent-emails`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (!res.ok) throw new Error("Failed to fetch sent emails");
+      if (!res.ok) throw new Error('Failed to fetch sent emails');
 
       const data = await res.json();
 
@@ -49,18 +49,18 @@ const SentEmailsScreen = () => {
         const normalized = data.emails.map((msg: any): SentEmail => {
           const dateObj = msg.sentAt ? new Date(msg.sentAt) : null;
           const formattedDate = dateObj
-            ? dateObj.toLocaleString("en-US", {
-                month: "short",
-                day: "numeric",
+            ? dateObj.toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
               })
-            : "";
+            : '';
 
-          const plainBody = msg.body?.replace(/<[^>]+>/g, "") || "";
+          const plainBody = msg.body?.replace(/<[^>]+>/g, '') || '';
 
           return {
             uid: msg._id.toString(),
-            subject: msg.subject || "No subject",
-            from: msg.senderName || msg.from || "Me",
+            subject: msg.subject || 'No subject',
+            from: msg.senderName || msg.from || 'Me',
             to: msg.to || [],
             date: formattedDate,
             excerpt: plainBody.slice(0, 80),
@@ -72,7 +72,7 @@ const SentEmailsScreen = () => {
         setEmails([]);
       }
     } catch (err: any) {
-      setError(err.message || "Something went wrong");
+      setError(err.message || 'Something went wrong');
     } finally {
       setLoading(false);
     }
@@ -97,7 +97,7 @@ const SentEmailsScreen = () => {
         <ScrollView>
           <View className="min-h-[70vh] flex flex-col items-center justify-center">
             <Image
-              source={require("../assets/images/empty-inbox.png")}
+              source={require('../assets/images/empty-inbox.png')}
               className="w-[114px] h-[100px]"
             />
             <Text className="text-[18px] font-semibold mt-3">
@@ -120,7 +120,7 @@ const SentEmailsScreen = () => {
               <Pressable
                 onPress={() =>
                   router.push({
-                    pathname: "/sentViewMail",
+                    pathname: '/sentViewMail',
                     params: { uid: mail.uid },
                   })
                 }

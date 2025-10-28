@@ -7,22 +7,22 @@ import {
   Alert,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
-import React, { useRef, useState, useEffect } from "react";
-import { useRouter } from "expo-router";
-import { useSearchParams } from "expo-router/build/hooks";
+} from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { useRouter } from 'expo-router';
+import { useSearchParams } from 'expo-router/build/hooks';
 
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 
 const ConfirmEmailAddress = () => {
   const searchParams = useSearchParams();
-  const email = searchParams.get("email") || "";
+  const email = searchParams.get('email') || '';
   const router = useRouter();
 
-  const [code, setCode] = useState(["", "", "", "", "", ""]);
+  const [code, setCode] = useState(['', '', '', '', '', '']);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const [counter, setCounter] = useState(59);
   const [resending, setResending] = useState(false);
@@ -47,41 +47,41 @@ const ConfirmEmailAddress = () => {
   };
 
   const handleKeyPress = (e: any, index: number) => {
-    if (e.nativeEvent.key === "Backspace" && code[index] === "") {
+    if (e.nativeEvent.key === 'Backspace' && code[index] === '') {
       if (index > 0) {
         inputs.current[index - 1]?.focus();
 
         const newCode = [...code];
-        newCode[index - 1] = "";
+        newCode[index - 1] = '';
         setCode(newCode);
       }
     }
   };
 
   const handleVerify = async () => {
-    const otp = code.join("");
+    const otp = code.join('');
     if (otp.length < 6) {
-      setError("Please enter all 6 digits");
+      setError('Please enter all 6 digits');
       return;
     }
 
     setLoading(true);
-    setError("");
+    setError('');
 
     try {
       const res = await fetch(`${apiUrl}/auth/verify-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp }),
       });
 
       const data = await res.json();
 
-      if (!res.ok) setError(data.error || "OTP verification failed");
+      if (!res.ok) setError(data.error || 'OTP verification failed');
       else {
-        Alert.alert("Success", "Email verified successfully!");
+        Alert.alert('Success', 'Email verified successfully!');
         router.push({
-          pathname: "/createPassword",
+          pathname: '/createPassword',
           params: { email },
         });
       }
@@ -90,7 +90,7 @@ const ConfirmEmailAddress = () => {
     } finally {
       setLoading(false);
       setTimeout(() => {
-        setError("");
+        setError('');
       }, 3000);
     }
   };
@@ -99,15 +99,15 @@ const ConfirmEmailAddress = () => {
     setResending(true);
     try {
       const res = await fetch(`${apiUrl}/auth/resend-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
 
       const data = await res.json();
-      if (!res.ok) setError(data.error || "Failed to resend OTP");
+      if (!res.ok) setError(data.error || 'Failed to resend OTP');
       else {
-        Alert.alert("Success", "A new OTP has been sent to your email.");
+        Alert.alert('Success', 'A new OTP has been sent to your email.');
         setCounter(59);
       }
     } catch (err) {
@@ -116,7 +116,7 @@ const ConfirmEmailAddress = () => {
     } finally {
       setResending(false);
       setTimeout(() => {
-        setError("");
+        setError('');
       }, 3000);
     }
   };
@@ -163,7 +163,7 @@ const ConfirmEmailAddress = () => {
           >
             <Text
               className={`text-[14px] ${
-                counter > 0 ? "text-gray-400" : "text-[#6941C6]"
+                counter > 0 ? 'text-gray-400' : 'text-[#6941C6]'
               }`}
             >
               {counter > 0
@@ -171,7 +171,7 @@ const ConfirmEmailAddress = () => {
                     counter < 10 ? `0${counter}` : counter
                   }`
                 : resending
-                ? "Resending..."
+                ? 'Resending...'
                 : "Didn't receive code? Resend OTP"}
             </Text>
           </TouchableOpacity>
@@ -179,13 +179,13 @@ const ConfirmEmailAddress = () => {
           <View className="w-[100%] mt-10">
             <TouchableOpacity
               className={`p-5 rounded-full items-center ${
-                loading ? "bg-gray-400" : "bg-[#3D4294]"
+                loading ? 'bg-gray-400' : 'bg-[#3D4294]'
               }`}
               onPress={handleVerify}
               disabled={loading}
             >
               <Text className="text-white font-medium text-[16px]">
-                {loading ? "Verifying..." : "Proceed to setup Password"}
+                {loading ? 'Verifying...' : 'Proceed to setup Password'}
               </Text>
             </TouchableOpacity>
           </View>

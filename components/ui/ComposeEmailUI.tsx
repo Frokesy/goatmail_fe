@@ -5,12 +5,12 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-} from "react-native";
-import React, { useState } from "react";
-import { Checkbox } from "expo-checkbox";
-import SendEmailIcon from "../icons/SendEmailIcon";
-import { useAuth } from "@/app/context/authContext";
-import { sendEmail } from "@/helpers/api";
+} from 'react-native';
+import React, { useState } from 'react';
+import { Checkbox } from 'expo-checkbox';
+import SendEmailIcon from '../icons/SendEmailIcon';
+import { useAuth } from '@/app/context/authContext';
+import { sendEmail } from '@/helpers/api';
 
 interface ComposeEmailUIProps {
   setModalVisible: (visible: boolean) => void;
@@ -29,7 +29,7 @@ interface ComposeEmailUIProps {
 }
 
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 const ComposeEmailUI = ({
   setModalVisible,
   subject,
@@ -50,44 +50,44 @@ const ComposeEmailUI = ({
   const [showCC, setShowCC] = useState<boolean>(false);
   const [showBCC, setShowBCC] = useState<boolean>(false);
   const [currentRecipientInput, setCurrentRecipientInput] =
-    useState<string>("");
+    useState<string>('');
   const [currentCCRecipientInput, setCurrentCCRecipientInput] =
-    useState<string>("");
+    useState<string>('');
   const [currentBCCRecipientInput, setCurrentBCCRecipientInput] =
-    useState<string>("");
+    useState<string>('');
   const [isChecked, setChecked] = useState(false);
 
   const addRecipient = (cat: string) => {
-    if (cat === "recipient") {
+    if (cat === 'recipient') {
       const email = currentRecipientInput.trim();
 
       if (email.length > 0 && !recipients.includes(email)) {
         setRecipients([...recipients, email]);
       }
-      setCurrentRecipientInput("");
-    } else if (cat === "ccrecipient") {
+      setCurrentRecipientInput('');
+    } else if (cat === 'ccrecipient') {
       const email = currentCCRecipientInput.trim();
 
       if (email.length > 0 && !ccrecipients.includes(email)) {
         setCCRecipients([...ccrecipients, email]);
       }
-      setCurrentCCRecipientInput("");
-    } else if (cat === "bccrecipient") {
+      setCurrentCCRecipientInput('');
+    } else if (cat === 'bccrecipient') {
       const email = currentBCCRecipientInput.trim();
 
       if (email.length > 0 && !bccrecipients.includes(email)) {
         setBCCRecipients([...bccrecipients, email]);
       }
-      setCurrentBCCRecipientInput("");
+      setCurrentBCCRecipientInput('');
     }
   };
 
   const removeRecipient = (email: string, cat: string) => {
-    if (cat === "recipient") {
+    if (cat === 'recipient') {
       setRecipients(recipients.filter((e) => e !== email));
-    } else if (cat === "ccrecipient") {
+    } else if (cat === 'ccrecipient') {
       setCCRecipients(ccrecipients.filter((e) => e !== email));
-    } else if (cat === "bccrecipient") {
+    } else if (cat === 'bccrecipient') {
       setBCCRecipients(bccrecipients.filter((e) => e !== email));
     }
   };
@@ -109,7 +109,7 @@ const ComposeEmailUI = ({
 
       if (draftId) {
         await fetch(`${apiUrl}/drafts/${draftId}`, {
-          method: "DELETE",
+          method: 'DELETE',
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -117,13 +117,13 @@ const ComposeEmailUI = ({
         setDraftId(null);
       }
 
-      Alert.alert("Success", "Email sent successfully!");
+      Alert.alert('Success', 'Email sent successfully!');
       setModalVisible(false);
     } catch (err: any) {
-      Alert.alert("Error", err.message || "Failed to send email");
+      Alert.alert('Error', err.message || 'Failed to send email');
     } finally {
-      setMail("");
-      setSubject("");
+      setMail('');
+      setSubject('');
       setRecipients([]);
       setCCRecipients([]);
       setBCCRecipients([]);
@@ -133,7 +133,7 @@ const ComposeEmailUI = ({
   };
 
   const canEnableTracking =
-    recipients.length > 0 && subject.trim() !== "" && mail.trim() !== "";
+    recipients.length > 0 && subject.trim() !== '' && mail.trim() !== '';
   return (
     <View>
       <View className="flex flex-row items-center mt-10">
@@ -141,8 +141,8 @@ const ComposeEmailUI = ({
         <TextInput
           value={currentRecipientInput}
           onChangeText={setCurrentRecipientInput}
-          onSubmitEditing={() => addRecipient("recipient")}
-          submitBehavior={"submit"}
+          onSubmitEditing={() => addRecipient('recipient')}
+          submitBehavior={'submit'}
           returnKeyType="done"
           className="border-b-2 border-[#D0D5DD] w-[90vw] ml-3 pb-2"
           placeholder="Enter recipients"
@@ -163,7 +163,7 @@ const ComposeEmailUI = ({
             <Text className="text-[12px]">{email}</Text>
             <TouchableOpacity
               className="ml-2"
-              onPress={() => removeRecipient(email, "recipient")}
+              onPress={() => removeRecipient(email, 'recipient')}
             >
               <Text>✕</Text>
             </TouchableOpacity>
@@ -173,10 +173,10 @@ const ComposeEmailUI = ({
 
       <View className="flex flex-row mt-10">
         <Pressable onPress={() => setShowCC(!showCC)}>
-          <Text>{showCC ? "Remove CC" : "Add CC"}</Text>
+          <Text>{showCC ? 'Remove CC' : 'Add CC'}</Text>
         </Pressable>
         <Pressable className="ml-4" onPress={() => setShowBCC(!showBCC)}>
-          <Text>{showBCC ? "Remove BCC" : "Add BCC"}</Text>
+          <Text>{showBCC ? 'Remove BCC' : 'Add BCC'}</Text>
         </Pressable>
       </View>
       {showCC && (
@@ -186,8 +186,8 @@ const ComposeEmailUI = ({
             <TextInput
               value={currentCCRecipientInput}
               onChangeText={setCurrentCCRecipientInput}
-              onSubmitEditing={() => addRecipient("ccrecipient")}
-              submitBehavior={"submit"}
+              onSubmitEditing={() => addRecipient('ccrecipient')}
+              submitBehavior={'submit'}
               returnKeyType="done"
               className="border-b-2 border-[#D0D5DD] ml-3 w-[90vw] pb-2"
               placeholder="Enter CC recipients"
@@ -208,7 +208,7 @@ const ComposeEmailUI = ({
                 <Text className="text-[12px]">{email}</Text>
                 <TouchableOpacity
                   className="ml-2"
-                  onPress={() => removeRecipient(email, "ccrecipient")}
+                  onPress={() => removeRecipient(email, 'ccrecipient')}
                 >
                   <Text>✕</Text>
                 </TouchableOpacity>
@@ -224,8 +224,8 @@ const ComposeEmailUI = ({
             <TextInput
               value={currentBCCRecipientInput}
               onChangeText={setCurrentBCCRecipientInput}
-              onSubmitEditing={() => addRecipient("bccrecipient")}
-              submitBehavior={"submit"}
+              onSubmitEditing={() => addRecipient('bccrecipient')}
+              submitBehavior={'submit'}
               returnKeyType="done"
               className="border-b-2 border-[#D0D5DD] ml-3 w-[90vw] pb-2"
               placeholder="Enter BCC recipients"
@@ -246,7 +246,7 @@ const ComposeEmailUI = ({
                 <Text className="text-[12px]">{email}</Text>
                 <TouchableOpacity
                   className="ml-2"
-                  onPress={() => removeRecipient(email, "bccrecipient")}
+                  onPress={() => removeRecipient(email, 'bccrecipient')}
                 >
                   <Text>✕</Text>
                 </TouchableOpacity>
@@ -270,7 +270,7 @@ const ComposeEmailUI = ({
         numberOfLines={10}
         value={mail}
         onChangeText={setMail}
-        style={{ textAlignVertical: "top" }}
+        style={{ textAlignVertical: 'top' }}
         className="border border-[#D0D5DD] w-[100%] min-h-[30vh] mt-10 p-3 rounded-lg"
         placeholder="Compose your mail..."
         placeholderTextColor="#9ca3af"
@@ -286,18 +286,18 @@ const ComposeEmailUI = ({
       <TouchableOpacity
         onPress={handleSend}
         disabled={
-          recipients.length === 0 || subject === "" || mail === "" || loading
+          recipients.length === 0 || subject === '' || mail === '' || loading
         }
         className={`mt-20 w-full py-4 flex items-center flex-row justify-center rounded-full ${
-          recipients.length === 0 || subject === "" || mail === "" || loading
-            ? "bg-gray-400 opacity-50"
-            : "bg-[#3D4294]"
+          recipients.length === 0 || subject === '' || mail === '' || loading
+            ? 'bg-gray-400 opacity-50'
+            : 'bg-[#3D4294]'
         }`}
         activeOpacity={0.7}
       >
         <SendEmailIcon />
         <Text className="text-white font-bold text-[16px] ml-3">
-          {loading ? "Sending..." : "Send"}
+          {loading ? 'Sending...' : 'Send'}
         </Text>
       </TouchableOpacity>
     </View>

@@ -8,30 +8,30 @@ import {
   ActivityIndicator,
   Keyboard,
   TouchableWithoutFeedback,
-} from "react-native";
-import React, { useRef, useState, useEffect } from "react";
-import CaretRight from "../../components/icons/CaretRight";
-import CopyIcon from "../../components/icons/CopyIcon";
-import { Link } from "expo-router";
-import SuccessModal from "../../components/modals/SuccessModal";
-import CircledTick from "../../assets/images/circledtick.png";
-import { useSearchParams } from "expo-router/build/hooks";
-import * as Clipboard from "expo-clipboard";
+} from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import CaretRight from '../../components/icons/CaretRight';
+import CopyIcon from '../../components/icons/CopyIcon';
+import { Link } from 'expo-router';
+import SuccessModal from '../../components/modals/SuccessModal';
+import CircledTick from '../../assets/images/circledtick.png';
+import { useSearchParams } from 'expo-router/build/hooks';
+import * as Clipboard from 'expo-clipboard';
 
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 const TwoFA = () => {
-  const [code, setCode] = useState(["", "", "", "", "", ""]);
+  const [code, setCode] = useState(['', '', '', '', '', '']);
   const [modalVisible, setModalVisible] = useState(false);
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [secretKey, setSecretKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [verifying, setVerifying] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const inputs = useRef<(TextInput | null)[]>([]);
   const searchParams = useSearchParams();
-  const email = searchParams.get("email") || "";
+  const email = searchParams.get('email') || '';
 
   useEffect(() => {
     const fetch2FASetup = async () => {
@@ -42,10 +42,10 @@ const TwoFA = () => {
           setQrCode(data.qrCode);
           setSecretKey(data.secret);
         } else {
-          setError(data.error || "Failed to load 2FA setup");
+          setError(data.error || 'Failed to load 2FA setup');
         }
       } catch (err) {
-        setError("Network error");
+        setError('Network error');
         console.log(err);
       } finally {
         setLoading(false);
@@ -66,12 +66,12 @@ const TwoFA = () => {
   };
 
   const handleKeyPress = (e: any, index: number) => {
-    if (e.nativeEvent.key === "Backspace" && code[index] === "") {
+    if (e.nativeEvent.key === 'Backspace' && code[index] === '') {
       if (index > 0) {
         inputs.current[index - 1]?.focus();
 
         const newCode = [...code];
-        newCode[index - 1] = "";
+        newCode[index - 1] = '';
         setCode(newCode);
       }
     }
@@ -79,20 +79,20 @@ const TwoFA = () => {
 
   const handleVerify = async () => {
     setVerifying(true);
-    setError("");
+    setError('');
     try {
-      const token = code.join("");
+      const token = code.join('');
       const res = await fetch(`${apiUrl}/auth/2fa/verify`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, token }),
       });
       const data = await res.json();
 
-      if (!res.ok) setError(data.error || "Invalid code");
+      if (!res.ok) setError(data.error || 'Invalid code');
       else setModalVisible(true);
     } catch (err) {
-      setError("Network error");
+      setError('Network error');
       console.log(err);
     } finally {
       setVerifying(false);
@@ -155,7 +155,7 @@ const TwoFA = () => {
                 className="flex flex-row items-center py-3 px-6 rounded-full bg-[#3D4294]"
                 onPress={async () => {
                   await Clipboard.setStringAsync(secretKey);
-                  alert("Copied to clipboard!");
+                  alert('Copied to clipboard!');
                 }}
               >
                 <Text className="text-white mr-2">Copy</Text>

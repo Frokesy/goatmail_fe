@@ -7,34 +7,34 @@ import {
   Pressable,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
-import { useState } from "react";
-import CustomSelect from "../../components/CustomSelect";
-import EyeOffIcon from "../../components/icons/EyeOff";
-import EyeIcon from "../../components/icons/EyesIcon";
-import SuccessModal from "../../components/modals/SuccessModal";
-import SuccessImage from "../../assets/images/success.png";
-import { useSearchParams } from "expo-router/build/hooks";
+} from 'react-native';
+import { useState } from 'react';
+import CustomSelect from '../../components/CustomSelect';
+import EyeOffIcon from '../../components/icons/EyeOff';
+import EyeIcon from '../../components/icons/EyesIcon';
+import SuccessModal from '../../components/modals/SuccessModal';
+import SuccessImage from '../../assets/images/success.png';
+import { useSearchParams } from 'expo-router/build/hooks';
 
 const serverOptions = [
-  { label: "IMAP (Sync across devices)", value: "IMAP" },
-  { label: "POP3 (Download locally)", value: "POP3" },
+  { label: 'IMAP (Sync across devices)', value: 'IMAP' },
+  { label: 'POP3 (Download locally)', value: 'POP3' },
 ];
 
 const securityTypeOptions = [
-  { label: "SSL/TLS", value: "SSL/TLS" },
-  { label: "STARTTLS", value: "STARTTLS" },
-  { label: "None", value: "None" },
+  { label: 'SSL/TLS', value: 'SSL/TLS' },
+  { label: 'STARTTLS', value: 'STARTTLS' },
+  { label: 'None', value: 'None' },
 ];
 
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 
 const IncomingEmailServerType = () => {
   const [server, setServer] = useState<string | number | null>(null);
-  const [serverName, setServerName] = useState("");
-  const [password, setPassword] = useState("");
-  const [port, setPort] = useState("");
+  const [serverName, setServerName] = useState('');
+  const [password, setPassword] = useState('');
+  const [port, setPort] = useState('');
   const [securityType, setSecurityType] = useState<string | number | null>(
     null
   );
@@ -42,18 +42,18 @@ const IncomingEmailServerType = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const searchParams = useSearchParams();
-  const email = searchParams.get("email") || "";
+  const email = searchParams.get('email') || '';
 
   const handleProceed = async () => {
     if (!server || !serverName || !password || !port || !securityType) {
-      alert("Please fill in all fields");
+      alert('Please fill in all fields');
       return;
     }
 
     try {
       const res = await fetch(`${apiUrl}/auth/set-incoming-server`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
           serverType: server,
@@ -66,12 +66,12 @@ const IncomingEmailServerType = () => {
 
       const data = await res.json();
       if (!res.ok) {
-        alert(data.error || "Failed to save server details");
+        alert(data.error || 'Failed to save server details');
       } else {
         setModalVisible(true);
       }
     } catch (err) {
-      alert("Network error");
+      alert('Network error');
       console.log(err);
     }
   };

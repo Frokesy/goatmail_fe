@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Modal,
   View,
@@ -8,12 +8,12 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Animated,
-} from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import CustomSelect from "../../components/CustomSelect";
-import EyeOffIcon from "../../components/icons/EyeOff";
-import EyeIcon from "../../components/icons/EyesIcon";
-import { useAuth } from "@/app/context/authContext";
+} from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import CustomSelect from '../../components/CustomSelect';
+import EyeOffIcon from '../../components/icons/EyeOff';
+import EyeIcon from '../../components/icons/EyesIcon';
+import { useAuth } from '@/app/context/authContext';
 
 interface UpdateIncomingServerModalProps {
   visible: boolean;
@@ -21,14 +21,14 @@ interface UpdateIncomingServerModalProps {
 }
 
 const serverOptions = [
-  { label: "IMAP (Sync across devices)", value: "IMAP" },
-  { label: "POP3 (Download locally)", value: "POP3" },
+  { label: 'IMAP (Sync across devices)', value: 'IMAP' },
+  { label: 'POP3 (Download locally)', value: 'POP3' },
 ];
 
 const securityTypeOptions = [
-  { label: "SSL/TLS", value: "SSL/TLS" },
-  { label: "STARTTLS", value: "STARTTLS" },
-  { label: "None", value: "None" },
+  { label: 'SSL/TLS', value: 'SSL/TLS' },
+  { label: 'STARTTLS', value: 'STARTTLS' },
+  { label: 'None', value: 'None' },
 ];
 
 interface IncomingServer {
@@ -44,17 +44,17 @@ const UpdateIncomingServerModal: React.FC<UpdateIncomingServerModalProps> = ({
   onClose,
 }) => {
   // incoming server fields
-  const [serverType, setServerType] = useState("");
-  const [serverName, setServerName] = useState("");
-  const [port, setPort] = useState("");
+  const [serverType, setServerType] = useState('');
+  const [serverName, setServerName] = useState('');
+  const [port, setPort] = useState('');
   const { token, user } = useAuth();
-  const [security, setSecurity] = useState("");
-  const [password, setPassword] = useState("");
+  const [security, setSecurity] = useState('');
+  const [password, setPassword] = useState('');
   const [updating, setUpdating] = useState(false);
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState<string>('');
 
   const apiUrl =
-    "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+    'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
   const [showPassword, toggleShowPassword] = useState(false);
 
   const fetchIncomingServer = async () => {
@@ -67,13 +67,13 @@ const UpdateIncomingServerModal: React.FC<UpdateIncomingServerModalProps> = ({
 
       const data: IncomingServer = await res.json();
       if (data) {
-        setServerType(data.serverType || "");
-        setServerName(data.serverName || "");
-        setPort(data.port?.toString() || "");
-        setSecurity(data.security || "");
+        setServerType(data.serverType || '');
+        setServerName(data.serverName || '');
+        setPort(data.port?.toString() || '');
+        setSecurity(data.security || '');
       }
     } catch (err) {
-      console.log("Failed to fetch incoming server settings:", err);
+      console.log('Failed to fetch incoming server settings:', err);
     }
   };
   const handleUpdateIncomingServer = async ({
@@ -90,16 +90,16 @@ const UpdateIncomingServerModal: React.FC<UpdateIncomingServerModalProps> = ({
     password: string;
   }) => {
     if (!serverType || !serverName || !port || !security || !password) {
-      setError("All fields are required");
+      setError('All fields are required');
       return;
     }
 
     try {
       setUpdating(true);
       const res = await fetch(`${apiUrl}/update-incoming-password`, {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
@@ -113,13 +113,13 @@ const UpdateIncomingServerModal: React.FC<UpdateIncomingServerModalProps> = ({
       });
 
       if (!res.ok) {
-        throw new Error("Failed to update server settings");
+        throw new Error('Failed to update server settings');
       }
 
       onClose();
-      setPassword("");
+      setPassword('');
     } catch (err: any) {
-      setError(err.message || "Error updating server settings");
+      setError(err.message || 'Error updating server settings');
     } finally {
       setUpdating(false);
     }

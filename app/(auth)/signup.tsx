@@ -7,14 +7,14 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
-import React, { useState } from "react";
-import { Link, useRouter } from "expo-router";
+} from 'react-native';
+import React, { useState } from 'react';
+import { Link, useRouter } from 'expo-router';
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 const Signup = () => {
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -22,38 +22,38 @@ const Signup = () => {
 
   const handleSignup = async () => {
     if (!email || !name) {
-      setError("All fields are required");
+      setError('All fields are required');
       return;
     }
 
     setLoading(true);
-    setError("");
+    setError('');
     setSuccess(false);
 
     try {
       const res = await fetch(`${apiUrl}/auth/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Failed to signup. Try again.");
+        setError(data.error || 'Failed to signup. Try again.');
       } else {
         setSuccess(true);
         router.push({
-          pathname: "/confirmEmailAddress",
+          pathname: '/confirmEmailAddress',
           params: { email },
         });
       }
     } catch (err) {
       console.log(err);
-      setError("Network error. Please try again.");
+      setError('Network error. Please try again.');
     } finally {
       setTimeout(() => {
-        setError("");
+        setError('');
       }, 3000);
       setLoading(false);
     }
@@ -61,7 +61,7 @@ const Signup = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <SafeAreaView className="mt-[10vh] mx-6 flex flex-col items-center justify-center">
-        <Image source={require("../../assets/images/icon.png")} />
+        <Image source={require('../../assets/images/icon.png')} />
         <Text className="text-[24px] font-bold">
           Setup your Goatmail account
         </Text>
@@ -102,7 +102,7 @@ const Signup = () => {
             className="bg-[#3D4294] p-5 rounded-full items-center"
           >
             <Text className="text-white font-medium text-[16px]">
-              {loading ? "Sending OTP..." : "Proceed to setup Server"}
+              {loading ? 'Sending OTP...' : 'Proceed to setup Server'}
             </Text>
           </TouchableOpacity>
         </View>

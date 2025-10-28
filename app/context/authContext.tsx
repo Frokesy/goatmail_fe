@@ -4,8 +4,8 @@ import React, {
   useEffect,
   useState,
   ReactNode,
-} from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type User = {
   _id: string;
@@ -31,7 +31,7 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
@@ -40,15 +40,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const loadSession = async () => {
       try {
-        const storedUser = await AsyncStorage.getItem("user");
-        const storedToken = await AsyncStorage.getItem("token");
+        const storedUser = await AsyncStorage.getItem('user');
+        const storedToken = await AsyncStorage.getItem('token');
 
         if (storedUser && storedToken) {
           setUser(JSON.parse(storedUser));
           setToken(storedToken);
         }
       } catch (err) {
-        console.error("❌ Failed to load session", err);
+        console.error('❌ Failed to load session', err);
       } finally {
         setLoading(false);
       }
@@ -59,8 +59,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (userData: { email: string }, jwtToken: string) => {
     setToken(jwtToken);
-    await AsyncStorage.setItem("user", JSON.stringify(userData));
-    await AsyncStorage.setItem("token", jwtToken);
+    await AsyncStorage.setItem('user', JSON.stringify(userData));
+    await AsyncStorage.setItem('token', jwtToken);
 
     await getUser(jwtToken);
   };
@@ -68,21 +68,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const getUser = async (jwtToken: string) => {
     try {
       const res = await fetch(`${apiUrl}/get-user`, {
-        method: "GET",
+        method: 'GET',
         headers: {
           Authorization: `Bearer ${jwtToken}`,
         },
       });
 
       if (!res.ok) {
-        throw new Error("Failed to fetch user details");
+        throw new Error('Failed to fetch user details');
       }
 
       const data = await res.json();
       setUser(data.user);
-      await AsyncStorage.setItem("user", JSON.stringify(data.user));
+      await AsyncStorage.setItem('user', JSON.stringify(data.user));
     } catch (err) {
-      console.error("❌ Error fetching user:", err);
+      console.error('❌ Error fetching user:', err);
     }
   };
 
@@ -90,8 +90,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
     setToken(null);
 
-    await AsyncStorage.removeItem("user");
-    await AsyncStorage.removeItem("token");
+    await AsyncStorage.removeItem('user');
+    await AsyncStorage.removeItem('token');
   };
 
   return (
@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
   if (!ctx) {
-    throw new Error("useAuth must be used inside AuthProvider");
+    throw new Error('useAuth must be used inside AuthProvider');
   }
   return ctx;
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -10,13 +10,13 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-} from "react-native";
-import { useRouter } from "expo-router";
-import Svg, { Circle } from "react-native-svg";
-import MiniTick from "../icons/MiniTick";
-import GreyDot from "../icons/GreyDot";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useAuth } from "@/app/context/authContext";
+} from 'react-native';
+import { useRouter } from 'expo-router';
+import Svg, { Circle } from 'react-native-svg';
+import MiniTick from '../icons/MiniTick';
+import GreyDot from '../icons/GreyDot';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '@/app/context/authContext';
 
 const CIRCLE_SIZE = 36;
 const STROKE_WIDTH = 3;
@@ -24,7 +24,7 @@ const RADIUS = (CIRCLE_SIZE - STROKE_WIDTH) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 const EmailAccountCreationStatusModal = ({
   modalVisible,
   setModalVisible,
@@ -36,7 +36,7 @@ const EmailAccountCreationStatusModal = ({
   email?: string;
   screen?: string;
 }) => {
-  const [countdown, setCountdown] = useState(screen === "pricing" ? 3 : 5);
+  const [countdown, setCountdown] = useState(screen === 'pricing' ? 3 : 5);
   const [completed, setCompleted] = useState(false);
   const progressAnim = useRef(new Animated.Value(0)).current;
   const [loading, setLoading] = useState<boolean>(false);
@@ -44,17 +44,17 @@ const EmailAccountCreationStatusModal = ({
   const { login } = useAuth();
 
   const handlePress = async () => {
-    const storedPass = await AsyncStorage.getItem("password");
+    const storedPass = await AsyncStorage.getItem('password');
     try {
       if (!storedPass) {
-        alert("No saved password found, please log in again.");
+        alert('No saved password found, please log in again.');
         return;
       }
 
       const res = await fetch(`${apiUrl}/auth/login`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password: storedPass }),
       });
@@ -65,19 +65,19 @@ const EmailAccountCreationStatusModal = ({
 
       if (!res.ok) {
         Alert.alert(
-          "Error Occured in Account Creation",
-          data.error || "Invalid credentials"
+          'Error Occured in Account Creation',
+          data.error || 'Invalid credentials'
         );
         setLoading(false);
         return;
       }
 
       await login({ email: data.email }, data.token);
-      router.replace("/inbox");
+      router.replace('/inbox');
       setModalVisible(false);
     } catch (err) {
-      console.error("Error going to inbox:", err);
-      alert("Something went wrong. Please try again.");
+      console.error('Error going to inbox:', err);
+      alert('Something went wrong. Please try again.');
     }
   };
 
@@ -89,7 +89,7 @@ const EmailAccountCreationStatusModal = ({
 
       Animated.timing(progressAnim, {
         toValue: 1,
-        duration: screen === "pricing" ? 3000 : 5000,
+        duration: screen === 'pricing' ? 3000 : 5000,
         useNativeDriver: false,
       }).start();
     }
@@ -102,11 +102,11 @@ const EmailAccountCreationStatusModal = ({
     }
 
     if (countdown === 0) {
-      if (screen === "pricing") {
+      if (screen === 'pricing') {
         setCompleted(true);
       } else {
         setModalVisible(false);
-        router.push({ pathname: "/pricing", params: { email } });
+        router.push({ pathname: '/pricing', params: { email } });
       }
     }
   }, [countdown, modalVisible, screen]);
@@ -153,19 +153,19 @@ const EmailAccountCreationStatusModal = ({
           )}
 
           <Text className="text-[24px] font-bold mt-20 text-center">
-            {screen === "pricing" && completed
-              ? "Your account is ready for use"
-              : "Email account creation in Progress"}
+            {screen === 'pricing' && completed
+              ? 'Your account is ready for use'
+              : 'Email account creation in Progress'}
           </Text>
           <Text className="text-[#A3A3A3] text-[14px] mt-2 text-center">
-            {screen === "pricing" && completed
-              ? "Let’s take you straight in 🚀"
-              : "Give it a minute..."}
+            {screen === 'pricing' && completed
+              ? 'Let’s take you straight in 🚀'
+              : 'Give it a minute...'}
           </Text>
 
           {!completed ? (
             <Image
-              source={require("../../assets/images/double-envelope.gif")}
+              source={require('../../assets/images/double-envelope.gif')}
               className="w-[180px] h-[180px]"
             />
           ) : (
@@ -179,20 +179,20 @@ const EmailAccountCreationStatusModal = ({
             </View>
             <View className="border-l-4 ml-3 border-[#d6d6d6] h-4"></View>
             <View className="flex flex-row items-center">
-              {screen === "pricing" && completed ? (
+              {screen === 'pricing' && completed ? (
                 <MiniTick />
-              ) : screen === "pricing" ? (
+              ) : screen === 'pricing' ? (
                 <GreyDot color="#3D4294" />
               ) : (
                 <GreyDot />
               )}
               <Text
                 className={`ml-2 text-[14px] ${
-                  screen === "pricing" && !completed
-                    ? "text-[#3D4294]"
+                  screen === 'pricing' && !completed
+                    ? 'text-[#3D4294]'
                     : completed
-                    ? "text-black"
-                    : "text-[#A3A3A3]"
+                    ? 'text-black'
+                    : 'text-[#A3A3A3]'
                 }`}
               >
                 Choosing pricing plans
@@ -200,7 +200,7 @@ const EmailAccountCreationStatusModal = ({
             </View>
           </View>
 
-          {screen === "pricing" && completed && (
+          {screen === 'pricing' && completed && (
             <TouchableOpacity
               onPress={handlePress}
               className="mt-auto w-full py-4 bg-[#3D4294] rounded-full"

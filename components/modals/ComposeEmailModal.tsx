@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import {
   Animated,
   Image,
@@ -8,22 +8,22 @@ import {
   Text,
   View,
   TouchableWithoutFeedback,
-} from "react-native";
-import AttachFilesModal from "./AttachFilesModal";
-import ScheduleEmailModal from "./ScheduleEmailModal";
-import EmailProtectionModal from "./EmailProtectionModal";
-import AiWritingAssistantModal from "./AiWritingAssistantModal";
-import ComposeEmailUI from "../ui/ComposeEmailUI";
-import EmailLockIcon from "../icons/EmailLockIcon";
-import ScheduledIcon from "../icons/ScheduledIcon";
-import ShareIcon from "../icons/ShareIcon";
-import XIcon from "../icons/XIcon";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { useAuth } from "@/app/context/authContext";
-import { Draft } from "@/app/drafts";
+} from 'react-native';
+import AttachFilesModal from './AttachFilesModal';
+import ScheduleEmailModal from './ScheduleEmailModal';
+import EmailProtectionModal from './EmailProtectionModal';
+import AiWritingAssistantModal from './AiWritingAssistantModal';
+import ComposeEmailUI from '../ui/ComposeEmailUI';
+import EmailLockIcon from '../icons/EmailLockIcon';
+import ScheduledIcon from '../icons/ScheduledIcon';
+import ShareIcon from '../icons/ShareIcon';
+import XIcon from '../icons/XIcon';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useAuth } from '@/app/context/authContext';
+import { Draft } from '@/app/drafts';
 
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 const ComposeEmailModal = ({
   modalVisible,
   setModalVisible,
@@ -41,8 +41,8 @@ const ComposeEmailModal = ({
   const [bccrecipients, setBccrecipients] = useState<any[]>(
     initialDraft?.bcc || []
   );
-  const [subject, setSubject] = useState<string>(initialDraft?.subject || "");
-  const [mail, setMail] = useState<string>(initialDraft?.body || "");
+  const [subject, setSubject] = useState<string>(initialDraft?.subject || '');
+  const [mail, setMail] = useState<string>(initialDraft?.body || '');
   const [draftId, setDraftId] = useState<string | null>(
     initialDraft?._id || null
   );
@@ -63,9 +63,9 @@ const ComposeEmailModal = ({
     ) {
       try {
         const res = await fetch(`${apiUrl}/save-draft`, {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
@@ -83,7 +83,7 @@ const ComposeEmailModal = ({
           setDraftId(data.draftId);
         }
       } catch (err) {
-        console.error("Failed to save draft:", err);
+        console.error('Failed to save draft:', err);
       }
     }
 
@@ -95,8 +95,8 @@ const ComposeEmailModal = ({
       setRecipients(initialDraft.to || []);
       setCcrecipients(initialDraft.cc || []);
       setBccrecipients(initialDraft.bcc || []);
-      setSubject(initialDraft.subject || "");
-      setMail(initialDraft.body || "");
+      setSubject(initialDraft.subject || '');
+      setMail(initialDraft.body || '');
       setDraftId(initialDraft._id || null);
     }
   }, [modalVisible, initialDraft]);
@@ -138,7 +138,7 @@ const ComposeEmailModal = ({
                 </Pressable>
                 <Pressable onPress={() => setShowAiModal(true)}>
                   <Image
-                    source={require("../../assets/images/ai-generate.png")}
+                    source={require('../../assets/images/ai-generate.png')}
                     className="w-[44px] h-[44px] mt-3"
                   />
                 </Pressable>

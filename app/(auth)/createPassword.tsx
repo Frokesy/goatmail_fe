@@ -7,29 +7,29 @@ import {
   Alert,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
-import React, { useState, useMemo } from "react";
-import EyeOffIcon from "../../components/icons/EyeOff";
-import EyeIcon from "../../components/icons/EyesIcon";
-import { useRouter } from "expo-router";
-import { Checkbox } from "expo-checkbox";
-import { useSearchParams } from "expo-router/build/hooks";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+} from 'react-native';
+import React, { useState, useMemo } from 'react';
+import EyeOffIcon from '../../components/icons/EyeOff';
+import EyeIcon from '../../components/icons/EyesIcon';
+import { useRouter } from 'expo-router';
+import { Checkbox } from 'expo-checkbox';
+import { useSearchParams } from 'expo-router/build/hooks';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 
 const CreatePassword = () => {
   const [showPassword, toggleShowPassword] = useState(false);
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isChecked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const searchParams = useSearchParams();
   const router = useRouter();
-  const email = searchParams.get("email") || "";
+  const email = searchParams.get('email') || '';
 
   const getPasswordStrength = (pwd: string) => {
     let score = 0;
@@ -38,10 +38,10 @@ const CreatePassword = () => {
     if (/[0-9]/.test(pwd)) score++;
     if (/[^A-Za-z0-9]/.test(pwd)) score++;
 
-    if (score <= 1) return { label: "Weak", color: "text-red-500" };
-    if (score === 2) return { label: "Medium", color: "text-orange-500" };
-    if (score >= 3) return { label: "Strong", color: "text-green-600" };
-    return { label: "", color: "" };
+    if (score <= 1) return { label: 'Weak', color: 'text-red-500' };
+    if (score === 2) return { label: 'Medium', color: 'text-orange-500' };
+    if (score >= 3) return { label: 'Strong', color: 'text-green-600' };
+    return { label: '', color: '' };
   };
 
   const passwordStrength = useMemo(
@@ -50,45 +50,45 @@ const CreatePassword = () => {
   );
 
   const handleSetPassword = async () => {
-    setError("");
+    setError('');
 
     if (!password || !confirmPassword) {
-      setError("Both password fields are required");
+      setError('Both password fields are required');
       return;
     }
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError('Passwords do not match');
       return;
     }
     if (!isChecked) {
-      setError("You must accept the Terms and Privacy Policy");
+      setError('You must accept the Terms and Privacy Policy');
       return;
     }
     if (password.length < 8) {
-      setError("Password must be at least 8 characters long");
+      setError('Password must be at least 8 characters long');
       return;
     }
 
     setLoading(true);
     try {
       const res = await fetch(`${apiUrl}/auth/set-password`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
 
-      if (!res.ok) setError(data.error || "Failed to set password");
+      if (!res.ok) setError(data.error || 'Failed to set password');
       else {
-        await AsyncStorage.setItem("password", password);
-        Alert.alert("Success", "Password set successfully!");
+        await AsyncStorage.setItem('password', password);
+        Alert.alert('Success', 'Password set successfully!');
         router.push({
-          pathname: "/incomingEmailServerType",
+          pathname: '/incomingEmailServerType',
           params: { email },
         });
       }
     } catch (err) {
-      setError("Network error");
+      setError('Network error');
       console.log(err);
     } finally {
       setLoading(false);
@@ -171,11 +171,11 @@ const CreatePassword = () => {
               Terms of use & Privacy Policy
             </Text>
             <Text className="text-[14px] mt-1">
-              I have read and agreed to the{" "}
+              I have read and agreed to the{' '}
               <Text className="text-[#1A2E6C] font-semibold">
                 User agreement
-              </Text>{" "}
-              and{" "}
+              </Text>{' '}
+              and{' '}
               <Text className="text-[#1A2E6C] font-semibold">
                 Privacy Policy
               </Text>
@@ -186,13 +186,13 @@ const CreatePassword = () => {
         <View className="w-[100%] mt-10">
           <TouchableOpacity
             className={`p-5 rounded-full items-center ${
-              loading ? "bg-gray-400" : "bg-[#3D4294]"
+              loading ? 'bg-gray-400' : 'bg-[#3D4294]'
             }`}
             onPress={handleSetPassword}
             disabled={loading}
           >
             <Text className="text-white font-medium text-[16px]">
-              {loading ? "Setting Password..." : "Proceed to setup Server"}
+              {loading ? 'Setting Password...' : 'Proceed to setup Server'}
             </Text>
           </TouchableOpacity>
         </View>

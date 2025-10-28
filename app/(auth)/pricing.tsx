@@ -5,42 +5,42 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
-} from "react-native";
-import React, { useState, useEffect } from "react";
-import PricingCard from "../../components/cards/PricingCard";
-import { useSearchParams } from "expo-router/build/hooks";
-import EmailAccountCreationStatusModal from "../../components/modals/EmailAccountCreationStatusModal";
+} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import PricingCard from '../../components/cards/PricingCard';
+import { useSearchParams } from 'expo-router/build/hooks';
+import EmailAccountCreationStatusModal from '../../components/modals/EmailAccountCreationStatusModal';
 import {
   initPaymentSheet,
   presentPaymentSheet,
-} from "@stripe/stripe-react-native";
+} from '@stripe/stripe-react-native';
 
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 const Pricing = () => {
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">(
-    "monthly"
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>(
+    'monthly'
   );
-  const [loadingPlan, setLoadingPlan] = useState("");
+  const [loadingPlan, setLoadingPlan] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [plans, setPlans] = useState<any | null>(null);
   const [fetching, setFetching] = useState(true);
 
   const searchParams = useSearchParams();
-  const email = searchParams.get("email") || "ayanfeoluwaakindele24@gmail.com";
+  const email = searchParams.get('email') || 'ayanfeoluwaakindele24@gmail.com';
 
   const handleSubscribe = async (plan: any) => {
     if (!email) {
-      Alert.alert("Error", "User email not found.");
+      Alert.alert('Error', 'User email not found.');
       return;
     }
     try {
       setLoadingPlan(plan.title);
 
-      if (plan.title === "Free Plan") {
+      if (plan.title === 'Free Plan') {
         await fetch(`${apiUrl}/auth/subscribe`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             email,
             plan: plan.title,
@@ -53,8 +53,8 @@ const Pricing = () => {
       }
 
       const res = await fetch(`${apiUrl}/auth/payment-sheet`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ priceId: plan.priceId, email }),
       });
 
@@ -65,22 +65,22 @@ const Pricing = () => {
         customerId: customer,
         customerEphemeralKeySecret: ephemeralKey,
         paymentIntentClientSecret,
-        merchantDisplayName: "Goatmail",
+        merchantDisplayName: 'Goatmail',
       });
 
       if (initError) {
-        Alert.alert("Init error", initError.message);
+        Alert.alert('Init error', initError.message);
         return;
       }
 
       const { error: presentError } = await presentPaymentSheet();
 
       if (presentError) {
-        Alert.alert("Payment failed", presentError.message);
+        Alert.alert('Payment failed', presentError.message);
       } else {
         await fetch(`${apiUrl}/auth/subscribe`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             email,
             plan: plan.title,
@@ -92,9 +92,9 @@ const Pricing = () => {
         setModalVisible(true);
       }
     } catch (err: any) {
-      Alert.alert("Error", err.message);
+      Alert.alert('Error', err.message);
     } finally {
-      setLoadingPlan("");
+      setLoadingPlan('');
     }
   };
 
@@ -105,8 +105,8 @@ const Pricing = () => {
         const data = await response.json();
         setPlans(data);
       } catch (err) {
-        console.error("Error fetching plans:", err);
-        Alert.alert("Error", "Could not load pricing plans");
+        console.error('Error fetching plans:', err);
+        Alert.alert('Error', 'Could not load pricing plans');
       } finally {
         setFetching(false);
       }
@@ -127,13 +127,13 @@ const Pricing = () => {
       <View className="flex flex-row bg-gray-200 px-6 py-2 mt-10 rounded-lg mx-6">
         <Pressable
           className={`p-3 rounded-lg flex-1 items-center ${
-            billingCycle === "monthly" ? "bg-white" : ""
+            billingCycle === 'monthly' ? 'bg-white' : ''
           }`}
-          onPress={() => setBillingCycle("monthly")}
+          onPress={() => setBillingCycle('monthly')}
         >
           <Text
             className={
-              billingCycle === "monthly" ? "text-[#3D4294]" : "text-[#667085]"
+              billingCycle === 'monthly' ? 'text-[#3D4294]' : 'text-[#667085]'
             }
           >
             Monthly Billing
@@ -142,13 +142,13 @@ const Pricing = () => {
 
         <Pressable
           className={`p-3 rounded-lg flex-1 items-center ${
-            billingCycle === "yearly" ? "bg-white" : ""
+            billingCycle === 'yearly' ? 'bg-white' : ''
           }`}
-          onPress={() => setBillingCycle("yearly")}
+          onPress={() => setBillingCycle('yearly')}
         >
           <Text
             className={
-              billingCycle === "yearly" ? "text-[#3D4294]" : "text-[#667085]"
+              billingCycle === 'yearly' ? 'text-[#3D4294]' : 'text-[#667085]'
             }
           >
             Yearly Billing

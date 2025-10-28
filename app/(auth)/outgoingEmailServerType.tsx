@@ -7,41 +7,41 @@ import {
   Pressable,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
-import { useState } from "react";
-import CustomSelect from "../../components/CustomSelect";
-import EyeOffIcon from "../../components/icons/EyeOff";
-import EyeIcon from "../../components/icons/EyesIcon";
-import SuccessModal from "../../components/modals/SuccessModal";
-import SuccessImage from "../../assets/images/success.png";
-import { useSearchParams } from "expo-router/build/hooks";
+} from 'react-native';
+import { useState } from 'react';
+import CustomSelect from '../../components/CustomSelect';
+import EyeOffIcon from '../../components/icons/EyeOff';
+import EyeIcon from '../../components/icons/EyesIcon';
+import SuccessModal from '../../components/modals/SuccessModal';
+import SuccessImage from '../../assets/images/success.png';
+import { useSearchParams } from 'expo-router/build/hooks';
 
 const securityTypeOptions = [
-  { label: "SSL/TLS", value: "SSL/TLS" },
-  { label: "STARTTLS", value: "STARTTLS" },
-  { label: "None", value: "None" },
+  { label: 'SSL/TLS', value: 'SSL/TLS' },
+  { label: 'STARTTLS', value: 'STARTTLS' },
+  { label: 'None', value: 'None' },
 ];
 
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 const OutgoingEmailServerType = () => {
   const [showPassword, toggleShowPassword] = useState(false);
   const [securityType, setSecurityType] = useState<string | number | null>(
     null
   );
-  const [smtpServer, setSmtpServer] = useState("");
-  const [password, setPassword] = useState("");
-  const [port, setPort] = useState("");
+  const [smtpServer, setSmtpServer] = useState('');
+  const [password, setPassword] = useState('');
+  const [port, setPort] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
   const searchParams = useSearchParams();
-  const email = searchParams.get("email") || "";
+  const email = searchParams.get('email') || '';
 
   const handleProceed = async () => {
     try {
       const res = await fetch(`${apiUrl}/auth/set-outgoing-server`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
           smtpServer,
@@ -53,7 +53,7 @@ const OutgoingEmailServerType = () => {
 
       const data = await res.json();
       if (!res.ok)
-        throw new Error(data.error || "Failed to save server details");
+        throw new Error(data.error || 'Failed to save server details');
 
       setModalVisible(true);
     } catch (err: any) {

@@ -6,26 +6,26 @@ import {
   Image,
   ActivityIndicator,
   TextInput,
-} from "react-native";
-import React, { useEffect, useRef, useState } from "react";
-import CaretLeft from "@/components/icons/CaretLeft";
-import { useRouter } from "expo-router";
-import CopyIcon from "@/components/icons/CopyIcon";
-import { useAuth } from "../context/authContext";
-import * as Clipboard from "expo-clipboard";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+} from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import CaretLeft from '@/components/icons/CaretLeft';
+import { useRouter } from 'expo-router';
+import CopyIcon from '@/components/icons/CopyIcon';
+import { useAuth } from '../context/authContext';
+import * as Clipboard from 'expo-clipboard';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 
 const Update2FAStatus = () => {
   const { user } = useAuth();
-  const [code, setCode] = useState(["", "", "", "", "", ""]);
+  const [code, setCode] = useState(['', '', '', '', '', '']);
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [secretKey, setSecretKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [verifying, setVerifying] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const router = useRouter();
 
   const inputs = useRef<(TextInput | null)[]>([]);
@@ -41,10 +41,10 @@ const Update2FAStatus = () => {
           setQrCode(data.qrCode);
           setSecretKey(data.secret);
         } else {
-          setError(data.error || "Failed to load 2FA setup");
+          setError(data.error || 'Failed to load 2FA setup');
         }
       } catch (err) {
-        setError("Network error");
+        setError('Network error');
         console.log(err);
       } finally {
         setLoading(false);
@@ -65,12 +65,12 @@ const Update2FAStatus = () => {
   };
 
   const handleKeyPress = (e: any, index: number) => {
-    if (e.nativeEvent.key === "Backspace" && code[index] === "") {
+    if (e.nativeEvent.key === 'Backspace' && code[index] === '') {
       if (index > 0) {
         inputs.current[index - 1]?.focus();
 
         const newCode = [...code];
-        newCode[index - 1] = "";
+        newCode[index - 1] = '';
         setCode(newCode);
       }
     }
@@ -78,19 +78,19 @@ const Update2FAStatus = () => {
 
   const handleVerify = async () => {
     setVerifying(true);
-    setError("");
+    setError('');
     try {
-      const token = code.join("");
+      const token = code.join('');
       const res = await fetch(`${apiUrl}/auth/2fa/verify`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: user?.email, token }),
       });
       const data = await res.json();
 
-      if (!res.ok) setError(data.error || "Invalid code");
+      if (!res.ok) setError(data.error || 'Invalid code');
     } catch (err) {
-      setError("Network error");
+      setError('Network error');
       console.log(err);
     } finally {
       setVerifying(false);
@@ -111,7 +111,7 @@ const Update2FAStatus = () => {
         enableOnAndroid
         extraScrollHeight={10}
       >
-        {" "}
+        {' '}
         <View className="pt-10 pb-6 px-4 border-b flex flex-row justify-between border-[#E4E4E7]">
           <Pressable
             onPress={() => router.back()}
@@ -122,22 +122,22 @@ const Update2FAStatus = () => {
           </Pressable>
           <Pressable
             onPress={handleVerify}
-            disabled={verifying || code.includes("")}
+            disabled={verifying || code.includes('')}
           >
             <Text
               className={`text-[14px] ${
-                verifying || code.includes("")
-                  ? "text-gray-400"
-                  : "text-[#1A2E6C]"
+                verifying || code.includes('')
+                  ? 'text-gray-400'
+                  : 'text-[#1A2E6C]'
               }`}
             >
-              {verifying ? "Verifying..." : "Save changes"}
+              {verifying ? 'Verifying...' : 'Save changes'}
             </Text>
           </Pressable>
         </View>
         <View className="py-10 px-6">
           <View className="flex flex-row items-center">
-            <Image source={require("../../assets/images/TwoFA.png")} />
+            <Image source={require('../../assets/images/TwoFA.png')} />
             <View className="flex flex-col pl-3">
               <Text className="text-[16px] pb-2">
                 Enable Two-factor authentication (2FA)
@@ -184,7 +184,7 @@ const Update2FAStatus = () => {
                   className="flex flex-row items-center py-3 px-6 rounded-full bg-[#3D4294]"
                   onPress={async () => {
                     await Clipboard.setStringAsync(secretKey);
-                    alert("Copied to clipboard!");
+                    alert('Copied to clipboard!');
                   }}
                 >
                   <Text className="text-white mr-2">Copy</Text>

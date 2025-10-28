@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,14 +7,14 @@ import {
   Image,
   SafeAreaView,
   Pressable,
-} from "react-native";
-import { useAuth } from "./context/authContext";
-import Header from "@/components/defaults/Header";
-import PenIcon from "@/components/icons/PenIcon";
-import ComposeEmailModal from "@/components/modals/ComposeEmailModal";
-import UpdateIncomingServerModal from "@/components/modals/UpdateIncomingServerModal";
-import { useRouter } from "expo-router";
-import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
+} from 'react-native';
+import { useAuth } from './context/authContext';
+import Header from '@/components/defaults/Header';
+import PenIcon from '@/components/icons/PenIcon';
+import ComposeEmailModal from '@/components/modals/ComposeEmailModal';
+import UpdateIncomingServerModal from '@/components/modals/UpdateIncomingServerModal';
+import { useRouter } from 'expo-router';
+import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 
 interface Mail {
   uid: string;
@@ -29,25 +29,25 @@ const Inbox = () => {
   const { user, token } = useAuth();
   const [loading, setLoading] = useState(true);
   const [mails, setMails] = useState<Mail[]>([]);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
   const router = useRouter();
 
   const apiUrl =
-    "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+    'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 
   const fetchInbox = async () => {
     try {
       setLoading(true);
-      setError("");
+      setError('');
       const res = await fetch(`${apiUrl}/inbox`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!res.ok) {
         throw new Error(
-          "Failed to fetch inbox, please update your server details"
+          'Failed to fetch inbox, please update your server details'
         );
       }
 
@@ -57,18 +57,18 @@ const Inbox = () => {
         const normalized = data.messages.map((msg: any) => {
           const dateObj = msg.date ? new Date(msg.date) : null;
           const formattedDate = dateObj
-            ? dateObj.toLocaleString("en-US", {
-                month: "short",
-                day: "numeric",
+            ? dateObj.toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
               })
-            : "";
+            : '';
 
           return {
             uid: msg.id.toString(),
-            subject: msg.subject || "No subject",
-            from: msg.from || "Unknown sender",
+            subject: msg.subject || 'No subject',
+            from: msg.from || 'Unknown sender',
             date: formattedDate,
-            excerpt: msg.excerpt || "",
+            excerpt: msg.excerpt || '',
             starred: Boolean(msg.starred),
           };
         });
@@ -78,7 +78,7 @@ const Inbox = () => {
         setMails([]);
       }
     } catch (err: any) {
-      setError(err.message || "Something went wrong");
+      setError(err.message || 'Something went wrong');
     } finally {
       setLoading(false);
     }
@@ -93,16 +93,16 @@ const Inbox = () => {
       let res;
       if (isStarred) {
         res = await fetch(`${apiUrl}/unstar-mail/${mailId}`, {
-          method: "DELETE",
+          method: 'DELETE',
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
       } else {
         res = await fetch(`${apiUrl}/star-mail`, {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ mailId }),
@@ -110,7 +110,7 @@ const Inbox = () => {
       }
 
       if (!res.ok) {
-        throw new Error("Failed to update star status");
+        throw new Error('Failed to update star status');
       }
     } catch (err) {
       console.error(err);
@@ -156,7 +156,7 @@ const Inbox = () => {
         <ScrollView>
           <View className="min-h-[70vh] flex flex-col items-center justify-center">
             <Image
-              source={require("../assets/images/empty-inbox.png")}
+              source={require('../assets/images/empty-inbox.png')}
               className="w-[114px] h-[100px]"
             />
             <Text className="text-[18px] font-semibold mt-3">
@@ -175,33 +175,33 @@ const Inbox = () => {
               renderLeftActions={renderLeftActions}
               renderRightActions={renderRightActions}
               onSwipeableOpen={async (direction) => {
-                if (direction === "right") {
+                if (direction === 'right') {
                   try {
                     await fetch(`${apiUrl}/archive-mail`, {
-                      method: "POST",
+                      method: 'POST',
                       headers: {
-                        "Content-Type": "application/json",
+                        'Content-Type': 'application/json',
                         Authorization: `Bearer ${token}`,
                       },
                       body: JSON.stringify({ mailId: mail.uid }),
                     });
                     setMails((prev) => prev.filter((m) => m.uid !== mail.uid));
                   } catch (err) {
-                    console.error("Archive error:", err);
+                    console.error('Archive error:', err);
                   }
-                } else if (direction === "left") {
+                } else if (direction === 'left') {
                   try {
                     await fetch(`${apiUrl}/delete-mail`, {
-                      method: "POST",
+                      method: 'POST',
                       headers: {
-                        "Content-Type": "application/json",
+                        'Content-Type': 'application/json',
                         Authorization: `Bearer ${token}`,
                       },
                       body: JSON.stringify({ mailId: mail.uid }),
                     });
                     setMails((prev) => prev.filter((m) => m.uid !== mail.uid));
                   } catch (err) {
-                    console.error("Delete error:", err);
+                    console.error('Delete error:', err);
                   }
                 }
               }}
@@ -209,14 +209,14 @@ const Inbox = () => {
               <View className="flex-row items-start border-b border-gray-200 bg-[#fff] px-4 py-3">
                 <Pressable onPress={() => toggleStar(mail.uid, mail.starred)}>
                   <Text className="text-xl mr-3">
-                    {mail.starred ? "⭐" : "☆"}
+                    {mail.starred ? '⭐' : '☆'}
                   </Text>
                 </Pressable>
 
                 <Pressable
                   onPress={() =>
                     router.push({
-                      pathname: "/viewMail",
+                      pathname: '/viewMail',
                       params: { uid: mail.uid },
                     })
                   }

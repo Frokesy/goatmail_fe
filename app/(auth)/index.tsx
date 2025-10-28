@@ -9,35 +9,35 @@ import {
   TouchableWithoutFeedback,
   View,
   Alert,
-} from "react-native";
-import EyeIcon from "../../components/icons/EyesIcon";
-import EyeOffIcon from "../../components/icons/EyeOff";
-import { useEffect, useState } from "react";
-import { Link, useRouter } from "expo-router";
-import { useAuth } from "../context/authContext";
+} from 'react-native';
+import EyeIcon from '../../components/icons/EyesIcon';
+import EyeOffIcon from '../../components/icons/EyeOff';
+import { useEffect, useState } from 'react';
+import { Link, useRouter } from 'expo-router';
+import { useAuth } from '../context/authContext';
 
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 export default function Login() {
   const [showPassword, toggleShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { login, user, loading: contextLoading } = useAuth();
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert("Missing fields", "Please enter email and password");
+      Alert.alert('Missing fields', 'Please enter email and password');
       return;
     }
 
     setLoading(true);
     try {
       const res = await fetch(`${apiUrl}/auth/login`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
       });
@@ -45,15 +45,15 @@ export default function Login() {
       const data = await res.json();
 
       if (!res.ok) {
-        Alert.alert("Login Failed", data.error || "Invalid credentials");
+        Alert.alert('Login Failed', data.error || 'Invalid credentials');
         setLoading(false);
         return;
       }
 
       await login({ email: data.email }, data.token);
-      router.replace("/inbox");
+      router.replace('/inbox');
     } catch (err) {
-      Alert.alert("Error", "Something went wrong. Try again.");
+      Alert.alert('Error', 'Something went wrong. Try again.');
       console.log(err);
     } finally {
       setLoading(false);
@@ -62,7 +62,7 @@ export default function Login() {
 
   useEffect(() => {
     if (!contextLoading && user) {
-      router.replace("/inbox");
+      router.replace('/inbox');
     }
   }, [contextLoading, user, router]);
   if (contextLoading) {
@@ -76,7 +76,7 @@ export default function Login() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <SafeAreaView className="mt-[10vh] mx-6 flex flex-col items-center justify-center">
-        <Image source={require("../../assets/images/icon.png")} />
+        <Image source={require('../../assets/images/icon.png')} />
         <Text className="text-[24px] font-bold">Login to your account</Text>
         <Text className="text-[#A3A3A3] text-[14px] mt-2">
           Pickup where you left off and login to your account
@@ -120,7 +120,7 @@ export default function Login() {
           <TouchableOpacity
             disabled={loading}
             className={`p-5 rounded-full items-center ${
-              loading ? "bg-gray-400" : "bg-[#3D4294]"
+              loading ? 'bg-gray-400' : 'bg-[#3D4294]'
             }`}
             onPress={handleLogin}
           >

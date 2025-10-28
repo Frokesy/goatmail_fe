@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -8,10 +8,10 @@ import {
   SafeAreaView,
   ScrollView,
   Image,
-} from "react-native";
-import { useAuth } from "@/app/context/authContext";
-import Header from "@/components/defaults/Header";
-import ComposeEmailModal from "@/components/modals/ComposeEmailModal";
+} from 'react-native';
+import { useAuth } from '@/app/context/authContext';
+import Header from '@/components/defaults/Header';
+import ComposeEmailModal from '@/components/modals/ComposeEmailModal';
 
 export interface Draft {
   _id: string;
@@ -25,26 +25,26 @@ export interface Draft {
 }
 
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
 const DraftsScreen = () => {
   const { token } = useAuth();
 
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [showComposeModal, setShowComposeModal] = useState(false);
   const [selectedDraft, setSelectedDraft] = useState<Draft | null>(null);
 
   const fetchDrafts = useCallback(async () => {
     try {
       setLoading(true);
-      setError("");
+      setError('');
 
       const res = await fetch(`${apiUrl}/drafts`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (!res.ok) throw new Error("Failed to fetch drafts");
+      if (!res.ok) throw new Error('Failed to fetch drafts');
 
       const data = await res.json();
 
@@ -52,20 +52,20 @@ const DraftsScreen = () => {
         const normalized = data.drafts.map((d: any): Draft => {
           const dateObj = d.updatedAt ? new Date(d.updatedAt) : null;
           const formattedDate = dateObj
-            ? dateObj.toLocaleString("en-US", {
-                month: "short",
-                day: "numeric",
+            ? dateObj.toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
               })
-            : "";
+            : '';
 
-          const plainBody = d.body?.replace(/<[^>]+>/g, "") || "";
+          const plainBody = d.body?.replace(/<[^>]+>/g, '') || '';
 
           return {
             _id: d._id.toString(),
             to: d.to || [],
             cc: d.cc || [],
             bcc: d.bcc || [],
-            subject: d.subject || "No subject",
+            subject: d.subject || 'No subject',
             body: plainBody,
             createdAt: d.createdAt,
             updatedAt: formattedDate,
@@ -77,7 +77,7 @@ const DraftsScreen = () => {
         setDrafts([]);
       }
     } catch (err: any) {
-      setError(err.message || "Something went wrong");
+      setError(err.message || 'Something went wrong');
     } finally {
       setLoading(false);
     }
@@ -102,7 +102,7 @@ const DraftsScreen = () => {
         <ScrollView>
           <View className="min-h-[70vh] flex flex-col items-center justify-center">
             <Image
-              source={require("../assets/images/empty-inbox.png")}
+              source={require('../assets/images/empty-inbox.png')}
               className="w-[114px] h-[100px]"
             />
             <Text className="text-[18px] font-semibold mt-3">No drafts</Text>
@@ -130,8 +130,8 @@ const DraftsScreen = () => {
                 <View className="flex-row justify-between">
                   <Text className="font-semibold text-[15px] flex-1">
                     {item.to?.length > 0
-                      ? item.to.join(", ")
-                      : "(No recipient)"}
+                      ? item.to.join(', ')
+                      : '(No recipient)'}
                   </Text>
                   <Text className="text-gray-400 text-xs ml-2">
                     {item.updatedAt}

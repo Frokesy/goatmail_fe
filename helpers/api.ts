@@ -1,5 +1,5 @@
 const apiUrl =
-  "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+  "http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api";
 export async function sendEmail(payload: {
   name: string;
   token: string;

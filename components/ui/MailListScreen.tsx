@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,12 +7,12 @@ import {
   Image,
   SafeAreaView,
   Pressable,
-} from "react-native";
-import Header from "@/components/defaults/Header";
-import { useAuth } from "@/app/context/authContext";
-import PenIcon from "@/components/icons/PenIcon";
-import ComposeEmailModal from "@/components/modals/ComposeEmailModal";
-import { useRouter } from "expo-router";
+} from 'react-native';
+import Header from '@/components/defaults/Header';
+import { useAuth } from '@/app/context/authContext';
+import PenIcon from '@/components/icons/PenIcon';
+import ComposeEmailModal from '@/components/modals/ComposeEmailModal';
+import { useRouter } from 'expo-router';
 
 interface Mail {
   uid: string;
@@ -34,23 +34,23 @@ interface MailListScreenProps {
 const MailListScreen: React.FC<MailListScreenProps> = ({
   title,
   endpoint,
-  emptyImage = require("../../assets/images/empty-inbox.png"),
-  emptyText = "Nothing to see yet!",
-  emptySubtext = "No messages in this folder. Check back later.",
+  emptyImage = require('../../assets/images/empty-inbox.png'),
+  emptyText = 'Nothing to see yet!',
+  emptySubtext = 'No messages in this folder. Check back later.',
 }) => {
   const { user, token } = useAuth();
   const [loading, setLoading] = useState(true);
   const [mails, setMails] = useState<Mail[]>([]);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const router = useRouter();
 
   const apiUrl =
-    "http://ec2-13-60-67-114.eu-north-1.compute.amazonaws.com:3000/api";
+    'http://ec2-51-20-249-56.eu-north-1.compute.amazonaws.com:3000/api';
   const fetchMails = async () => {
     try {
       setLoading(true);
-      setError("");
+      setError('');
       const res = await fetch(`${apiUrl}${endpoint}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -65,18 +65,18 @@ const MailListScreen: React.FC<MailListScreenProps> = ({
         const normalized = data.messages.map((msg: any) => {
           const dateObj = msg.date ? new Date(msg.date) : null;
           const formattedDate = dateObj
-            ? dateObj.toLocaleString("en-US", {
-                month: "short",
-                day: "numeric",
+            ? dateObj.toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
               })
-            : "";
+            : '';
 
           return {
             uid: msg.id.toString(),
-            subject: msg.subject || "No subject",
-            from: msg.from || "Unknown sender",
+            subject: msg.subject || 'No subject',
+            from: msg.from || 'Unknown sender',
             date: formattedDate,
-            excerpt: msg.excerpt || "",
+            excerpt: msg.excerpt || '',
             starred: Boolean(msg.starred),
           };
         });
@@ -86,7 +86,7 @@ const MailListScreen: React.FC<MailListScreenProps> = ({
         setMails([]);
       }
     } catch (err: any) {
-      setError(err.message || "Something went wrong");
+      setError(err.message || 'Something went wrong');
     } finally {
       setLoading(false);
     }
@@ -101,23 +101,23 @@ const MailListScreen: React.FC<MailListScreenProps> = ({
       let res;
       if (isStarred) {
         res = await fetch(`${apiUrl}/unstar-mail/${mailId}`, {
-          method: "DELETE",
+          method: 'DELETE',
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
       } else {
         res = await fetch(`${apiUrl}/star-mail`, {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ mailId }),
         });
       }
 
-      if (!res.ok) throw new Error("Failed to update star status");
+      if (!res.ok) throw new Error('Failed to update star status');
     } catch (err) {
       console.error(err);
       setMails((prev) =>
@@ -163,14 +163,14 @@ const MailListScreen: React.FC<MailListScreenProps> = ({
               >
                 <Pressable onPress={() => toggleStar(mail.uid, mail.starred)}>
                   <Text className="text-xl mr-3">
-                    {mail.starred ? "⭐" : "☆"}
+                    {mail.starred ? '⭐' : '☆'}
                   </Text>
                 </Pressable>
 
                 <Pressable
                   onPress={() =>
                     router.push({
-                      pathname: "/viewMail",
+                      pathname: '/viewMail',
                       params: { uid: mail.uid },
                     })
                   }
