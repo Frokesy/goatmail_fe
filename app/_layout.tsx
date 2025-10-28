@@ -15,6 +15,7 @@ export default function RootLayout() {
             <GestureHandlerRootView>
               <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="(auth)" />
+                <Stack.Screen name="allMail" options={{ headerShown: false }} />
                 <Stack.Screen name="inbox" options={{ headerShown: false }} />
                 <Stack.Screen name="sent" options={{ headerShown: false }} />
                 <Stack.Screen name="starred" options={{ headerShown: false }} />

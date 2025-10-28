@@ -46,7 +46,7 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
     { id: 6, name: 'Archive', href: '/archived', icon: <ArchiveIcon /> },
     { id: 7, name: 'Spam', href: '/spam', icon: <SpamIcon /> },
     { id: 8, name: 'Trash', href: '/trash', icon: <TrashIcon /> },
-    { id: 9, name: 'All mail', icon: <EmailIcon /> },
+    { id: 9, name: 'All mail', href: '/allMail', icon: <EmailIcon /> },
     {
       id: 11,
       name: 'New Label',
