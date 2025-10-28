@@ -48,6 +48,7 @@ const ViewMail = () => {
 
         const data = await res.json();
         if (!data.mail) throw new Error('Email not found');
+        console.log(data);
 
         setMail({
           uid: data.mail.id.toString(),

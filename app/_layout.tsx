@@ -1,10 +1,10 @@
-import { Stack } from "expo-router";
-import "./globals.css";
-import { AuthProvider } from "./context/authContext";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { ContactsProvider } from "./context/contactContext";
-import { GroupsProvider } from "./context/groupsContext";
+import { Stack } from 'expo-router';
+import './globals.css';
+import { AuthProvider } from './context/authContext';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ContactsProvider } from './context/contactContext';
+import { GroupsProvider } from './context/groupsContext';
 
 export default function RootLayout() {
   return (
@@ -22,6 +22,7 @@ export default function RootLayout() {
                   name="archived"
                   options={{ headerShown: false }}
                 />
+                <Stack.Screen name="spam" options={{ headerShown: false }} />
                 <Stack.Screen name="trash" options={{ headerShown: false }} />
                 <Stack.Screen name="drafts" options={{ headerShown: false }} />
                 <Stack.Screen
@@ -78,6 +79,6 @@ export default function RootLayout() {
 }
 
 export const unstable_settings = {
-  initialRouteName: "(auth)",
+  initialRouteName: '(auth)',
   preserveStateOnFastRefresh: true,
 };

@@ -1,5 +1,5 @@
-import { useAuth } from "../../app/context/authContext";
-import { useRef, useEffect } from "react";
+import { useAuth } from '../../app/context/authContext';
+import { useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,23 +8,23 @@ import {
   TouchableWithoutFeedback,
   Pressable,
   ScrollView,
-} from "react-native";
-import InboxIcon from "../icons/InboxIcon";
-import SentIcon from "../icons/SentIcon";
-import ScheduledIcon from "../icons/ScheduledIcon";
-import StarIcon from "../icons/StarIcon";
-import DraftsIcon from "../icons/DraftsIcon";
-import ArchiveIcon from "../icons/ArchiveIcon";
-import SpamIcon from "../icons/SpamIcon";
-import TrashIcon from "../icons/TrashIcon";
-import EmailIcon from "../icons/EmailIcon";
-import LabelIcon from "../icons/LabelIcon";
-import PeopleIcon from "../icons/PeopleIcon";
-import SubscriptionIcon from "../icons/SubscriptionIcon";
-import SettingsIcon from "../icons/SettingsIcon";
-import SignoutIcon from "../icons/SignoutIcon";
-import { Route, useRouter } from "expo-router";
-import { useGroups } from "@/app/context/groupsContext";
+} from 'react-native';
+import InboxIcon from '../icons/InboxIcon';
+import SentIcon from '../icons/SentIcon';
+import ScheduledIcon from '../icons/ScheduledIcon';
+import StarIcon from '../icons/StarIcon';
+import DraftsIcon from '../icons/DraftsIcon';
+import ArchiveIcon from '../icons/ArchiveIcon';
+import SpamIcon from '../icons/SpamIcon';
+import TrashIcon from '../icons/TrashIcon';
+import EmailIcon from '../icons/EmailIcon';
+import LabelIcon from '../icons/LabelIcon';
+import PeopleIcon from '../icons/PeopleIcon';
+import SubscriptionIcon from '../icons/SubscriptionIcon';
+import SettingsIcon from '../icons/SettingsIcon';
+import SignoutIcon from '../icons/SignoutIcon';
+import { Route, useRouter } from 'expo-router';
+import { useGroups } from '@/app/context/groupsContext';
 
 interface DrawerProps {
   drawerVisible: boolean;
@@ -38,47 +38,47 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
   const { groups } = useGroups();
 
   const navItems = [
-    { id: 1, name: "Inbox", href: "/inbox", icon: <InboxIcon /> },
-    { id: 2, name: "Sent", href: "/sent", icon: <SentIcon /> },
-    { id: 3, name: "Scheduled", icon: <ScheduledIcon /> },
-    { id: 4, name: "Starred", href: "/starred", icon: <StarIcon /> },
-    { id: 5, name: "Drafts", href: "/drafts", icon: <DraftsIcon /> },
-    { id: 6, name: "Archive", href: "/archived", icon: <ArchiveIcon /> },
-    { id: 7, name: "Spam", icon: <SpamIcon /> },
-    { id: 8, name: "Trash", href: "/trash", icon: <TrashIcon /> },
-    { id: 9, name: "All mail", icon: <EmailIcon /> },
+    { id: 1, name: 'Inbox', href: '/inbox', icon: <InboxIcon /> },
+    { id: 2, name: 'Sent', href: '/sent', icon: <SentIcon /> },
+    { id: 3, name: 'Scheduled', icon: <ScheduledIcon /> },
+    { id: 4, name: 'Starred', href: '/starred', icon: <StarIcon /> },
+    { id: 5, name: 'Drafts', href: '/drafts', icon: <DraftsIcon /> },
+    { id: 6, name: 'Archive', href: '/archived', icon: <ArchiveIcon /> },
+    { id: 7, name: 'Spam', href: '/spam', icon: <SpamIcon /> },
+    { id: 8, name: 'Trash', href: '/trash', icon: <TrashIcon /> },
+    { id: 9, name: 'All mail', icon: <EmailIcon /> },
     {
       id: 11,
-      name: "New Label",
+      name: 'New Label',
       icon: <LabelIcon />,
-      href: "/newLabel",
-      subgroup: "label",
+      href: '/newLabel',
+      subgroup: 'label',
     },
     {
       id: 12,
-      name: "Create group",
+      name: 'Create group',
       icon: <PeopleIcon />,
-      subgroup: "group",
-      href: "/createGroup",
+      subgroup: 'group',
+      href: '/createGroup',
     },
     {
       id: 13,
-      name: "Subscription",
+      name: 'Subscription',
       icon: <SubscriptionIcon />,
-      subgroup: "extras",
+      subgroup: 'extras',
     },
     {
       id: 14,
-      name: "Settings",
+      name: 'Settings',
       icon: <SettingsIcon />,
-      href: "/settings/accountSettings",
-      subgroup: "extras",
+      href: '/settings/accountSettings',
+      subgroup: 'extras',
     },
     {
       id: 15,
-      name: "Sign out",
+      name: 'Sign out',
       icon: <SignoutIcon />,
-      subgroup: "extras",
+      subgroup: 'extras',
     },
   ];
 
@@ -101,14 +101,14 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
   }, [drawerVisible, slideAnim]);
 
   const handlePress = (href: Route | undefined) => {
-    router.replace(href ? href : "/+not-found");
+    router.replace(href ? href : '/+not-found');
     setDrawerVisible(false);
   };
 
   const handleLogout = async () => {
     await logout();
     setDrawerVisible(false);
-    router.replace("/");
+    router.replace('/');
   };
 
   return (
@@ -131,8 +131,8 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
             <View className="bg-[#EEF0F4] text-[#333333] mr-4 h-[40px] w-[40px] rounded-full flex items-center justify-center">
               <Text className="font-semibold text-[#333333]">
                 {(() => {
-                  if (!user?.name) return "";
-                  const parts = user.name.trim().split(" ");
+                  if (!user?.name) return '';
+                  const parts = user.name.trim().split(' ');
                   if (parts.length === 1) {
                     return parts[0].substring(0, 2).toUpperCase();
                   }
@@ -153,13 +153,13 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
                   <Pressable onPress={() => handlePress(item.href as Route)}>
                     <View
                       className={`${
-                        item.name === title && "bg-[#E8EAF0]"
+                        item.name === title && 'bg-[#E8EAF0]'
                       } flex flex-row items-center py-2 px-3 rounded-lg mt-1`}
                     >
                       <View>{item.icon}</View>
                       <Text
                         className={`${
-                          item.name === title && "font-semibold"
+                          item.name === title && 'font-semibold'
                         } text-[14px] text-[#101828] ml-3`}
                       >
                         {item.name}
@@ -168,13 +168,13 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
                   </Pressable>
                 )}
 
-                {item.subgroup === "label" && (
+                {item.subgroup === 'label' && (
                   <View className="mt-10">
                     <Text className="text-[12px] uppercase">Labels</Text>
                     <Pressable
                       onPress={() => handlePress(item.href as Route)}
                       className={`${
-                        item.name === title && "bg-[#E8EAF0] px-3"
+                        item.name === title && 'bg-[#E8EAF0] px-3'
                       } flex flex-row items-center py-2 rounded-lg mt-1`}
                     >
                       <View>{item.icon}</View>
@@ -185,14 +185,14 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
                   </View>
                 )}
 
-                {item.subgroup === "group" && (
+                {item.subgroup === 'group' && (
                   <View className="my-10">
                     <Text className="text-[12px] uppercase mb-1">Groups</Text>
 
                     <Pressable
                       onPress={() => handlePress(item.href as Route)}
                       className={`${
-                        item.name === title && "bg-[#E8EAF0]"
+                        item.name === title && 'bg-[#E8EAF0]'
                       } flex flex-row items-center py-2 rounded-lg px-3`}
                     >
                       <View className="flex flex-row items-center">
@@ -208,7 +208,7 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
                           <Pressable
                             key={group.id}
                             onPress={() => {
-                              console.log("Opening group:", group.name);
+                              console.log('Opening group:', group.name);
                             }}
                           >
                             <View className="flex flex-row items-center py-2 px-3 rounded-lg mt-1">
@@ -223,9 +223,9 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
                   </View>
                 )}
 
-                {item.subgroup === "extras" && (
+                {item.subgroup === 'extras' && (
                   <>
-                    {item.name === "Sign out" ? (
+                    {item.name === 'Sign out' ? (
                       <Pressable onPress={handleLogout}>
                         <View className="flex flex-row items-center mt-3">
                           <View>{item.icon}</View>
@@ -240,13 +240,13 @@ const Drawer = ({ drawerVisible, setDrawerVisible, title }: DrawerProps) => {
                       >
                         <View
                           className={`${
-                            item.name === title && "bg-[#E8EAF0]"
+                            item.name === title && 'bg-[#E8EAF0]'
                           } flex flex-row items-center py-2 rounded-lg mt-1`}
                         >
                           <View>{item.icon}</View>
                           <Text
                             className={`${
-                              item.name === title && "font-semibold"
+                              item.name === title && 'font-semibold'
                             } text-[14px] text-[#101828] ml-3`}
                           >
                             {item.name}
