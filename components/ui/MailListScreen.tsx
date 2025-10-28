@@ -171,7 +171,10 @@ const MailListScreen: React.FC<MailListScreenProps> = ({
                   onPress={() =>
                     router.push({
                       pathname: '/viewMail',
-                      params: { uid: mail.uid },
+                      params: {
+                        uid: mail.uid,
+                        mailbox: title === 'Spam' ? 'Spam' : 'INBOX',
+                      },
                     })
                   }
                   className="flex-1"

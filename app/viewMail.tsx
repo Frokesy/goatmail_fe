@@ -12,6 +12,7 @@ import Header from '@/components/defaults/Header';
 import { useSearchParams } from 'expo-router/build/hooks';
 import { useAuth } from './context/authContext';
 import RenderHtml from 'react-native-render-html';
+import { cleanMailHtml } from '@/helpers/email';
 
 interface MailDetail {
   uid: string;
@@ -30,17 +31,19 @@ const ViewMail = () => {
   const searchParams = useSearchParams();
   const { token } = useAuth();
   const uid = searchParams.get('uid') || '';
+  const mailbox = searchParams.get('mailbox') || 'INBOX';
   const [mail, setMail] = useState<MailDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  console.log(mailbox);
 
   useEffect(() => {
     const fetchMail = async () => {
       try {
         if (!uid) throw new Error('Mail UID is missing');
-
         setLoading(true);
-        const res = await fetch(`${apiUrl}/mail/${uid}`, {
+        const res = await fetch(`${apiUrl}/mail/${mailbox}/${uid}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -48,8 +51,7 @@ const ViewMail = () => {
 
         const data = await res.json();
         if (!data.mail) throw new Error('Email not found');
-        console.log(data);
-
+        console.log(data.mail.body, 'main res');
         setMail({
           uid: data.mail.id.toString(),
           subject: data.mail.subject || '(no subject)',
@@ -64,7 +66,7 @@ const ViewMail = () => {
               })
             : '',
           starred: Boolean(data.mail.starred),
-          body: data.mail.body || '',
+          body: cleanMailHtml(data.mail.body || ''),
         });
       } catch (err: any) {
         console.error(err);
@@ -109,6 +111,8 @@ const ViewMail = () => {
       <Text className="text-gray-700 font-medium">{label}</Text>
     </Pressable>
   );
+
+  console.log(mail?.body, 'mail');
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -156,28 +160,29 @@ const ViewMail = () => {
             <RenderHtml
               contentWidth={width - 32}
               source={{ html: mail.body }}
-              baseStyle={{ fontSize: 15, lineHeight: 24, color: '#202124' }}
-              tagsStyles={{
-                a: { color: '#1a73e8', textDecorationLine: 'underline' },
-                p: { marginVertical: 6 },
-                img: {
-                  borderRadius: 8,
-                  marginVertical: 8,
-                },
-                blockquote: {
-                  paddingLeft: 12,
-                  color: '#5f6368',
-                  fontStyle: 'italic',
-                  marginVertical: 8,
-                  backgroundColor: '#f8f9fa',
-                  borderLeftWidth: 0,
-                },
-                ul: { marginVertical: 6, paddingLeft: 20 },
-                li: { marginVertical: 2 },
-                table: { borderWidth: 0, marginVertical: 8 },
-                td: { padding: 8, borderWidth: 0 },
+              baseStyle={{
+                fontSize: 15,
+                lineHeight: 22,
+                color: '#202124',
               }}
-              ignoredDomTags={['meta', 'link', 'style']}
+              enableExperimentalMarginCollapsing={true}
+              defaultTextProps={{ selectable: true }}
+              ignoredDomTags={[
+                'meta',
+                'link',
+                'style',
+                'script',
+                'head',
+                'title',
+              ]}
+              renderersProps={{
+                img: { enableExperimentalPercentWidth: true },
+              }}
+              systemFonts={['Arial', 'Helvetica', 'sans-serif']}
+              classesStyles={{
+                // Example: handle Gmail or Outlook specific classes
+                MsoNormal: { marginVertical: 8 },
+              }}
             />
           </View>
 
